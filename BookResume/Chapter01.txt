@@ -1,0 +1,31 @@
+
+Bad Code.
+    Bad code can slow down or bankrupt companies.
+    LeBlack's    Law: Later equals never.
+
+The Total Cost of Owning a Mess.
+    Productivity is inverse proportional to the time.
+
+The Grand Redesign in the Sky.
+    Redesign can take up to 10 years. The initial members of the redesign team a no longer there.
+    New team members complain the new redesign is a mess and demand a new design.
+    Wade takes longer time. The fault is not from managers or marketers.
+    Programmers are like painters. A good painter knows the difference of good paints from the bad ones.
+        Bjarne Stroustrup, inventor of C++
+   Dave Thomas and Andy Hunt: Broken windows metaphore.
+   Grady Booch, author of Object Oriented Analysis and Design with Applications.
+   “Big” Dave Thomas, founder of OTI, godfather of the Eclipse strategy:
+        Clean code can be read, and enhanced by a
+        developer other than its original author.
+   Michael Feathers, author of Working Effectively with Legacy Code.
+        Clean code always looks like it was written by someone who cares.
+    It is not the language that makes programs appear simple. It is the programmer
+    that make the language appear simple!
+
+We Are Authors
+   The @author field of a Javadoc tells us who we are. The next time you write a line of code,
+   remember you are an author, writing for readers who will judge your effort.
+    the ratio of time spent reading vs. writing is well over 10:1
+The Boy Scout Rule
+    Leave the campground cleaner than you found it.
+

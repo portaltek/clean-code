@@ -1,0 +1,9 @@
+Meaningful Names
+
+Use Intention-Revealing Names: Why it exists, what it does, and how it is used.
+Avoid Disinformation: accountList should be a list of accounts otherwise it can confuse others.
+Make Meaningful Distinctions:
+Use Pronounceable Names.
+Use searchable names.
+Avoid Encodings.
+
