@@ -7,3 +7,4 @@ Use Pronounceable Names.
 Use searchable names.
 Avoid Encodings.
 
+DEVELOP CHANGE
