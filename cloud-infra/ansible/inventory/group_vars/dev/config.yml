@@ -1,0 +1,40 @@
+project: "ccd"
+env: "dev"
+region: "us-east-2"
+
+
+
+
+# VPC Parameters
+vpc_cidr: 172.16.0.0/16
+public_subnet_1_cidr: 172.16.1.0/24
+public_subnet_2_cidr: 172.16.2.0/24
+bastion_access_cidr: 0.0.0.0/0
+bastion_instance_type: t2.micro
+
+# Consul Cluster Paramters
+consul_subnet_1_cidr: 172.16.3.0/24
+consul_subnet_2_cidr: 172.16.4.0/24
+consul_server_instance_type: t2.micro
+consul_server_count: '3'
+
+# Database Tier Parameters
+db_subnet_1_cidr: 172.16.5.0/24
+db_subnet_2_cidr: 172.16.6.0/24
+db_instance_type: db.r3.large
+db_create_replica: 'false'
+
+# Application Tier Parameters
+app_subnet_1_cidr: 172.16.7.0/24
+app_subnet_2_cidr: 172.16.8.0/24
+cache_node_type: cache.t2.micro
+cache_node_count: '1'
+cache_failover: 'false'
+
+# Application Host Parameters
+app_instance_type: t2.small
+app_instance_count: '2'
+
+# Java Settings
+jvm_opts: -Xmx512M
+

@@ -1,0 +1,6 @@
+env: "prod"
+region: "us-east-2"
+my_var: "HELLO_WORLD"
+
+
+

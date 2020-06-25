@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  environment:
+    AWS_DEFAULT_REGION: "{{ region }}"
+  vars:
+    vpc_stack_name: "{{ env }}-vpc"
+    peering_stack_name: "{{ env }}-shared-peer"
+    bucket_stack_name: "{{ env }}-logging-bucket"
+    bucket_policy_stack_name: "{{ env }}-logging-bucket-policy"
+    consul_stack_name: "{{ env }}-consul"
+    bucket_name: "{{ env }}-{{ region }}-fluence-web-access-logs"
+  tasks:
+
+    - name: Create VPC Stack
+      cloudformation:
+        stack_name: "{{ vpc_stack_name }}"
+        state: "present"
+        region: "{{ region }}"
+        template: "templates/vpc.json"
+        template_parameters:
+          BastionAccessFromCIDR: "{{ bastion_access_cidr }}"
+          BastionInstanceType: "{{ bastion_instance_type }}"
+          VpcCidr: "{{ vpc_cidr }}"
+          PublicSubnet1Cidr: "{{ public_subnet_1_cidr }}"
+          PublicSubnet2Cidr: "{{ public_subnet_2_cidr }}"
+          KeyName: "{{ keyname }}"
+          Environment: "{{ env }}"
+      register: vpc
+    - name: show vpc stack outputs
+      debug: msg="Created {{ vpc_stack_name }} with these resources {{ vpc.stack_outputs }}"

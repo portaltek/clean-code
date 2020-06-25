@@ -1,0 +1,113 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  environment:
+    AWS_DEFAULT_REGION: "{{ region }}"
+  vars:
+    vpc_stack_name: "{{ env }}-vpc"
+    peering_stack_name: "{{ env }}-shared-peer"
+    bucket_stack_name: "{{ env }}-logging-bucket"
+    bucket_policy_stack_name: "{{ env }}-logging-bucket-policy"
+    consul_stack_name: "{{ env }}-consul"
+    bucket_name: "{{ env }}-{{ region }}-fluence-web-access-logs"
+  tasks:
+
+    - name: Create VPC Stack
+      cloudformation:
+        stack_name: "{{ vpc_stack_name }}"
+        state: "present"
+        region: "{{ region }}"
+        template: "templates/vpc.json"
+        template_parameters:
+          BastionAccessFromCIDR: "{{ bastion_access_cidr }}"
+          BastionInstanceType: "{{ bastion_instance_type }}"
+          VpcCidr: "{{ vpc_cidr }}"
+          PublicSubnet1Cidr: "{{ public_subnet_1_cidr }}"
+          PublicSubnet2Cidr: "{{ public_subnet_2_cidr }}"
+          KeyName: "{{ keyname }}"
+          Environment: "{{ env }}"
+      register: vpc
+    - name: show vpc stack outputs
+      debug: msg="Created {{ vpc_stack_name }} with these resources {{ vpc.stack_outputs }}"
+
+    - name: get nat gateways
+      shell: "aws ec2 describe-nat-gateways --filter Name=vpc-id,Values={{ vpc.stack_outputs.VpcId }} --query 'NatGateways[].NatGatewayId' --output text"
+      register: nat_gateways
+    - name: tag nat gateways
+      shell: "aws ec2 create-tags --resources {{ item }} --tags Key=Environment,Value={{ env }} Key=Tier,Value=VPC Key=Name,Value={{ env }}-nat-gateway"
+      with_items: "{{ nat_gateways.stdout_lines }}"
+
+    - name: Check For Logging Bucket
+      shell: "aws s3 ls | grep {{ bucket_name }}"
+      register: bucket_exists
+      ignore_errors: true
+
+    - name: Create Logging Bucket
+      cloudformation:
+        stack_name: "{{ bucket_stack_name }}"
+        state: "present"
+        region: "{{ region }}"
+        template: "templates/elb-logging-bucket.json"
+        template_parameters:
+          Environment: "{{ env }}"
+          BucketName: "{{ bucket_name }}"
+      register: bucket
+      when: bucket_exists is failed
+
+    - name: Create Logging Bucket Policies
+      cloudformation:
+        stack_name: "{{ bucket_policy_stack_name }}"
+        state: "present"
+        region: "{{ region }}"
+        template: "templates/elb-logging-bucket-policy.json"
+        template_parameters:
+          Environment: "{{ env }}"
+          BucketName: "{{ bucket_name }}"
+      register: bucket_policy
+    - name: show bucket policy stack outputs
+      debug: msg="Created {{ bucket_policy_stack_name }} policies with these resources {{ bucket_policy.stack_outputs }}"
+
+    - name: Create Consul Stack
+      cloudformation:
+        stack_name: "{{ consul_stack_name }}"
+        state: "present"
+        region: "{{ region }}"
+        template: "templates/consul-tier.json"
+        template_parameters:
+          KeyName: "{{ keyname }}"
+          VPC: "{{ vpc.stack_outputs.VpcId }}"
+          VpcCidr: "{{ vpc.stack_outputs.VpcCidr }}"
+          AvailabilityZone1: "{{ vpc.stack_outputs.AvailabilityZone1 }}"
+          AvailabilityZone2: "{{ vpc.stack_outputs.AvailabilityZone2 }}"
+          PrivateRouteTable1: "{{ vpc.stack_outputs.PrivateRouteTable1 }}"
+          PrivateRouteTable2: "{{ vpc.stack_outputs.PrivateRouteTable2 }}"
+          BastionSecurityGroup: "{{ vpc.stack_outputs.BastionSecurityGroup }}"
+          ConsulSubnet1Cidr: "{{ consul_subnet_1_cidr }}"
+          ConsulSubnet2Cidr: "{{ consul_subnet_2_cidr }}"
+          InstanceType: "{{ consul_server_instance_type }}"
+          InstanceCount: "{{ consul_server_count }}"
+          Environment: "{{ env }}"
+      register: consul
+    - name: show consul stack outputs
+      debug: msg="Created {{ consul_stack_name }} created with these resources {{ consul.stack_outputs }}"
+
+    - name: refresh inventory
+      meta: refresh_inventory
+
+    - name: get bastion host
+      shell: "aws ec2 describe-instances --filters \"Name=tag:Name,Values={{env}}-bastion-host\" \"Name=instance-state-name,Values=running\" | jq -r .Reservations[].Instances[].PublicDnsName"
+      register: bastion_host
+
+    - name: clear known_hosts entry in case of new instance
+      known_hosts: name={{ item }} state=absent
+      with_items: "{{ bastion_host.stdout_lines }}"
+
+    - name: add public hostname for bastion host
+      add_host: name={{ item }} groups="tag_Name_{{ env }}_bastion_host_public"
+      with_items: "{{ bastion_host.stdout_lines }}"
+
+- import_playbook: bastion.yml

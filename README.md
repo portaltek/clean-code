@@ -29,3 +29,16 @@ Update file build.gradle by adding:
 apply plugin: 'java'
 ```
 Click load gradle changes. 
+
+
+```shell
+#SET SSH KEY 
+eval $(ssh-agent) | ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem | ssh-add -l
+
+#REMOVE ALL SSH KEYS
+ssh-add -D
+
+#SET PROFILES AND DISPLAY CURRENT PROFILE
+export AWS_PROFILE=ansible_tutorial && aws configure list
+
+```

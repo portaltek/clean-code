@@ -1,0 +1,147 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+    "Description" : "Empty template sample",
+    "Metadata": {},
+    "Parameters": {},
+    "Mappings": {},
+    "Conditions": {},
+    "Resources": {
+
+      "MyVPC":{
+        "Type":"AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "172.16.0.0/16",
+          "Tags": [{"Key":"Name", "Value":"MyVPC"}]
+        }
+      },
+      "MyPublicSubnet0":{
+        "Type":"AWS::EC2::Subnet",
+        "Properties": {
+          "AvailabilityZone": "us-east-2a",
+          "VpcId": { "Ref": "MyVPC"},
+          "CidrBlock": "172.16.1.0/24",
+          "MapPublicIpOnLaunch": "true",
+          "Tags": [{"Key":"Name", "Value":"MyPublicSubnet0"}]
+        }
+      },
+      "MyPublicSubnet1":{
+        "Type":"AWS::EC2::Subnet",
+        "Properties": {
+          "AvailabilityZone": "us-east-2b",
+          "VpcId": { "Ref": "MyVPC"},
+          "CidrBlock": "172.16.2.0/24",
+          "MapPublicIpOnLaunch": "true",
+          "Tags": [{"Key":"Name", "Value":"MyPublicSubnet1"}]
+        }
+      },  
+      "MyPrivateSubnet0":{
+        "Type":"AWS::EC2::Subnet",
+        "Properties": {
+          "AvailabilityZone": "us-east-2a",
+          "VpcId": { "Ref": "MyVPC"},
+          "CidrBlock": "172.16.3.0/24",
+          "MapPublicIpOnLaunch": "false",
+          "Tags": [{"Key":"Name", "Value":"MyPrivateSubnet0"}]
+        }
+      },
+      "MyPrivateSubnet1":{
+        "Type":"AWS::EC2::Subnet",
+        "Properties": {
+          "AvailabilityZone": "us-east-2b",
+          "VpcId": { "Ref": "MyVPC"},
+          "CidrBlock": "172.16.4.0/24",
+          "MapPublicIpOnLaunch": "false",
+          "Tags": [{"Key":"Name", "Value":"MyPrivateSubnet1"}]
+        }
+      },
+
+      
+      
+      "InternetGateway":{
+        "Type":"AWS::EC2::InternetGateway",
+        "Properties": {  "Tags": [{"Key":"Name", "Value":"MyInternetGateway"}]}
+      },
+      "MyVPCGatewayAttachment":{
+        "Type": "AWS::EC2::VPCGatewayAttachment",
+        "Properties": {  
+          "VpcId": { "Ref": "MyVPC"},
+          "InternetGatewayId": { "Ref": "InternetGateway"}
+        }  
+      },
+      "RouteTable":{
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {  
+          "VpcId": { "Ref": "MyVPC"}
+        }  
+      },
+
+      "InternetRoute":{
+        "Type": "AWS::EC2::Route",
+        "DependsOn": "MyVPCGatewayAttachment",
+        "Properties": {  
+          "DestinationCidrBlock": "0.0.0.0/0",
+          "GatewayId": { "Ref": "InternetGateway"},
+          "RouteTableId": { "Ref": "RouteTable"}
+        }  
+      },
+
+      "MySecurityGroup":{
+        "Type":"AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupName": "MySecurityGroup",
+          "GroupDescription": "MySecurityGroup description",
+          "VpcId": { "Ref": "MyVPC"},
+          "SecurityGroupIngress": { 
+            "IpProtocol": "tcp",
+            "FromPort": "3306",
+            "ToPort": "3306",
+            "CidrIp": "0.0.0.0/0"
+          },
+          "SecurityGroupEgress": { 
+            "IpProtocol": "tcp",
+            "FromPort": "3306",
+            "ToPort": "3306",
+            "CidrIp": "0.0.0.0/0"
+          }
+        }
+      },
+
+
+
+      "MyDBSubnetGroup":{
+        "Type":"AWS::RDS::DBSubnetGroup",
+        "Properties": {
+
+          "DBSubnetGroupDescription": "MyDBSubnetGroup description",
+          "SubnetIds": [{"Ref": "MyPrivateSubnet0"},{"Ref": "MyPrivateSubnet1"}],
+          "Tags": [{"Key":"Name", "Value":"MyDBSubnetGroup"}]
+        }
+      },
+      "MyDBCluster": {
+        "Type" : "AWS::RDS::DBCluster",
+        "Properties" : {
+          "VpcSecurityGroupIds" : [{"Ref":"MySecurityGroup"}],
+          "DBSubnetGroupName": {"Ref":"MyDBSubnetGroup"},
+          "Engine" : "aurora",
+          "MasterUsername" : "myName",
+          "MasterUserPassword" : "myPassword",
+          "DBClusterParameterGroupName": "default.aurora5.6",
+          "DatabaseName" : "MyDatabase",
+          "Port" : 3306
+        }  
+      }, 
+      "MyDBInstance0" : {
+        "Type" : "AWS::RDS::DBInstance",
+        "Properties" : {
+          "DBInstanceClass" : "db.t2.small",
+          "Engine" : "aurora",
+          "DBParameterGroupName": "default.aurora5.6",
+          "DBClusterIdentifier" : { "Ref": "MyDBCluster"},
+          "PubliclyAccessible" : "true"
+        }
+      }
+      
+      
+    },
+    "Outputs": {}
+}    
