@@ -21,7 +21,7 @@
         stack_name            : "{{ vpc_stack_name }}"
         state                 : "absent"
         region                : "{{ region }}"
-        template              : "templates/create-vpc.yml"
+        template              : "templates/vpc.yml"
         template_parameters:
           VpcCidr             : "{{ vpc_cidr }}"
           PublicSubnet1Cidr   : "{{ public_subnet_1_cidr }}"

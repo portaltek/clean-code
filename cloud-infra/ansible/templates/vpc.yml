@@ -1,23 +1,24 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Creates VPC structure for a given environment, including Internet Gateway, NAT
-  instances, public and private route tables. Also creates a bastion instance
-  for access to environment.
+  Creates VPC cloud infrastructure
 Parameters:
   Environment:
     Description: Application Environment
     Type: String
-    Default: dev
+    Default: dv
     AllowedValues:
-      - dev
+      - dv
       - qa
-      - stg
-      - prod
-  KeyName:
-    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
-    Type: 'AWS::EC2::KeyPair::KeyName'
-    ConstraintDescription: must be the name of an existing EC2 KeyPair.
-
+      - pt
+      - st
+      - pr
+  ProjectId:
+    Description: ProjectId = Project + environment
+    Type: String
+#  KeyName:
+#    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+#    Type: 'AWS::EC2::KeyPair::KeyName'
+#    ConstraintDescription: must be the name of an existing EC2 KeyPair.
 
   VpcCidr:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
@@ -44,13 +45,6 @@ Parameters:
     MinLength: '9'
     Type: String
 Mappings:
-  BastionAmi:
-    us-east-1:
-      id: ami-00ceddf5ec0719672
-    us-west-1:
-      id: ami-0b28b7ebaf95fd2cb
-    us-west-2:
-      id: ami-0b7ff70d98d512514
   AvailabilityZones:
     us-west-1:
       '1': us-west-1a
@@ -61,6 +55,9 @@ Mappings:
     us-east-1:
       '1': us-east-1b
       '2': us-east-1e
+    us-east-2:
+      '1': us-east-2a
+      '2': us-east-2b
 Resources:
   VPC:
     Type: 'AWS::EC2::VPC'
@@ -72,7 +69,7 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
+            - - !Ref ProjectId
               - vpc
         - Key: Environment
           Value: !Ref Environment
@@ -85,8 +82,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - internet-gateway
+            - - !Ref ProjectId
+              - igw
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -109,8 +106,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-subnet-1
+            - - !Ref ProjectId
+              - pbl-subnet-1
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -128,8 +125,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-subnet-2
+            - - !Ref ProjectId
+              - pbl-subnet-2
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -142,8 +139,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-route-table
+            - - !Ref ProjectId
+              - pbl-route-table
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -173,8 +170,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-subnet-acl
+            - - !Ref ProjectId
+              - pbl-subnet-acl
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -317,8 +314,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - private-route-table-1
+            - - !Ref ProjectId
+              - pvt-rtb-1
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -331,8 +328,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - private-route-table-2
+            - - !Ref ProjectId
+              - pvt-rtb-2
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -349,98 +346,62 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway2
       RouteTableId: !Ref PrivateRouteTable2
-  BastionEIP:
-    Type: 'AWS::EC2::EIP'
-    DependsOn: AttachGateway
-    Properties:
-      Domain: vpc
-      InstanceId: !Ref BastionInstance
-  BastionInstance:
-    Type: 'AWS::EC2::Instance'
-    DependsOn: InternetGateway
-    Properties:
-      ImageId: !FindInMap
-        - BastionAmi
-        - !Ref 'AWS::Region'
-        - id
-      InstanceType: !Ref BastionInstanceType
-      KeyName: !Ref KeyName
-      SecurityGroupIds:
-        - !Ref BastionSecurityGroup
-      SubnetId: !Ref PublicSubnet
-      Tags:
-        - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref Environment
-              - bastion-host
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Tier
-          Value: VPC
-  BastionSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Allow remote access from a CIDR range
-      VpcId: !Ref VPC
-      SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: '0'
-          ToPort: '65535'
-          CidrIp: !Ref VpcCidr
-        - IpProtocol: tcp
-          FromPort: '443'
-          ToPort: '443'
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: udp
-          FromPort: '0'
-          ToPort: '65535'
-          CidrIp: !Ref VpcCidr
-        - IpProtocol: icmp
-          FromPort: '-1'
-          ToPort: '-1'
-          CidrIp: !Ref VpcCidr
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: !Ref BastionTcpPort
-          ToPort: !Ref BastionTcpPort
-          CidrIp: !Ref BastionAccessFromCIDR
-      Tags:
-        - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref Environment
-              - bastion-security-group
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Tier
-          Value: VPC
+
+
   NatEip1:
     DependsOn: AttachGateway
+    Type: 'AWS::EC2::EIP'
     Properties:
       Domain: vpc
-    Type: 'AWS::EC2::EIP'
+
   NatEip2:
     DependsOn: AttachGateway
     Properties:
       Domain: vpc
     Type: 'AWS::EC2::EIP'
+
+
   NatGateway1:
     DependsOn: InternetGateway
+    Type: 'AWS::EC2::NatGateway'
     Properties:
       AllocationId: !GetAtt
         - NatEip1
         - AllocationId
       SubnetId: !Ref PublicSubnet
-    Type: 'AWS::EC2::NatGateway'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - nat-1
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+
   NatGateway2:
     DependsOn: InternetGateway
+    Type: 'AWS::EC2::NatGateway'
     Properties:
       AllocationId: !GetAtt
         - NatEip2
         - AllocationId
       SubnetId: !Ref PublicSubnet2
-    Type: 'AWS::EC2::NatGateway'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - nat-2
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+
+
+
+
 Outputs:
   VpcId:
     Description: VPC ID
@@ -478,11 +439,4 @@ Outputs:
   PrivateRouteTable2:
     Description: Route table for private subnet
     Value: !Ref PrivateRouteTable2
-  BastionSecurityGroup:
-    Description: Bastion Security Group
-    Value: !Ref BastionSecurityGroup
-  BastionHost:
-    Description: Bastion Host
-    Value: !GetAtt
-      - BastionInstance
-      - PublicIp
+

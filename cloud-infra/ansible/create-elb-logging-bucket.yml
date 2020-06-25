@@ -1,0 +1,48 @@
+---
+- hosts                       : localhost
+  connection                  : local
+  gather_facts                : no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  environment:
+    AWS_DEFAULT_REGION        : "{{ region }}"
+  vars:
+    vpc_stack_name            : "{{ project_id }}-vpc"
+    bucket_stack_name         : "{{ project_id }}-logging-bucket"
+    bucket_policy_stack_name  : "{{ project_id }}-logging-bucket-policy"
+    bucket_name               : "{{ project_id }}-{{ region }}-web-access-logs"
+  tasks:
+    #- debug                   : msg="{{ keyname }}"
+    - name: Check For Logging Bucket
+      shell: "aws s3 ls | grep {{ bucket_name }}"
+      register: bucket_exists
+      ignore_errors: true
+    - debug: msg="bucket_exists:{{ bucket_exists }}"
+
+
+    - name                    : "CREATE LOGGING BUCKET: {{ bucket_stack_name }} "
+      cloudformation:
+        stack_name            : "{{ bucket_stack_name }}"
+        state                 : "present"
+        region                : "{{ region }}"
+        template              : "templates/elb-logging-bucket.json"
+        template_parameters:
+          Environment         : "{{ env }}"
+          BucketName          : "{{ bucket_name }}"
+      register: bucket
+      when: bucket_exists is failed
+    - debug: msg="bucket:{{ bucket }}"
+
+#    - name: Create Logging Bucket Policies
+#      cloudformation:
+#        stack_name: "{{ bucket_policy_stack_name }}"
+#        state: "present"
+#        region: "{{ region }}"
+#        template: "templates/elb-logging-bucket-policy.json"
+#        template_parameters:
+#          Environment: "{{ env }}"
+#          BucketName: "{{ bucket_name }}"
+#      register: bucket_policy
+#    - name: show bucket policy stack outputs
+#      debug: msg="Created {{ bucket_policy_stack_name }} policies with these resources {{ bucket_policy.stack_outputs }}"
