@@ -42,3 +42,10 @@ ssh-add -D
 export AWS_PROFILE=ansible_tutorial && aws configure list
 
 ```
+
+```shell
+#ANSIBLE SCRIPT TO CREATE VPC
+ ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc.yml
+
+```
+

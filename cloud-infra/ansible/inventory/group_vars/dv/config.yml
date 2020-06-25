@@ -1,7 +1,7 @@
 project: "ccd"
-env: "dev"
+env: "dv"
 region: "us-east-2"
-
+keyname: "{{ project }}-{{ env }}_keypair_{{ region }}"
 
 
 

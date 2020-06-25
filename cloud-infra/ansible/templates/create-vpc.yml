@@ -1,70 +1,21 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Creates VPC structure for a given environment, including Internet Gateway, NAT
-  instances, public and private route tables. Also creates a bastion instance
-  for access to environment.
+  Creates VPC cloud infrastructure
 Parameters:
   Environment:
     Description: Application Environment
     Type: String
-    Default: dev
+    Default: dv
     AllowedValues:
-      - dev
+      - dv
       - qa
-      - stg
-      - prod
-  KeyName:
-    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
-    Type: 'AWS::EC2::KeyPair::KeyName'
-    ConstraintDescription: must be the name of an existing EC2 KeyPair.
-  BastionAccessFromCIDR:
-    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
-    ConstraintDescription: Please specify the CIDR block as n.n.n.n/n
-    Default: 0.0.0.0/0
-    Description: CIDR block allowed to connect to the Bastion Host
-    MaxLength: '18'
-    MinLength: '9'
-    Type: String
-  BastionInstanceType:
-    Description: Bastion EC2 instance type
-    Type: String
-    Default: t2.micro
-    AllowedValues:
-      - t2.micro
-      - t2.small
-      - t2.medium
-      - m3.medium
-      - m3.large
-      - m3.xlarge
-      - m3.2xlarge
-      - c4.large
-      - c4.xlarge
-      - c4.2xlarge
-      - c4.4xlarge
-      - c4.8xlarge
-      - c3.large
-      - c3.xlarge
-      - c3.2xlarge
-      - c3.4xlarge
-      - c3.8xlarge
-      - r3.large
-      - r3.xlarge
-      - r3.2xlarge
-      - r3.4xlarge
-      - r3.8xlarge
-      - g2.2xlarge
-      - i2.xlarge
-      - i2.2xlarge
-      - i2.4xlarge
-      - i2.8xlarge
-      - hs1.8xlarge
-    ConstraintDescription: must be a valid EC2 instance type.
-  BastionTcpPort:
-    AllowedPattern: '[0-9]*'
-    ConstraintDescription: Numbers only
-    Default: '22'
-    Description: TCP port the Bastion Host listens to
-    Type: String
+      - st
+      - pr
+#  KeyName:
+#    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+#    Type: 'AWS::EC2::KeyPair::KeyName'
+#    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
   VpcCidr:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: Please specify the CIDR block as n.n.n.n/n
@@ -90,13 +41,6 @@ Parameters:
     MinLength: '9'
     Type: String
 Mappings:
-  BastionAmi:
-    us-east-1:
-      id: ami-00ceddf5ec0719672
-    us-west-1:
-      id: ami-0b28b7ebaf95fd2cb
-    us-west-2:
-      id: ami-0b7ff70d98d512514
   AvailabilityZones:
     us-west-1:
       '1': us-west-1a
@@ -107,6 +51,9 @@ Mappings:
     us-east-1:
       '1': us-east-1b
       '2': us-east-1e
+    us-east-2:
+      '1': us-east-2a
+      '2': us-east-2b
 Resources:
   VPC:
     Type: 'AWS::EC2::VPC'
@@ -395,72 +342,8 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway2
       RouteTableId: !Ref PrivateRouteTable2
-  BastionEIP:
-    Type: 'AWS::EC2::EIP'
-    DependsOn: AttachGateway
-    Properties:
-      Domain: vpc
-      InstanceId: !Ref BastionInstance
-  BastionInstance:
-    Type: 'AWS::EC2::Instance'
-    DependsOn: InternetGateway
-    Properties:
-      ImageId: !FindInMap
-        - BastionAmi
-        - !Ref 'AWS::Region'
-        - id
-      InstanceType: !Ref BastionInstanceType
-      KeyName: !Ref KeyName
-      SecurityGroupIds:
-        - !Ref BastionSecurityGroup
-      SubnetId: !Ref PublicSubnet
-      Tags:
-        - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref Environment
-              - bastion-host
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Tier
-          Value: VPC
-  BastionSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Allow remote access from a CIDR range
-      VpcId: !Ref VPC
-      SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: '0'
-          ToPort: '65535'
-          CidrIp: !Ref VpcCidr
-        - IpProtocol: tcp
-          FromPort: '443'
-          ToPort: '443'
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: udp
-          FromPort: '0'
-          ToPort: '65535'
-          CidrIp: !Ref VpcCidr
-        - IpProtocol: icmp
-          FromPort: '-1'
-          ToPort: '-1'
-          CidrIp: !Ref VpcCidr
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: !Ref BastionTcpPort
-          ToPort: !Ref BastionTcpPort
-          CidrIp: !Ref BastionAccessFromCIDR
-      Tags:
-        - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref Environment
-              - bastion-security-group
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Tier
-          Value: VPC
+
+
   NatEip1:
     DependsOn: AttachGateway
     Properties:
@@ -524,11 +407,4 @@ Outputs:
   PrivateRouteTable2:
     Description: Route table for private subnet
     Value: !Ref PrivateRouteTable2
-  BastionSecurityGroup:
-    Description: Bastion Security Group
-    Value: !Ref BastionSecurityGroup
-  BastionHost:
-    Description: Bastion Host
-    Value: !GetAtt
-      - BastionInstance
-      - PublicIp
+

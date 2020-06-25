@@ -8,27 +8,25 @@
   environment:
     AWS_DEFAULT_REGION: "{{ region }}"
   vars:
-    vpc_stack_name: "{{ env }}-vpc"
-    peering_stack_name: "{{ env }}-shared-peer"
-    bucket_stack_name: "{{ env }}-logging-bucket"
-    bucket_policy_stack_name: "{{ env }}-logging-bucket-policy"
-    consul_stack_name: "{{ env }}-consul"
-    bucket_name: "{{ env }}-{{ region }}-fluence-web-access-logs"
+    vpc_stack_name: "{{ project }}-{{ env }}-vpc"
+    peering_stack_name: "{{ project }}-{{ env }}-shared-peer"
+    bucket_stack_name: "{{ project }}-{{ env }}-logging-bucket"
+    bucket_policy_stack_name: "{{ project }}-{{ env }}-logging-bucket-policy"
+    consul_stack_name: "{{ project }}-{{ env }}-consul"
+    bucket_name: "{{ project }}-{{ env }}-{{ region }}-web-access-logs"
   tasks:
-
-    - name: Create VPC Stack
+    - debug: msg="{{ keyname }}"
+    - name: CREATE VPC STACK
       cloudformation:
         stack_name: "{{ vpc_stack_name }}"
         state: "present"
         region: "{{ region }}"
-        template: "templates/vpc.json"
+        template: "templates/create-vpc.yml"
         template_parameters:
-          BastionAccessFromCIDR: "{{ bastion_access_cidr }}"
-          BastionInstanceType: "{{ bastion_instance_type }}"
           VpcCidr: "{{ vpc_cidr }}"
           PublicSubnet1Cidr: "{{ public_subnet_1_cidr }}"
           PublicSubnet2Cidr: "{{ public_subnet_2_cidr }}"
-          KeyName: "{{ keyname }}"
+          #KeyName: "{{ keyname }}"
           Environment: "{{ env }}"
       register: vpc
     - name: show vpc stack outputs
