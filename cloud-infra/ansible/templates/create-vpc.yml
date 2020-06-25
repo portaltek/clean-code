@@ -9,8 +9,12 @@ Parameters:
     AllowedValues:
       - dv
       - qa
+      - pt
       - st
       - pr
+  ProjectId:
+    Description: ProjectId = Project + environment
+    Type: String
 #  KeyName:
 #    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
 #    Type: 'AWS::EC2::KeyPair::KeyName'
@@ -65,7 +69,7 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
+            - - !Ref ProjectId
               - vpc
         - Key: Environment
           Value: !Ref Environment
@@ -78,8 +82,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - internet-gateway
+            - - !Ref ProjectId
+              - igw
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -102,8 +106,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-subnet-1
+            - - !Ref ProjectId
+              - pbl-subnet-1
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -121,8 +125,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-subnet-2
+            - - !Ref ProjectId
+              - pbl-subnet-2
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -135,8 +139,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-route-table
+            - - !Ref ProjectId
+              - pbl-route-table
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -166,8 +170,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - public-subnet-acl
+            - - !Ref ProjectId
+              - pbl-subnet-acl
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -310,8 +314,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - private-route-table-1
+            - - !Ref ProjectId
+              - pvt-rtb-1
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -324,8 +328,8 @@ Resources:
         - Key: Name
           Value: !Join
             - '-'
-            - - !Ref Environment
-              - private-route-table-2
+            - - !Ref ProjectId
+              - pvt-rtb-2
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -346,30 +350,51 @@ Resources:
 
   NatEip1:
     DependsOn: AttachGateway
+    Type: 'AWS::EC2::EIP'
     Properties:
       Domain: vpc
-    Type: 'AWS::EC2::EIP'
+
   NatEip2:
     DependsOn: AttachGateway
     Properties:
       Domain: vpc
     Type: 'AWS::EC2::EIP'
+
+
   NatGateway1:
     DependsOn: InternetGateway
+    Type: 'AWS::EC2::NatGateway'
     Properties:
       AllocationId: !GetAtt
         - NatEip1
         - AllocationId
       SubnetId: !Ref PublicSubnet
-    Type: 'AWS::EC2::NatGateway'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - nat-1
+
   NatGateway2:
     DependsOn: InternetGateway
+    Type: 'AWS::EC2::NatGateway'
     Properties:
       AllocationId: !GetAtt
         - NatEip2
         - AllocationId
       SubnetId: !Ref PublicSubnet2
-    Type: 'AWS::EC2::NatGateway'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - nat-2
+
+
+
+
+
 Outputs:
   VpcId:
     Description: VPC ID

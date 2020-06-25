@@ -16,10 +16,10 @@
     bucket_name               : "{{ project_id }}-{{ region }}-web-access-logs"
   tasks:
     #- debug                   : msg="{{ keyname }}"
-    - name                    : "CREATE STACK: {{ vpc_stack_name }} "
+    - name                    : "DELETE STACK: {{ vpc_stack_name }} "
       cloudformation:
         stack_name            : "{{ vpc_stack_name }}"
-        state                 : "present"
+        state                 : "absent"
         region                : "{{ region }}"
         template              : "templates/create-vpc.yml"
         template_parameters:
@@ -30,5 +30,3 @@
           Environment         : "{{ env }}"
           ProjectId           : "{{ project_id }}"
       register: vpc
-    - name: show vpc stack outputs
-      debug: msg="Created {{ vpc_stack_name }} with these resources {{ vpc.stack_outputs }}"
