@@ -1,16 +1,19 @@
-README.md
 
-===============================================================================================================
+
+**INITIAL COMMANDS:**
+
+```shell
 mkdir <PROJECT_NAME>
 cd <PROJECT_NAME>/
 gradle init
 git init
 stree .
 idea .
+```
 
-===============================================================================================================
-Create project structure under <PROJECT_NAME> folder:
-<PROJECT_NAME>
+**Create project structure under <PROJECT_NAME> folder:**
+
+```shell
 └── src
     └── main
         └── java    
@@ -18,10 +21,11 @@ Create project structure under <PROJECT_NAME> folder:
     └── test
         └── java    
         └── resources
+```
 
-===============================================================================================================
+
 Update file build.gradle by adding:
+```shell
 apply plugin: 'java'
-
-
-And click load gradle changes. 
+```
+Click load gradle changes. 
