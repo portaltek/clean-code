@@ -30,4 +30,5 @@ apply plugin: 'java'
 ```
 Click load gradle changes. 
 
-IMPORTAN CHANGE MADE IN MASTER
+IMPORTANT CHANGE MADE IN MASTER
+MINOR CHANGE MADE IN MASTER
