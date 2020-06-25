@@ -375,6 +375,10 @@ Resources:
             - '-'
             - - !Ref ProjectId
               - nat-1
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
 
   NatGateway2:
     DependsOn: InternetGateway
@@ -390,7 +394,10 @@ Resources:
             - '-'
             - - !Ref ProjectId
               - nat-2
-
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
 
 
 
