@@ -1,0 +1,26 @@
+---
+- hosts                       : localhost
+  connection                  : local
+  gather_facts                : no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  environment:
+    AWS_DEFAULT_REGION        : "{{ region }}"
+  vars:
+    vpc_stack_name            : "{{ project_id }}-vpc"
+    bucket_stack_name         : "{{ project_id }}-bucket"
+    bucket_name               : "{{ project_id }}-{{ region }}-bucket"
+  tasks:
+    - name                    : "DELETE BUCKET: {{ bucket_name }} "
+      cloudformation:
+        stack_name            : "{{ bucket_stack_name }}"
+        state                 : "absent"
+        region                : "{{ region }}"
+        template              : "templates/bucket.yml"
+        template_parameters:
+          Environment         : "{{ env }}"
+          BucketName          : "{{ bucket_name }}"
+      register: bucket
+    - debug: msg="bucket:{{ bucket }}"
+

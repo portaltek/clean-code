@@ -41,11 +41,16 @@ ssh-add -D
 #SET PROFILES AND DISPLAY CURRENT PROFILE
 export AWS_PROFILE=ansible_tutorial && aws configure list
 
+#ALL IN ONE
+ssh-add -D && eval $(ssh-agent) && ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem && ssh-add -l 
+export AWS_PROFILE=ansible_tutorial && aws configure list
+
 ```
 
 ```shell
 #ANSIBLE SCRIPT TO CREATE VPC
- ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc.yml
+ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc.yml
+ansible-playbook -e "env=dv" cloud-infra/ansible/create-bucket.yml
 
 ```
 

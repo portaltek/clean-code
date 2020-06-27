@@ -1,0 +1,85 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates S3 bucket to contain ELB logging records for a given environment.
+Parameters:
+  Environment:
+    Description: Application Environment
+    Type: String
+    Default: dv
+    AllowedValues:
+      - dv
+      - qa
+      - pt
+      - st
+      - pr
+  BucketName:
+    Description: Name of Logging Bucket
+    Type: String
+  BucketDeletionPolicy:
+    Description: Bucket deletion policy
+    Type: String
+    Default: retain
+    AllowedValues:
+      - delete
+      - retain
+#Mappings:
+#  Principal:
+#    us-east-1:
+#      id: '127311923021'
+#    us-east-2:
+#      id: '127311923022'
+#    us-west-1:
+#      id: 027434742980
+#    us-west-2:
+#      id: '797873946194'
+Resources:
+  AccessLogBucket:
+    Type: AWS::S3::Bucket
+    #DeletionPolicy: retain
+    Properties:
+      BucketName:
+        Ref: BucketName
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: GlacierRule
+            Prefix: glacier
+            Status: Enabled
+            ExpirationInDays: '365'
+            Transition:
+              TransitionInDays: '1'
+              StorageClass: Glacier
+      Tags:
+        - Key: Name
+          Value:
+            Ref: BucketName
+        - Key: Environment
+          Value:
+            Ref: Environment
+  AccessLogBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DeletionPolicy: Retain
+    Properties:
+      Bucket:
+        Ref: AccessLogBucket
+      PolicyDocument:
+        #Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - s3:PutObject
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: BucketName
+                    - "/*"
+            Principal: '*'
+#            Principal:
+#              AWS:
+#                Fn::FindInMap:
+#                  - Principal
+#                  - Ref: AWS::Region
+#                  - id
