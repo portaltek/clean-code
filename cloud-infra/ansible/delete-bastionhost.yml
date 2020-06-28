@@ -12,12 +12,12 @@
     bastion_stack_name        : "{{ project_id }}-bastionhost"
 
   tasks:
-    - name                    : "CREATE STACK: {{ bastion_stack_name }} "
+    - name                    : "DELETE STACK: {{ bastion_stack_name }} "
       cloudformation:
         stack_name            : "{{ bastion_stack_name }}"
-        state                 : "present"
+        state                 : "absent"
         region                : "{{ region }}"
-        template              : "templates/bastionhost2.yml"
+        template              : "templates/bastionhost.yml"
         template_parameters:
           #Environment         : "{{ env }}"
           EC2InstanceType     : "t2.micro"

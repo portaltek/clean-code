@@ -26,9 +26,14 @@
           VpcCidr             : "{{ vpc_cidr }}"
           PublicSubnet1Cidr   : "{{ public_subnet_1_cidr }}"
           PublicSubnet2Cidr   : "{{ public_subnet_2_cidr }}"
-          #KeyName: "{{ keyname }}"
           Environment         : "{{ env }}"
           ProjectId           : "{{ project_id }}"
+
+          BastionAMI          : '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+          KeyName             : 'ansible_tutorial'
+          BastionAccessFromCIDR: "{{ bastion_access_cidr }}"
+
+
       register: vpc
     - name: show vpc stack outputs
       debug: msg="Created {{ vpc_stack_name }} with these resources {{ vpc.stack_outputs }}"

@@ -19,11 +19,11 @@
         region                : "{{ region }}"
         template              : "templates/bastionhost.yml"
         template_parameters:
-          Environment         : "{{ env }}"
+          #Environment         : "{{ env }}"
           EC2InstanceType     : "t2.micro"
           EC2AMI              : '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
           KeyName             : 'ansible_tutorial'
-          PublicSubnet        : "{{ project_id }}-pbl-subnet-1"
+          #PublicSubnet        : "{{ project_id }}-pbl-subnet-1"
 
       register: bucket
     - debug: msg="bucket:{{ bucket }}"
