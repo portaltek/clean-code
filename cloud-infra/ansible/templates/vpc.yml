@@ -93,7 +93,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
-  PublicSubnet:
+  PublicSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
@@ -152,10 +152,10 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
-  PublicSubnetRouteTableAssociation:
+  PublicSubnet1RouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet
+      SubnetId: !Ref PublicSubnet1
       RouteTableId: !Ref PublicRouteTable
   PublicSubnet2RouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
@@ -296,10 +296,10 @@ Resources:
       Icmp:
         Code: '-1'
         Type: '-1'
-  PublicSubnetNetworkAclAssociation:
+  PublicSubnet1NetworkAclAssociation:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet
+      SubnetId: !Ref PublicSubnet1
       NetworkAclId: !Ref PublicNetworkAcl
   PublicSubnet2NetworkAclAssociation:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
@@ -368,7 +368,7 @@ Resources:
       AllocationId: !GetAtt
         - NatEip1
         - AllocationId
-      SubnetId: !Ref PublicSubnet
+      SubnetId: !Ref PublicSubnet1
       Tags:
         - Key: Name
           Value: !Join
@@ -411,7 +411,7 @@ Outputs:
     Value: !Ref VpcCidr
   PublicSubnet1:
     Description: Public subnet
-    Value: !Ref PublicSubnet
+    Value: !Ref PublicSubnet1
   PublicSubnet2:
     Description: Public subnet
     Value: !Ref PublicSubnet2
@@ -419,7 +419,7 @@ Outputs:
     Description: Public Subnets
     Value: !Join
       - ','
-      - - !Ref PublicSubnet
+      - - !Ref PublicSubnet1
         - !Ref PublicSubnet2
   AvailabilityZone1:
     Description: Availability zone for all public/private subnets

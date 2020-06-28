@@ -1,4 +1,13 @@
-
+** TODO **
+    - Project with Load balancer.
+    - Project with Consul.
+    - IAM
+        - Separate accounts to access certain env resources.
+        - 
+    - RDS 
+        - Migrate to a better server specs.
+        - Add more readonly replicas. 
+        - Tutorials point 
 
 **INITIAL COMMANDS:**
 
@@ -51,6 +60,10 @@ export AWS_PROFILE=ansible_tutorial && aws configure list
 #ANSIBLE SCRIPT TO CREATE VPC
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc.yml
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-bucket.yml
+ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost.yml
+ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost2.yml
+
+
 
 ```
 
