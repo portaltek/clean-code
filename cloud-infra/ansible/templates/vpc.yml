@@ -363,16 +363,28 @@ Resources:
 
 
   NatEip1:
-    DependsOn: AttachGateway
     Type: 'AWS::EC2::EIP'
     Properties:
       Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - eip-1
+    DependsOn: AttachGateway
 
   NatEip2:
-    DependsOn: AttachGateway
+    Type: 'AWS::EC2::EIP'
     Properties:
       Domain: vpc
-    Type: 'AWS::EC2::EIP'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - eip-2
+    DependsOn: AttachGateway
 
 
   NatGateway1:
@@ -473,7 +485,6 @@ Resources:
       SubnetId: !Ref PublicSubnet1
       SecurityGroupIds:
         - Ref: BastionSecurityGroup
-
       Tags:
         - Key: Name
           Value:
@@ -487,7 +498,19 @@ Resources:
         - Key: Tier
           Value: VPC
 
-
+  BastionEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - eip-bastion
+      InstanceId:
+        Ref: BastionInstance
+    DependsOn: AttachGateway
 
 
 
@@ -534,5 +557,14 @@ Outputs:
     Description: Route table for private subnet
     Value: !Ref PrivateRouteTable2
 
-
+  BastionSecurityGroup:
+    Description: Bastion Security Group
+    Value:
+      Ref: BastionSecurityGroup
+  BastionHost:
+    Description: Bastion Host
+    Value:
+      Fn::GetAtt:
+        - BastionInstance
+        - PublicIp
 
