@@ -12,6 +12,7 @@ public_subnet_1_cidr: 172.16.1.0/24
 public_subnet_2_cidr: 172.16.2.0/24
 bastion_access_cidr: 0.0.0.0/0
 bastion_instance_type: t2.micro
+bastion_ami: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
 
 # Consul Cluster Paramters
 consul_subnet_1_cidr: 172.16.3.0/24

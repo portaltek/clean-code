@@ -42,12 +42,14 @@ Parameters:
     Type: String
 
   BastionAMI:
-    Type: String
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+
   KeyName:
     Type: String
-  BastionAccessFromCIDR:
+  BastionAccessCIDR:
     Type: String
-
+  BastionInstanceType:
+    Type: String
 
 
 
@@ -447,7 +449,7 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp:
-            Ref: BastionAccessFromCIDR
+            Ref: BastionAccessCIDR
       Tags:
         - Key: Name
           Value:
@@ -461,6 +463,29 @@ Resources:
         - Key: Tier
           Value: VPC
 
+  BastionInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: InternetGateway
+    Properties:
+      ImageId: !Ref BastionAMI
+      InstanceType: !Ref BastionInstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - Ref: BastionSecurityGroup
+
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Join:
+              - "-"
+              - - Ref: ProjectId
+                - bastion-host
+        - Key: Environment
+          Value:
+            Ref: Environment
+        - Key: Tier
+          Value: VPC
 
 
 

@@ -29,9 +29,10 @@
           Environment         : "{{ env }}"
           ProjectId           : "{{ project_id }}"
 
-          BastionAMI          : '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+          BastionAMI          : "{{ bastion_ami }}"
           KeyName             : 'ansible_tutorial'
-          BastionAccessFromCIDR: "{{ bastion_access_cidr }}"
+          BastionAccessCIDR   : "{{ bastion_access_cidr }}"
+          BastionInstanceType : "{{ bastion_instance_type }}"
 
 
       register: vpc
