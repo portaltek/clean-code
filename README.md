@@ -1,15 +1,19 @@
-** TODO **
-    - Project with Load balancer.
-    - Project with Consul.
+## AWS Template Project
+
+#### TODO 
+    - Load balancer.
+    - Consul.
     - IAM
         - Separate accounts to access certain env resources.
-        - 
     - RDS 
         - Migrate to a better server specs.
         - Add more readonly replicas. 
         - Tutorials point 
+        
+    - SumoLogic:
+        - Installation with ansible-aws/bastion.yml template    
 
-**INITIAL COMMANDS:**
+#### Commands to Initialize any project:
 
 ```shell
 mkdir <PROJECT_NAME>
@@ -20,7 +24,7 @@ stree .
 idea .
 ```
 
-**Create project structure under <PROJECT_NAME> folder:**
+#### Create project structure under <PROJECT_NAME> folder:
 
 ```shell
 └── src
@@ -40,6 +44,7 @@ apply plugin: 'java'
 Click load gradle changes. 
 
 
+#### Set SSH Keys and AWS Profile
 ```shell
 #SET SSH KEY 
 eval $(ssh-agent) | ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem | ssh-add -l
@@ -56,12 +61,14 @@ export AWS_PROFILE=ansible_tutorial && aws configure list
 
 ```
 
+#### Ansible Scripts
 ```shell
-#ANSIBLE SCRIPT TO CREATE VPC
+
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc.yml
-ansible-playbook -e "env=dv" cloud-infra/ansible/create-bucket.yml
+ansible-playbook -e "env=dv" cloud-infra/ansible/create-log-bucket.yml
+#Not required:
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost.yml
-ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost2.yml
+
 
 
 
