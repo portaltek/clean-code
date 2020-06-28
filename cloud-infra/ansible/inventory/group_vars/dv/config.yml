@@ -3,7 +3,7 @@ env: "dv"
 project_id: "{{ project }}-{{ env }}"
 region: "us-east-2"
 keyname: "{{ project_id }}_keypair_{{ region }}"
-
+key_name: "ansible_tutorial"
 
 
 # VPC Parameters
@@ -20,12 +20,13 @@ log_bucket_name: "{{ project_id }}-log-bucket"
 log_bucket_username: "{{ project }}-log-bucket-user"
 
 
-# Consul Cluster Paramters
+# Consul Cluster Parameters
 consul_stack_name: "{{ project_id }}-consul"
 consul_subnet_1_cidr: 172.16.3.0/24
 consul_subnet_2_cidr: 172.16.4.0/24
 consul_instance_type: t2.micro
 consul_server_count: '3'
+consul_ami: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
 
 # Database Tier Parameters
 db_subnet_1_cidr: 172.16.5.0/24

@@ -65,20 +65,11 @@ Parameters:
   InstanceCount:
     Type: Number
     Default: '3'
-#  KeyName:
-#    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
-#    Type: AWS::EC2::KeyPair::KeyName
-#    ConstraintDescription: must be the name of an existing EC2 KeyPair.
-
-#Mappings:
-#  InstanceAmi:
-#    us-east-1:
-#      id: ami-0268654ad6761b42d
-#    us-west-1:
-#      id: ami-0683fd6bd7add18af
-#    us-west-2:
-#      id: ami-003afdf357d92558c
-
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  ConsulAMI:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
 
 
 Resources:
@@ -253,6 +244,84 @@ Resources:
       Path: "/"
       Roles:
         - Ref: ConsulEc2Role
+
+  ConsulServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP/S access on the configured port, as well as SSH
+        access from bastion.
+      VpcId:
+        Ref: VPC
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: 0.0.0.0/0
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+        - CidrIp:
+            Ref: VpcCidr
+          FromPort: 8300
+          IpProtocol: tcp
+          ToPort: 8302
+        - CidrIp:
+            Ref: VpcCidr
+          FromPort: 8300
+          IpProtocol: udp
+          ToPort: 8302
+      SecurityGroupIngress:
+        - SourceSecurityGroupId:
+            Ref: BastionSecurityGroup
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+        - CidrIp:
+            Ref: VpcCidr
+          FromPort: 8300
+          IpProtocol: tcp
+          ToPort: 8302
+        - CidrIp:
+            Ref: VpcCidr
+          FromPort: 8300
+          IpProtocol: udp
+          ToPort: 8302
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Join:
+              - "-"
+              - - Ref: Environment
+                - consul-server-security-group
+        - Key: Environment
+          Value:
+            Ref: Environment
+        - Key: Tier
+          Value: Config
+
+#  LaunchConfig:
+#    Type: AWS::AutoScaling::LaunchConfiguration
+#    Properties:
+#      ImageId: !Ref ConsulAMI
+#      KeyName:
+#        Ref: KeyName
+#      UserData:
+#        Fn::Base64:
+#          Fn::Join:
+#            - ''
+#            - - "#cloud-config\n\n"
+#              - 'runcmd:
+#
+#'
+#              - " - systemctl restart newrelic-infra\n"
+#      SecurityGroups:
+#        - Ref: ConsulServerSecurityGroup
+#      InstanceType:
+#        Ref: InstanceType
+#      InstanceMonitoring: 'false'
+#      IamInstanceProfile:
+#        Ref: ConsulInstanceProfile
 #  ConsulClusterGroup:
 #    Type: AWS::AutoScaling::AutoScalingGroup
 #    Properties:
@@ -286,86 +355,8 @@ Resources:
 #          Value:
 #            Ref: Environment
 #          PropagateAtLaunch: 'true'
-#  LaunchConfig:
-#    Type: AWS::AutoScaling::LaunchConfiguration
-#    Properties:
-#      ImageId:
-#        Fn::FindInMap:
-#          - InstanceAmi
-#          - Ref: AWS::Region
-#          - id
-#      KeyName:
-#        Ref: KeyName
-#      UserData:
-#        Fn::Base64:
-#          Fn::Join:
-#            - ''
-#            - - "#cloud-config\n\n"
-#              - 'runcmd:
-#
-#'
-#              - " - systemctl restart newrelic-infra\n"
-#      SecurityGroups:
-#        - Ref: ConsulServerSecurityGroup
-#      InstanceType:
-#        Ref: InstanceType
-#      InstanceMonitoring: 'false'
-#      IamInstanceProfile:
-#        Ref: ConsulInstanceProfile
-#  ConsulServerSecurityGroup:
-#    Type: AWS::EC2::SecurityGroup
-#    Properties:
-#      GroupDescription: Enable HTTP/S access on the configured port, as well as SSH
-#        access from bastion.
-#      VpcId:
-#        Ref: VPC
-#      SecurityGroupEgress:
-#        - CidrIp: 0.0.0.0/0
-#          FromPort: 80
-#          IpProtocol: tcp
-#          ToPort: 80
-#        - CidrIp: 0.0.0.0/0
-#          FromPort: 443
-#          IpProtocol: tcp
-#          ToPort: 443
-#        - CidrIp:
-#            Ref: VpcCidr
-#          FromPort: 8300
-#          IpProtocol: tcp
-#          ToPort: 8302
-#        - CidrIp:
-#            Ref: VpcCidr
-#          FromPort: 8300
-#          IpProtocol: udp
-#          ToPort: 8302
-#      SecurityGroupIngress:
-#        - SourceSecurityGroupId:
-#            Ref: BastionSecurityGroup
-#          FromPort: 22
-#          IpProtocol: tcp
-#          ToPort: 22
-#        - CidrIp:
-#            Ref: VpcCidr
-#          FromPort: 8300
-#          IpProtocol: tcp
-#          ToPort: 8302
-#        - CidrIp:
-#            Ref: VpcCidr
-#          FromPort: 8300
-#          IpProtocol: udp
-#          ToPort: 8302
-#      Tags:
-#        - Key: Name
-#          Value:
-#            Fn::Join:
-#              - "-"
-#              - - Ref: Environment
-#                - consul-server-security-group
-#        - Key: Environment
-#          Value:
-#            Ref: Environment
-#        - Key: Tier
-#          Value: Config
+
+
 #
 #
 #
