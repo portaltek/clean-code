@@ -7,6 +7,7 @@ keyname: "{{ project_id }}_keypair_{{ region }}"
 
 
 # VPC Parameters
+vpc_stack_name: "{{ project_id }}-vpc"
 vpc_cidr: 172.16.0.0/16
 public_subnet_1_cidr: 172.16.1.0/24
 public_subnet_2_cidr: 172.16.2.0/24
@@ -20,9 +21,10 @@ log_bucket_username: "{{ project }}-log-bucket-user"
 
 
 # Consul Cluster Paramters
+consul_stack_name: "{{ project_id }}-consul"
 consul_subnet_1_cidr: 172.16.3.0/24
 consul_subnet_2_cidr: 172.16.4.0/24
-consul_server_instance_type: t2.micro
+consul_instance_type: t2.micro
 consul_server_count: '3'
 
 # Database Tier Parameters

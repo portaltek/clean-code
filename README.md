@@ -63,9 +63,11 @@ export AWS_PROFILE=ansible_tutorial && aws configure list
 
 #### Ansible Scripts
 ```shell
-
+# VPC Tier
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc.yml
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-log-bucket.yml
+# Consul Tier
+ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul.yml
 #Not required:
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost.yml
 
