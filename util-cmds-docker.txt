@@ -7,4 +7,5 @@ docker stop $(docker ps -aq)
 docker rm CONTAINER_ID
 docker rm $(docker ps -aq)
 
-docker build --build-arg JAR_FILE=build/libs/clean-code.jar -t clean-code-docker:1.0.0 .
+docker build --build-arg JAR_FILE=build/libs/*.jar -t clean-code-docker:1.0.0 .
+docker run -p 8080:8080 clean-code-docker:1.0.0
