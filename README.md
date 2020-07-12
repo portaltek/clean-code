@@ -70,9 +70,13 @@ ansible-playbook -e "env=dv" cloud-infra/ansible/create-log-bucket.yml
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul.yml
 #Not required:
 ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost.yml
+```
 
-
+#### Docker Scripts
+```shell
+#Maven
+docker build --build-arg JAR_FILE=build/libs/clean-code.jar -t clean-code-docker .
+docker build --build-arg JAR_FILE=build/libs/clean-code.jar -t clean-code-docker docker/Dockerfile
 
 
 ```
-

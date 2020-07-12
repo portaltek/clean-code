@@ -1,0 +1,10 @@
+docker image ls
+docker rmi IMAGE_ID|REPOSITORY
+docker rmi $(docker images -q)
+
+docker ps -a
+docker stop $(docker ps -aq)
+docker rm CONTAINER_ID
+docker rm $(docker ps -aq)
+
+docker build --build-arg JAR_FILE=build/libs/clean-code.jar -t clean-code-docker:1.0.0 .

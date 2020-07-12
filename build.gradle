@@ -1,15 +1,13 @@
-//apply plugin: 'java'
-//apply plugin: 'idea'
-
 plugins {
     id 'org.springframework.boot' version '2.3.0.RELEASE'
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id 'java'
     id 'idea'
-    //id "yakworks.yaml-config" version "1.1.14"
 }
-description = """cleancode-project"""
 
+description = """cleancode-project"""
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     //implementation      'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -42,4 +40,11 @@ repositories {
 }
 test {
     useJUnitPlatform()
+}
+
+bootJar {
+    archiveBaseName = 'clean-code'
+    archiveVersion = '1.0.0'
+    archiveFileName = 'clean-code.jar'
+    //archiveFileName = archiveBaseName + '-' + archiveVersion + '.jar'
 }
