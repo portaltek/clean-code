@@ -1,0 +1,15 @@
+project: "ccd"
+env: "dv"
+project_id: "{{ project }}-{{ env }}"
+region: "us-east-2"
+keyname: "{{ project_id }}_keypair_{{ region }}"
+
+#aws_account: 967267661750
+#ecr_endpoint: 967267661750.dkr.ecr.us-east-1.amazonaws.com
+
+domain: cdd.net
+tm_domain: cdd.com
+stm_domain: cdd.com
+app_name: "app-{{ project_id }}"
+svc_name: "svc-{{ project_id }}"
+cdn_name: "cdn-{{ project_id }}"

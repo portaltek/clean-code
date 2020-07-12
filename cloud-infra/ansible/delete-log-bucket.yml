@@ -1,0 +1,25 @@
+---
+- hosts                       : localhost
+  connection                  : local
+  gather_facts                : no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  environment:
+    AWS_DEFAULT_REGION        : "{{ region }}"
+  vars:
+  tasks:
+    - name                    : "DELETE BUCKET: {{ log_bucket_stack_name }} "
+      cloudformation:
+        stack_name            : "{{ log_bucket_stack_name }}"
+        state                 : "absent"
+        region                : "{{ region }}"
+        template              : "templates/log-bucket.yml"
+        template_parameters:
+          Environment         : "{{ env }}"
+          BucketName          : "{{ log_bucket_name }}"
+          BucketUsername      : "{{ log_bucket_username }}"
+      register: log_bucket
+    - debug: msg="log_bucket:{{ log_bucket }}"
+
+

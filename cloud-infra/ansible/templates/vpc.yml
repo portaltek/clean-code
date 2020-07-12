@@ -1,0 +1,570 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Creates VPC cloud infrastructure
+Parameters:
+  Environment:
+    Description: Application Environment
+    Type: String
+    Default: dv
+    AllowedValues:
+      - dv
+      - qa
+      - pt
+      - st
+      - pr
+  ProjectId:
+    Description: ProjectId = Project + environment
+    Type: String
+
+  VpcCidr:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Please specify the CIDR block as n.n.n.n/n
+    Default: 10.0.0.0/16
+    Description: VPC CIDR
+    MaxLength: '18'
+    MinLength: '9'
+    Type: String
+  PublicSubnet1Cidr:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Please specify the CIDR block as n.n.n.n/n
+    Default: 10.0.1.0/24
+    Description: Public Subnet 1 CIDR
+    MaxLength: '18'
+    MinLength: '9'
+    Type: String
+  PublicSubnet2Cidr:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Please specify the CIDR block as n.n.n.n/n
+    Default: 10.0.2.0/24
+    Description: Public Subnet 2 CIDR
+    MaxLength: '18'
+    MinLength: '9'
+    Type: String
+
+  BastionAMI:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+
+  KeyName:
+    Type: String
+  BastionAccessCIDR:
+    Type: String
+  BastionInstanceType:
+    Type: String
+
+
+
+Mappings:
+  AvailabilityZones:
+    us-west-1:
+      '1': us-west-1a
+      '2': us-west-1b
+    us-west-2:
+      '1': us-west-2a
+      '2': us-west-2b
+    us-east-1:
+      '1': us-east-1b
+      '2': us-east-1e
+    us-east-2:
+      '1': us-east-2a
+      '2': us-east-2b
+
+
+
+
+
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - vpc
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - igw
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  AttachGateway:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PublicSubnet1Cidr
+      AvailabilityZone: !FindInMap
+        - AvailabilityZones
+        - !Ref 'AWS::Region'
+        - '1'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - pbl-subnet-1
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  PublicSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PublicSubnet2Cidr
+      AvailabilityZone: !FindInMap
+        - AvailabilityZones
+        - !Ref 'AWS::Region'
+        - '2'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - pbl-subnet-2
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - pbl-route-table
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  PublicRoute:
+    Type: 'AWS::EC2::Route'
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  PublicSubnet1RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+  PublicSubnet2RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+  PublicNetworkAcl:
+    Type: 'AWS::EC2::NetworkAcl'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - pbl-subnet-acl
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  InboundHTTPPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '100'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '80'
+        To: '80'
+  InboundHTTPSPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '101'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '443'
+        To: '443'
+  InboundDynamicPortsPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '102'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  InboundSSHPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '103'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '22'
+        To: '22'
+  InboundIcmpPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '104'
+      Protocol: '1'
+      RuleAction: allow
+      Egress: 'false'
+      CidrBlock: 0.0.0.0/0
+      Icmp:
+        Code: '-1'
+        Type: '-1'
+  OutboundHTTPPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '100'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '80'
+        To: '80'
+  OutboundHTTPSPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '101'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '443'
+        To: '443'
+  OutBoundDynamicPortPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '102'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '1024'
+        To: '65535'
+  OutBoundSSHPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '103'
+      Protocol: '6'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      PortRange:
+        From: '22'
+        To: '22'
+  OutboundIcmpPublicNetworkAclEntry:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      NetworkAclId: !Ref PublicNetworkAcl
+      RuleNumber: '104'
+      Protocol: '1'
+      RuleAction: allow
+      Egress: 'true'
+      CidrBlock: 0.0.0.0/0
+      Icmp:
+        Code: '-1'
+        Type: '-1'
+  PublicSubnet1NetworkAclAssociation:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      NetworkAclId: !Ref PublicNetworkAcl
+  PublicSubnet2NetworkAclAssociation:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      NetworkAclId: !Ref PublicNetworkAcl
+  PrivateRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - pvt-rtb-1
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  PrivateRouteTable2:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - pvt-rtb-2
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+  PrivateRoute1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway1
+      RouteTableId: !Ref PrivateRouteTable1
+  PrivateRoute2:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway2
+      RouteTableId: !Ref PrivateRouteTable2
+
+
+  NatEip1:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - eip-1
+    DependsOn: AttachGateway
+
+  NatEip2:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - eip-2
+    DependsOn: AttachGateway
+
+
+  NatGateway1:
+    DependsOn: InternetGateway
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt
+        - NatEip1
+        - AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - nat-1
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+
+  NatGateway2:
+    DependsOn: InternetGateway
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt
+        - NatEip2
+        - AllocationId
+      SubnetId: !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - nat-2
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: VPC
+
+
+
+
+
+
+  BastionSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow remote access from a CIDR range
+      VpcId:
+        Ref: VPC
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: '0'
+          ToPort: '65535'
+          CidrIp:
+            Ref: VpcCidr
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: udp
+          FromPort: '0'
+          ToPort: '65535'
+          CidrIp:
+            Ref: VpcCidr
+        - IpProtocol: icmp
+          FromPort: "-1"
+          ToPort: "-1"
+          CidrIp:
+            Ref: VpcCidr
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp:
+            Ref: BastionAccessCIDR
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Join:
+              - "-"
+              - - Ref: ProjectId
+                - sg-bastionhost
+        - Key: Environment
+          Value:
+            Ref: Environment
+        - Key: Tier
+          Value: VPC
+
+  BastionInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: InternetGateway
+    Properties:
+      ImageId: !Ref BastionAMI
+      InstanceType: !Ref BastionInstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - Ref: BastionSecurityGroup
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Join:
+              - "-"
+              - - Ref: ProjectId
+                - bastion-host
+        - Key: Environment
+          Value:
+            Ref: Environment
+        - Key: Tier
+          Value: VPC
+
+  BastionEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - eip-bastion
+      InstanceId:
+        Ref: BastionInstance
+    DependsOn: AttachGateway
+
+
+
+
+
+
+
+
+Outputs:
+  VpcId:
+    Description: VPC ID
+    Value: !Ref VPC
+  VpcCidr:
+    Description: CIDR block for this VPC
+    Value: !Ref VpcCidr
+  PublicSubnet1:
+    Description: Public subnet
+    Value: !Ref PublicSubnet1
+  PublicSubnet2:
+    Description: Public subnet
+    Value: !Ref PublicSubnet2
+  PublicSubnets:
+    Description: Public Subnets
+    Value: !Join
+      - ','
+      - - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+  AvailabilityZone1:
+    Description: Availability zone for all public/private subnets
+    Value: !FindInMap
+      - AvailabilityZones
+      - !Ref 'AWS::Region'
+      - '1'
+  AvailabilityZone2:
+    Description: Availability zone for all public/private subnets
+    Value: !FindInMap
+      - AvailabilityZones
+      - !Ref 'AWS::Region'
+      - '2'
+  PrivateRouteTable1:
+    Description: Route table for private subnet
+    Value: !Ref PrivateRouteTable1
+  PrivateRouteTable2:
+    Description: Route table for private subnet
+    Value: !Ref PrivateRouteTable2
+
+  BastionSecurityGroup:
+    Description: Bastion Security Group
+    Value:
+      Ref: BastionSecurityGroup
+  BastionHost:
+    Description: Bastion Host
+    Value:
+      Fn::GetAtt:
+        - BastionInstance
+        - PublicIp
+

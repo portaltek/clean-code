@@ -1,0 +1,123 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates S3 bucket to contain ELB logging records for a given environment.
+Parameters:
+  Environment:
+    Description: Application Environment
+    Type: String
+    Default: dv
+    AllowedValues:
+      - dv
+      - qa
+      - pt
+      - st
+      - pr
+  BucketName:
+    Type: String
+  BucketUsername:
+    Type: String
+
+
+
+
+Resources:
+
+  BucketUser:
+    Type: AWS::IAM::User
+    Properties:
+      LoginProfile:
+        Password: myP@ssW0rd
+      Tags:
+        - Key: Name
+          Value:
+            Ref: BucketUsername
+      UserName:
+        Ref: BucketUsername
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    #DeletionPolicy: retain
+    Properties:
+      BucketName:
+        Ref: BucketName
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: GlacierRule
+            Prefix: glacier
+            Status: Enabled
+            ExpirationInDays: '365'
+            Transition:
+              TransitionInDays: '1'
+              StorageClass: Glacier
+      Tags:
+        - Key: Name
+          Value:
+            Ref: BucketName
+        - Key: Environment
+          Value:
+            Ref: Environment
+
+  BucketManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Join
+        - '-'
+        - - !Ref BucketName
+          - mng-policy
+      Description: Policy for accessing ELB logs
+      Path: "/"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action:
+              - s3:GetObject
+              - s3:GetObjectVersion
+              - s3:ListBucket
+              - s3:ListBucketVersions
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: BucketName
+                    - "/*"
+              - Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: BucketName
+      Users:
+        - Ref: BucketUser
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DeletionPolicy: Retain
+    Properties:
+      Bucket:
+        Ref: Bucket
+      PolicyDocument:
+        #Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - s3:PutObject
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - Ref: BucketName
+                    - "/*"
+            Principal: '*'
+#            Principal:
+#              AWS: '1111111111'
+#            Principal:
+#              AWS:
+#                - arn:aws:iam::111122223333:root
+#            Principal:
+#              AWS:
+#                Fn::FindInMap:
+#                  - Principal
+#                  - Ref: AWS::Region
+#                  - id
