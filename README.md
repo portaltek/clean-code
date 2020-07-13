@@ -75,7 +75,7 @@ ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost.yml
 #### Docker Scripts
 ```shell
 
-
+mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
 
 
 

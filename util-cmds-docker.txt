@@ -7,16 +7,32 @@ docker stop $(docker ps -aq)
 docker rm CONTAINER_ID|NAMES
 docker rm $(docker ps -aq)
 
+# REMOVE ALL IMAGES AND CONTAINERS
+docker rmi $(docker images -q) && docker rm $(docker ps -aq)
+
 docker build --build-arg JAR_FILE=build/libs/*.jar -t clean-code-docker:1.0.0 .
 docker run -p 8080:8080 clean-code-docker:1.0.0
 
 mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
-docker build --build-arg DEPENDENCY=build/dependency -t clean-code-docker:1.0.0 .
+docker build -t clean-code-docker:1.0.0 .
+
 
 # OPTIONAL CREATE DOCKER IMAGE WITH GRADLE
 # ./gradlew bootBuildImage --imageName=clean-code-docker:1.0.0
 
-docker run -p 8080:8080 clean-code-docker:1.0.0
-docker run -e "SPRING_PROFILES_ACTIVE=PR" -p 8080:8080 -t clean-code-docker:1.0.0
+docker run --rm -p 8080:8080 clean-code-docker:1.0.0
+docker run --rm -e "SPRING_PROFILES_ACTIVE=PR" -p 8080:8080 -t clean-code-docker:1.0.0
+
 # DEBUG IN A DOCKER CONTAINER
-docker run -e "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n" -p 8080:8080 -p 5005:5005 -t clean-code-docker:1.0.0
+docker run --rm -e "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n" -p 8080:8080 -p 5005:5005 -t clean-code-docker:1.0.0
+
+# INIT CONSOLE IN A DOCKER CONTAINER
+docker run --rm -ti --entrypoint /bin/sh -p 8080:8080 clean-code-docker:1.0.0
+
+# LIST GROUPS AND USERS
+echo "--------- GROUPS: ---------" && groups && echo "--------- USERS: ---------" && awk -F: '{ print $1}' /etc/passwd
+
+# RUN DOCKER APP MANUALLY
+docker run --rm -ti --entrypoint /bin/sh -p 8080:8080 clean-code-docker:1.0.0
+java -cp app:app/lib/* portaltek.cleancode.api.web.CleanCodeApplication
+
