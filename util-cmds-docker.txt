@@ -23,11 +23,10 @@ docker build -t clean-code-docker:1.0.0 .
 docker run --rm -p 8080:8080 clean-code-docker:1.0.0
 docker run --rm -e "SPRING_PROFILES_ACTIVE=PR" -p 8080:8080 -t clean-code-docker:1.0.0
 
+docker exec -ti 25e1bfa93acc /bin/sh
+
 # DEBUG IN A DOCKER CONTAINER
 docker run --rm -e "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n" -p 8080:8080 -p 5005:5005 -t clean-code-docker:1.0.0
-
-# INIT CONSOLE IN A DOCKER CONTAINER
-docker run --rm -ti --entrypoint /bin/sh -p 8080:8080 clean-code-docker:1.0.0
 
 # LIST GROUPS AND USERS
 echo "--------- GROUPS: ---------" && groups && echo "--------- USERS: ---------" && awk -F: '{ print $1}' /etc/passwd
