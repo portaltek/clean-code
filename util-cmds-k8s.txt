@@ -1,8 +1,13 @@
 # MAC
 brew install kubectl
+
+
 kubectl version --client
 kubectl cluster-info
 kubectl get all
+
+brew install kind
+kind create cluster
 
 docker build -t portaltek/docker:1.0.0 -f Dockerfile .
 docker run --rm -p 8080:8080 portaltek/docker:1.0.0
@@ -10,6 +15,7 @@ docker run --rm -p 8080:8080 portaltek/docker:1.0.0
 docker build -t portaltek/k8s:1.0.0 -f docker.k8s.dockerfile .
 docker run --rm -p 8080:8080 portaltek/k8s:1.0.0
 docker run --rm -ti --entrypoint /bin/sh -p 8080:8080 portaltek/k8s:1.0.0
+docker run -ti -p 8080:8080 portaltek/k8s:1.0.0
 curl localhost:8080/hello
 
 
@@ -17,6 +23,10 @@ curl localhost:8080/hello
 docker stop $(docker images -aq) & docker rm $(docker ps -aq) & docker rmi $(docker images -q)
 
 
-kubectl create deployment demo --image=portaltek/k8s:1.0.0 --dry-run -o=yaml > deployment.yaml
+kubectl create deployment demo --image=portaltek/k8s:1.0.0 --dry-run=client -o=yaml > deployment.yaml
 echo --- >> deployment.yaml
-kubectl create service clusterip demo --tcp=8080:8080 --dry-run -o=yaml >> deployment.yaml
+kubectl create service clusterip demo --tcp=8080:8080 --dry-run=client -o=yaml >> deployment.yaml
+
+kubectl apply -f deployment.yaml
+
+kubectl get all
