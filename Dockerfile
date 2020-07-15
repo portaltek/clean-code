@@ -6,8 +6,8 @@ ENV APP_DEPENDENCY=build/dependency
 
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
-COPY ${APP_DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${APP_DEPENDENCY}/META-INF /app/META-INF
-COPY ${APP_DEPENDENCY}/BOOT-INF/classes /app
+COPY $APP_DEPENDENCY/BOOT-INF/lib /app/lib
+COPY $APP_DEPENDENCY/META-INF /app/META-INF
+COPY $APP_DEPENDENCY/BOOT-INF/classes /app
 
-ENTRYPOINT java -cp app:app/lib/* ${MAIN_CLASS}
+ENTRYPOINT java -cp app:app/lib/* $MAIN_CLASS
