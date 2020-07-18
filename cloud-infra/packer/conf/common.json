@@ -1,0 +1,6 @@
+{
+  "data_dir": "/var/lib/consul",
+  "enable_debug": true,
+  "log_level": "info",
+  "disable_update_check": true
+}
