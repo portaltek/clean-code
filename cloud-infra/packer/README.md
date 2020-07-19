@@ -1,3 +1,9 @@
+Packer installation
+
+    brew install packer@1.6
+    packer version
+
+
 We are currently using the following source AMI:
 
     Ubuntu 18.04(bionic hvm:ebs-ssd) : ami-068670db424b01e9a : us-west-1
