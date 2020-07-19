@@ -26,8 +26,13 @@ Ansible Scripts.
     
     # Consul Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul.yml
+    
 
+    
 
 OPTIONAL:
 
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost.yml
+    
+    aws ec2 describe-instances --filters "Name=tag:Name,Values=ccd-dv-bastion-host" "Name=instance-state-name,Values=running" | jq -r .Reservations[].Instances[].PublicDnsName
+    aws ec2 describe-instances | jq -r .Reservations[].Instances[].PublicDnsName

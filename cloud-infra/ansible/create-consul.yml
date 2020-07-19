@@ -41,3 +41,32 @@
     register: consul
   - name: show consul stack outputs
     debug: msg="Created {{ consul_stack_name }} created with these resources {{ consul.stack_outputs }}"
+
+
+
+  ###################### Update BastionHost ######################
+
+
+  - name: refresh inventory
+    meta: refresh_inventory
+
+  - name: get bastion host
+    shell: "aws ec2 describe-instances --filters \"Name=tag:Name,Values={{project_id}}-bastion-host\" \"Name=instance-state-name,Values=running\" | jq -r .Reservations[].Instances[].PublicDnsName"
+    register: bastion_host
+
+  - name: bastion host dnsName
+    debug: msg="bastion_host= {{ bastion_host.stdout_lines }} "
+
+  - name: clear known_hosts entry in case of new instance
+    known_hosts: name={{ item }} state=absent
+    with_items: "{{ bastion_host.stdout_lines }}"
+
+  - name: add public hostname for bastion host
+    add_host: name={{ item }} groups="tag_Name_{{ project_id }}_bastion_host_public"
+    with_items: "{{ bastion_host.stdout_lines }}"
+
+
+
+  ###################### Configure SumoLogic collector in BastionHost ######################
+
+  ## TODO: Configure SumoLogic collector in BastionHost use ansible-aws/bastion.yml
