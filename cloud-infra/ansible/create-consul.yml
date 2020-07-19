@@ -38,6 +38,6 @@
         InstanceCount       : "{{ consul_server_count }}"
         KeyName             : "{{ key_name }}"
         ConsulAMI           : "{{ consul_ami }}"
-
-#  - name: show consul stack outputs
-#    debug: msg="Created {{ consul_stack_name }} with {{ consul.stack_outputs }}"
+    register: consul
+  - name: show consul stack outputs
+    debug: msg="Created {{ consul_stack_name }} created with these resources {{ consul.stack_outputs }}"
