@@ -9,54 +9,21 @@
     AWS_DEFAULT_REGION        : "{{ region }}"
   vars:
   tasks:
-    - cloudformation_facts:
-        all_facts: false
-      register: vpc_stack
-
-    - set_fact:
-        vpc: "{{ vpc_stack.ansible_facts.cloudformation[vpc_stack_name].stack_outputs }}"
-
-    - name: Get Latest Database Snapshot
-      shell: "AWS_DEFAULT_REGION={{region}} aws rds describe-db-cluster-snapshots --snapshot-type manual | jq --arg env {{project_id}} -r '.DBClusterSnapshots | map(select(.DBClusterSnapshotIdentifier | startswith($env))) | sort_by(.SnapshotCreateTime) | reverse | map(.DBClusterSnapshotIdentifier)[0]'"
-      register: latest_snapshot
-      when: db_snapshot is not defined or db_snapshot == ''
-
-    - set_fact:
-        db_snapshot: "{{ latest_snapshot.stdout }}"
-      when: latest_snapshot.stdout is defined and latest_snapshot.stdout != ''
-
-    - debug: msg="using snapshot {{db_snapshot}}"
-
-    - name                    : "CREATE STACK: {{ database_stack_name }} "
+    - name                    : "CREATE STACK: {{ cluster_stack_name }} "
       cloudformation:
-        stack_name            : "{{ database_stack_name }}"
+        stack_name            : "{{ cluster_stack_name }}"
         state                 : "present"
         region                : "{{ region }}"
-        template              : "templates/database.yml"
-        stack_policy          : "templates/db-stack-policy.json"
+        template              : "templates/database-cluster.yml"
         template_parameters:
-          Environment         : "{{ env }}"
-          ProjectId           : "{{ project_id }}"
-          VPC                 : "{{ vpc.VpcId }}"
-          VpcCidr             : "{{ vpc.VpcCidr }}"
-          AvailabilityZone1   : "{{ vpc.AvailabilityZone1 }}"
-          AvailabilityZone2   : "{{ vpc.AvailabilityZone2 }}"
-          PrivateRouteTable1  : "{{ vpc.PrivateRouteTable1 }}"
-          PrivateRouteTable2  : "{{ vpc.PrivateRouteTable2 }}"
-
-
-          DBName              : "{{ config.db_name }}"
-          DBUser              : "{{ config.db_user }}"
+#          Environment         : "{{ env }}"
+#          ProjectId           : "{{ project_id }}"
+#          DBName              : "{{ config.db_name }}"
+          DBUsername          : "{{ config.db_username }}"
           DBPassword          : "{{ config.db_password }}"
 
-          DbSubnet1Cidr       : "{{ db_subnet_1_cidr }}"
-          DbSubnet2Cidr       : "{{ db_subnet_2_cidr }}"
-          RdsType             : "{{ db_instance_type }}"
-          DBSnapshotIdentifier: "{{ db_snapshot | default('') }}"
-          CreateFailoverReplica: "{{ db_create_replica }}"
 
-
-      register: database
+      register: cluster
     - name: show {{ database_stack_name }} stack outputs
       debug: msg="Created {{ database_stack_name }} created with these resources {{ database.stack_outputs }}"
 

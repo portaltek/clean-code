@@ -5,6 +5,9 @@ region: "us-east-2"
 keyname: "{{ project_id }}_keypair_{{ region }}"
 key_name: "ansible_tutorial"
 
+# DB-Cluster Tier Parameters
+cluster_stack_name: "{{ project_id }}-cluster"
+
 
 # VPC Parameters
 vpc_stack_name: "{{ project_id }}-vpc"
@@ -51,5 +54,5 @@ jvm_opts: -Xmx512M
 
 config:
   db_name                     : app_db_name
-  db_username                 : app_db_username
-  db_password                 : app_db_password
+  db_username                 : username
+  db_password                 : password

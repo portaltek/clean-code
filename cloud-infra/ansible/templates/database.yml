@@ -285,17 +285,24 @@ Resources:
     Type: 'AWS::RDS::DBCluster'
     DeletionPolicy: Snapshot
     Properties:
-      DatabaseName: !If
-        - UseDbSnapshot
-        - !Ref 'AWS::NoValue'
-        - !Ref DBName
+#      DatabaseName: !If
+#        - UseDbSnapshot
+#        - !Ref 'AWS::NoValue'
+#        - !Ref DBName
+      #      SnapshotIdentifier: !If
+      #        - UseDbSnapshot
+      #        - !Ref DBSnapshotIdentifier
+      #        - !Ref 'AWS::NoValue'
+      #      MasterUsername: !If
+      #        - UseDbSnapshot
+      #        - !Ref 'AWS::NoValue'
+      #        - !Ref DBUsername
+      DatabaseName: DBName
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
       BackupRetentionPeriod: 1
       PreferredBackupWindow: '01:00-02:00'
       PreferredMaintenanceWindow: 'sun:03:00-sun:04:00'
-      SnapshotIdentifier: !If
-        - UseDbSnapshot
-        - !Ref DBSnapshotIdentifier
-        - !Ref 'AWS::NoValue'
       Engine: aurora
       EngineVersion: '5.6'
       DBClusterParameterGroupName: !Ref DBClusterParameterGroup
@@ -303,11 +310,6 @@ Resources:
         - !Ref AvailabilityZone1
         - !Ref AvailabilityZone2
       DBSubnetGroupName: !Ref DbSubnetGroup
-      MasterUsername: !If
-        - UseDbSnapshot
-        - !Ref 'AWS::NoValue'
-        - !Ref DBUsername
-      MasterUserPassword: !Ref DBPassword
       VpcSecurityGroupIds:
         - !GetAtt
           - DbSecurityGroup
@@ -322,50 +324,51 @@ Resources:
           Value: !Ref Environment
         - Key: Tier
           Value: DB
-  DBInstance:
-    Type: 'AWS::RDS::DBInstance'
-    Properties:
-      DBClusterIdentifier: !Ref DBCluster
-      DBSubnetGroupName: !Ref DbSubnetGroup
-      AvailabilityZone: !Ref AvailabilityZone1
-      Engine: aurora
-      DBParameterGroupName: !Ref DBParameterGroup
-      DBInstanceClass: !Ref RdsType
-      Tags:
-        - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref ProjectId
-              - db
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Tier
-          Value: DB
-  ReplicaDBInstance:
-    Type: 'AWS::RDS::DBInstance'
-    Condition: CreateReplica
-    Properties:
-      DBClusterIdentifier: !Ref DBCluster
-      DBSubnetGroupName: !Ref DbSubnetGroup
-      AvailabilityZone: !Ref AvailabilityZone2
-      Engine: aurora
-      DBParameterGroupName: !Ref DBParameterGroup
-      DBInstanceClass: !Ref RdsType
-      Tags:
-        - Key: Name
-          Value: !Join
-            - '-'
-            - - !Ref ProjectId
-              - db
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Tier
-          Value: DB
-Outputs:
-  DbHost:
-    Description: hostname for RDS instance
-    Value: !GetAtt
-      - DBCluster
-      - Endpoint.Address
-  DbClientSecurityGroup:
-    Value: !Ref DbClientSecurityGroup
+
+#  DBInstance:
+#    Type: 'AWS::RDS::DBInstance'
+#    Properties:
+#      DBClusterIdentifier: !Ref DBCluster
+#      DBSubnetGroupName: !Ref DbSubnetGroup
+#      AvailabilityZone: !Ref AvailabilityZone1
+#      Engine: aurora
+#      DBParameterGroupName: !Ref DBParameterGroup
+#      DBInstanceClass: !Ref RdsType
+#      Tags:
+#        - Key: Name
+#          Value: !Join
+#            - '-'
+#            - - !Ref ProjectId
+#              - db
+#        - Key: Environment
+#          Value: !Ref Environment
+#        - Key: Tier
+#          Value: DB
+#  ReplicaDBInstance:
+#    Type: 'AWS::RDS::DBInstance'
+#    Condition: CreateReplica
+#    Properties:
+#      DBClusterIdentifier: !Ref DBCluster
+#      DBSubnetGroupName: !Ref DbSubnetGroup
+#      AvailabilityZone: !Ref AvailabilityZone2
+#      Engine: aurora
+#      DBParameterGroupName: !Ref DBParameterGroup
+#      DBInstanceClass: !Ref RdsType
+#      Tags:
+#        - Key: Name
+#          Value: !Join
+#            - '-'
+#            - - !Ref ProjectId
+#              - db
+#        - Key: Environment
+#          Value: !Ref Environment
+#        - Key: Tier
+#          Value: DB
+#Outputs:
+#  DbHost:
+#    Description: hostname for RDS instance
+#    Value: !GetAtt
+#      - DBCluster
+#      - Endpoint.Address
+#  DbClientSecurityGroup:
+#    Value: !Ref DbClientSecurityGroup
