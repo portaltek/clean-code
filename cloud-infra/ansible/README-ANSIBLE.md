@@ -21,8 +21,8 @@ Set SSH Keys and AWS Profile.
 Ansible Scripts.
 
     # Initialization scripts.
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-log-bucket.yml
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-db-cluster.yml
+    ansible-playbook -e "env=dv" cloud-infra/ansible/_create-log-bucket.yml
+    ansible-playbook -e "env=dv" cloud-infra/ansible/_create-db-cluster.yml
         
     # BastionHost Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost-tier.yml
