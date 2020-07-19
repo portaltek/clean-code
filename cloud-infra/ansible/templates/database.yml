@@ -59,12 +59,14 @@ Parameters:
       - db.r3.2xlarge
       - db.r3.4xlarge
       - db.r3.8xlarge
+      - db.m3.medium
+      - db.t2.micro
     ConstraintDescription: must be a valid RDS instance type.
   DBName:
     Description: Name of Database instance
     Type: String
     Default: acmeapp
-  DBUser:
+  DBUsername:
     Description: Database username
     Type: String
     Default: db_user
@@ -94,7 +96,7 @@ Conditions:
     - 'true'
 Resources:
 
-  DbSubnet:
+  DbSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
@@ -126,10 +128,10 @@ Resources:
           Value: !Ref Environment
         - Key: Tier
           Value: DB
-  DbSubnetRouteTableAssociation:
+  DbSubnet1RouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref DbSubnet
+      SubnetId: !Ref DbSubnet1
       RouteTableId: !Ref PrivateRouteTable1
   DbSubnet2RouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
@@ -174,10 +176,10 @@ Resources:
       PortRange:
         From: '0'
         To: '65535'
-  DbSubnetNetworkAclAssociation:
+  DbSubnet1NetworkAclAssociation:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: !Ref DbSubnet
+      SubnetId: !Ref DbSubnet1
       NetworkAclId: !Ref DbNetworkAcl
   DbSubnet2NetworkAclAssociation:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
@@ -224,7 +226,7 @@ Resources:
     Properties:
       DBSubnetGroupDescription: description
       SubnetIds:
-        - !Ref DbSubnet
+        - !Ref DbSubnet1
         - !Ref DbSubnet2
       Tags:
         - Key: Name
@@ -304,7 +306,7 @@ Resources:
       MasterUsername: !If
         - UseDbSnapshot
         - !Ref 'AWS::NoValue'
-        - !Ref DBUser
+        - !Ref DBUsername
       MasterUserPassword: !Ref DBPassword
       VpcSecurityGroupIds:
         - !GetAtt

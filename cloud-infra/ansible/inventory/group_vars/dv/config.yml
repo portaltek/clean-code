@@ -32,8 +32,8 @@ consul_ami: ami-05118ae2c05d5f65f #us-east-2, check:cloud-infra/packer/README.md
 database_stack_name: "{{ project_id }}-database"
 db_subnet_1_cidr: 172.16.5.0/24
 db_subnet_2_cidr: 172.16.6.0/24
-db_instance_type: db.r3.large
-db_create_replica: 'false'
+db_instance_type: db.t2.micro #db.t2.micro, db.r3.large
+db_create_replica: 'true'
 
 # Application Tier Parameters
 app_subnet_1_cidr: 172.16.7.0/24
@@ -49,3 +49,7 @@ app_instance_count: '2'
 # Java Settings
 jvm_opts: -Xmx512M
 
+config:
+  db_name                     : app_db_name
+  db_username                 : app_db_username
+  db_password                 : app_db_password

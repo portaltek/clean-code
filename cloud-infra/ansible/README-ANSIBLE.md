@@ -24,8 +24,8 @@ Ansible Scripts.
     ansible-playbook -e "env=dv" cloud-infra/ansible/_create-log-bucket.yml
     ansible-playbook -e "env=dv" cloud-infra/ansible/_create-db-cluster.yml
         
-    # BastionHost Tier
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost-tier.yml
+    # VPC Tier
+    ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc-tier.yml
     
     # Consul Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul-tier.yml
@@ -34,8 +34,7 @@ Ansible Scripts.
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-database-tier.yml
     # TODO
     - Create a db-cluster script.
-    - Research how to store the db password in ANSIBLE_VAULT.
-    - 
+ 
     
 
 OPTIONAL:
@@ -53,3 +52,17 @@ OPTIONAL:
      ansible-vault --vault-password-file=./vault/password-file.txt encrypt vault/encrypted-file.txt 
      
      ansible-vault --vault-password-file=./vault/password-file.txt view vault/encrypted-file.txt 
+     
+     
+ DB-Cluster
+ 
+    Conditions:
+      UseDbSnapshot: !Not
+        - !Equals
+          - !Ref DBSnapshotIdentifier
+          - ''  
+          
+        SnapshotIdentifier: !If
+        - UseDbSnapshot
+        - !Ref DBSnapshotIdentifier
+        - !Ref 'AWS::NoValue'      

@@ -33,12 +33,11 @@
         state                 : "present"
         region                : "{{ region }}"
         template              : "templates/database.yml"
-        stack_policy          : "templates/db-stack-policy.json"
+        stack_policy          : "templates/database-stack-policy.json"
         template_parameters:
           Environment         : "{{ env }}"
           ProjectId           : "{{ project_id }}"
           VPC                 : "{{ vpc.VpcId }}"
-          VpcCidr             : "{{ vpc.VpcCidr }}"
           AvailabilityZone1   : "{{ vpc.AvailabilityZone1 }}"
           AvailabilityZone2   : "{{ vpc.AvailabilityZone2 }}"
           PrivateRouteTable1  : "{{ vpc.PrivateRouteTable1 }}"
@@ -46,7 +45,7 @@
 
 
           DBName              : "{{ config.db_name }}"
-          DBUser              : "{{ config.db_user }}"
+          DBUsername          : "{{ config.db_username }}"
           DBPassword          : "{{ config.db_password }}"
 
           DbSubnet1Cidr       : "{{ db_subnet_1_cidr }}"
