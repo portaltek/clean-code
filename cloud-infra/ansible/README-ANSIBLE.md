@@ -44,3 +44,12 @@ OPTIONAL:
     
     aws ec2 describe-instances --filters "Name=tag:Name,Values=ccd-dv-bastion-host" "Name=instance-state-name,Values=running" | jq -r .Reservations[].Instances[].PublicDnsName
     aws ec2 describe-instances | jq -r .Reservations[].Instances[].PublicDnsName
+    
+ Ansible-vault  
+ 
+     cd cloud-infra/ansible/
+     echo 'myPassword' > vault/password-file.txt #Usually this file can be stored in AWS S3
+     echo 'HELLO WORLD!!!' > vault/encrypted-file.txt 
+     ansible-vault --vault-password-file=./vault/password-file.txt encrypt vault/encrypted-file.txt 
+     
+     ansible-vault --vault-password-file=./vault/password-file.txt view vault/encrypted-file.txt 
