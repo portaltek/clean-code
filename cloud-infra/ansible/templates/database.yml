@@ -57,10 +57,7 @@ Parameters:
       - db.r3.large
       - db.r3.xlarge
       - db.r3.2xlarge
-      - db.r3.4xlarge
-      - db.r3.8xlarge
-      - db.m3.medium
-      - db.t2.micro
+      - db.t2.small
     ConstraintDescription: must be a valid RDS instance type.
   DBName:
     Description: Name of Database instance
@@ -262,6 +259,7 @@ Resources:
           Value: !Ref Environment
         - Key: Tier
           Value: DB
+
   DBParameterGroup:
     Type: 'AWS::RDS::DBParameterGroup'
     Properties:
@@ -281,22 +279,24 @@ Resources:
           Value: !Ref Environment
         - Key: Tier
           Value: DB
+
   DBCluster:
     Type: 'AWS::RDS::DBCluster'
     DeletionPolicy: Snapshot
     Properties:
+#  USE WHEN CLUSTER IS ALREADY CREATED AND YOU HAVE A SNAPSHOT
 #      DatabaseName: !If
 #        - UseDbSnapshot
 #        - !Ref 'AWS::NoValue'
 #        - !Ref DBName
-      #      SnapshotIdentifier: !If
-      #        - UseDbSnapshot
-      #        - !Ref DBSnapshotIdentifier
-      #        - !Ref 'AWS::NoValue'
-      #      MasterUsername: !If
-      #        - UseDbSnapshot
-      #        - !Ref 'AWS::NoValue'
-      #        - !Ref DBUsername
+#      SnapshotIdentifier: !If
+#        - UseDbSnapshot
+#        - !Ref DBSnapshotIdentifier
+#        - !Ref 'AWS::NoValue'
+#      MasterUsername: !If
+#        - UseDbSnapshot
+#        - !Ref 'AWS::NoValue'
+#        - !Ref DBUsername
       DatabaseName: DBName
       MasterUsername: !Ref DBUsername
       MasterUserPassword: !Ref DBPassword
@@ -325,25 +325,26 @@ Resources:
         - Key: Tier
           Value: DB
 
-#  DBInstance:
-#    Type: 'AWS::RDS::DBInstance'
-#    Properties:
-#      DBClusterIdentifier: !Ref DBCluster
-#      DBSubnetGroupName: !Ref DbSubnetGroup
-#      AvailabilityZone: !Ref AvailabilityZone1
-#      Engine: aurora
-#      DBParameterGroupName: !Ref DBParameterGroup
-#      DBInstanceClass: !Ref RdsType
-#      Tags:
-#        - Key: Name
-#          Value: !Join
-#            - '-'
-#            - - !Ref ProjectId
-#              - db
-#        - Key: Environment
-#          Value: !Ref Environment
-#        - Key: Tier
-#          Value: DB
+  DBInstance:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      DBClusterIdentifier: !Ref DBCluster
+      DBSubnetGroupName: !Ref DbSubnetGroup
+      AvailabilityZone: !Ref AvailabilityZone1
+      Engine: aurora
+      DBParameterGroupName: !Ref DBParameterGroup
+      DBInstanceClass: !Ref RdsType
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - db
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: DB
+
 #  ReplicaDBInstance:
 #    Type: 'AWS::RDS::DBInstance'
 #    Condition: CreateReplica
