@@ -20,14 +20,22 @@ Set SSH Keys and AWS Profile.
 
 Ansible Scripts.
 
-    # VPC Tier
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc.yml
+    # Initialization scripts.
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-log-bucket.yml
+    ansible-playbook -e "env=dv" cloud-infra/ansible/create-db-cluster.yml
+        
+    # BastionHost Tier
+    ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost-tier.yml
     
     # Consul Tier
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul.yml
+    ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul-tier.yml
     
-
+    # Database Tier
+    ansible-playbook -e "env=dv" cloud-infra/ansible/create-database-tier.yml
+    # TODO
+    - Create a db-cluster script.
+    - Research how to store the db password in ANSIBLE_VAULT.
+    - 
     
 
 OPTIONAL:

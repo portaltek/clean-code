@@ -29,6 +29,7 @@ consul_server_count: '3'
 consul_ami: ami-05118ae2c05d5f65f #us-east-2, check:cloud-infra/packer/README.md
 
 # Database Tier Parameters
+database_stack_name: "{{ project_id }}-database"
 db_subnet_1_cidr: 172.16.5.0/24
 db_subnet_2_cidr: 172.16.6.0/24
 db_instance_type: db.r3.large
