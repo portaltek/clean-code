@@ -74,7 +74,7 @@ Parameters:
 
 
 Resources:
-  ConsulSubnet:
+  ConsulSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId:
@@ -120,7 +120,7 @@ Resources:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId:
-        Ref: ConsulSubnet
+        Ref: ConsulSubnet1
       RouteTableId:
         Ref: PrivateRouteTable1
   ConsulSubnet2RouteTableAssociation:
@@ -203,7 +203,7 @@ Resources:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
       SubnetId:
-        Ref: ConsulSubnet
+        Ref: ConsulSubnet1
       NetworkAclId:
         Ref: ConsulNetworkAcl
   ConsulSubnet2NetworkAclAssociation:
@@ -329,7 +329,7 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       VPCZoneIdentifier:
-        - Ref: ConsulSubnet
+        - Ref: ConsulSubnet1
         - Ref: ConsulSubnet2
       LaunchConfigurationName:
         Ref: ConsulLaunchConfig
@@ -360,13 +360,9 @@ Resources:
           PropagateAtLaunch: 'true'
 
 
-#
-#
-#
-#
-#
-#Outputs:
-#  ConsulEc2Policy:
-#    Description: Managed Policy for Getting Consul Server Information
-#    Value:
-#      Ref: ConsulEc2Policy
+
+Outputs:
+  ConsulEc2Policy:
+    Description: Managed Policy for Getting Consul Server Information
+    Value:
+      Ref: ConsulEc2Policy
