@@ -26,11 +26,7 @@ Ansible Scripts.
     
     # Consul Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul.yml
-    # Need to change resources names. Packer??? Ansible???
-    - Consul EC2    : dv-consul-server
-    - Subnets       : dv-consul-subnet-acl
-    - NetworkACL    : dv-consul-subnet-acl
-    - Security Group: dv-consul-server-security-group
+
 
 OPTIONAL:
 
