@@ -12,6 +12,9 @@ Parameters:
       - pt
       - st
       - pr
+  ProjectId:
+    Description: ProjectId = Project + environment
+    Type: String
   VPC:
     Type: AWS::EC2::VPC::Id
     #Type: 'AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>'
@@ -88,13 +91,13 @@ Resources:
           Value:
             Fn::Join:
               - "-"
-              - - Ref: Environment
+              - - Ref: ProjectId
                 - consul-subnet-1
         - Key: Environment
           Value:
             Ref: Environment
         - Key: Tier
-          Value: Config
+          Value: Consul
   ConsulSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
@@ -109,13 +112,13 @@ Resources:
           Value:
             Fn::Join:
               - "-"
-              - - Ref: Environment
+              - - Ref: ProjectId
                 - consul-subnet-2
         - Key: Environment
           Value:
             Ref: Environment
         - Key: Tier
-          Value: Config
+          Value: Consul
   ConsulSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -140,13 +143,13 @@ Resources:
           Value:
             Fn::Join:
               - "-"
-              - - Ref: Environment
+              - - Ref: ProjectId
                 - consul-subnet-acl
         - Key: Environment
           Value:
             Ref: Environment
         - Key: Tier
-          Value: Config
+          Value: Consul
   InboundPrivateNetworkTcpAclEntry:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
@@ -293,13 +296,13 @@ Resources:
           Value:
             Fn::Join:
               - "-"
-              - - Ref: Environment
+              - - Ref: ProjectId
                 - consul-server-security-group
         - Key: Environment
           Value:
             Ref: Environment
         - Key: Tier
-          Value: Config
+          Value: Consul
 
   ConsulLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
@@ -345,14 +348,14 @@ Resources:
           Value:
             Fn::Join:
               - "-"
-              - - Ref: Environment
+              - - Ref: ProjectId
                 - consul-server
           PropagateAtLaunch: 'true'
         - Key: role
           Value: Config
           PropagateAtLaunch: 'true'
         - Key: Tier
-          Value: Config
+          Value: Consul
           PropagateAtLaunch: 'true'
         - Key: Environment
           Value:
