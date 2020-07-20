@@ -20,7 +20,7 @@
   "provisioners": [
     {
       "type" : "file",
-      "source" : "dhclient.conf",
+      "source" : "conf/dhclient.conf",
       "destination" : "/tmp/dhclient.conf"
     },
     {
