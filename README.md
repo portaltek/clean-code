@@ -48,8 +48,3 @@ Click load gradle changes.
 
 
 
-Conditions:
-  UseDbSnapshot: !Not
-    - !Equals
-      - !Ref DBSnapshotIdentifier
-      - ''

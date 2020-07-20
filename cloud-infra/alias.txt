@@ -1,0 +1,106 @@
+
+##############################################################################################################
+#   GENERAL
+##############################################################################################################
+export ALIAS_FILE=~/_RESEARCH/CLEAN_CODE/clean-code/cloud-infra/alias.txt
+alias refreshbash='cp $ALIAS_FILE ~/.bash_profile && . ~/.bash_profile'
+
+alias set.java8='export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_241.jdk/Contents/Home/'
+alias set.java14='export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-14.0.1.jdk/Contents/Home/'
+#alias test='echo hello_world'
+
+export MYSQL_HOME=/usr/local/Cellar/mysql\@5.6/5.6.46_2/
+#export GRADLE_HOME=/opt/gradle/gradle-5.6.3
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_241.jdk/Contents/Home/
+export JDK_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_241.jdk/Contents/Home/
+export JRE_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_241.jdk/Contents/Home/
+export PYTHON_HOME=/Users/rpineda/Library/Python/2.7
+
+
+# ADDING TO THE PATH
+export PATH=$PATH:$MYSQL_HOME/bin
+#export PATH=$PATH:$GRADLE_HOME/bin
+export PATH=$PATH:$PYTHON_HOME/bin
+#export PATH=$PATH:/usr/local/opt/ansible@2.8/bin
+#export PATH=$PATH:/Users/rpineda/Library/Python/2.7/lib/python/site-packages/ansible
+ 
+
+# ADD BRANCH TO CONSOLE PROMPT
+export PS1="\u \e[1;33m\]\W\e[1;31m\]\$(parse_git_branch)\[\e[00m\]$ "
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+
+
+
+# DEBUG TOMCAT
+export JPDA_ADDRESS=8000
+export JPDA_TRANSPORT=dt_socket
+
+
+# GIT ALIASES 
+git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+git config --global alias.lol "log --graph --all --decorate --pretty=format:'%C(bold yellow)%h%C(bold white)%d%Creset %s %C(bold cyan)- %an, %ar%Creset' --abbrev-commit -30"
+git config --global alias.mylog "log --pretty=format:'%h %s [%an]' --graph"
+git config --global user.name "rpineda@illuminateed.net"
+git config --global alias.alias "! git config --get-regexp ^alias\. | sed -e s/^alias\.// -e s/\ /\ =\ /"
+
+
+# MYSQL
+alias mysql.start='brew services start mysql@5.6'
+alias mysql.stop='brew services stop mysql@5.6'
+
+
+# OTHERS
+alias idea='open -a "`ls -dt /Applications/IntelliJ\ IDEA*|head -1`"'
+alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+
+
+
+
+
+##############################################################################################################
+#   ILLUMINATE.STUDIO    
+##############################################################################################################
+
+export ILLUMINATE_HOME=/Users/rpineda/Documents/ILLUMINATE
+export STUDIO_ANSIBLE=$ILLUMINATE_HOME/STUDIO-ANSIBLE
+export STUDIO_HOME=$ILLUMINATE_HOME/STUDIO/studio
+export CATALINA_BASE=$ILLUMINATE_HOME/STUDIO/studio-tomcat-base
+export CATALINA_HOME=/usr/local/tomcat/tomcat8.5
+
+
+alias studio.fly='cd $STUDIO_HOME && ./gradlew flywayMigrate'
+alias studio.war='cd $STUDIO_HOME && ./gradlew -Pbuildlabel='' clean war'
+alias studio.test='cd $STUDIO_HOME && ./gradlew test'
+alias studio.ls='ls -lht $CATALINA_BASE/webapps/ && echo '==========' '
+alias studio.cpwar='cd $STUDIO_HOME && cp build/libs/ia.war $CATALINA_BASE/webapps'
+alias studio.debug='$CATALINA_HOME/bin/catalina.sh jpda run'
+
+alias studio.deploy='studio.ls && studio.cpwar && studio.ls'
+alias studio.flydeploy='studio.fly && studio.deploy'
+alias studio.fulldeploy='studio.fly && studio.war && studio.deploy'
+
+alias studio.prssh='eval $(ssh-agent) && ssh-add ~/.ssh/studio-pem-files/prod*.pem && ssh-add -l '
+alias studio.qassh='eval $(ssh-agent) && ssh-add ~/.ssh/studio-pem-files/qa*.pem && ssh-add -l '
+alias studio.cpviews='studio.home && cp -r src/main/webapp/views $CATALINA_BASE/webapps/ia/ && cp -r src/main/webapp/template $CATALINA_BASE/webapps/ia/ && cp -r src/main/webapp/resources $CATALINA_BASE/webapps/ia/'
+
+
+alias studio.home='cd $STUDIO_HOME'
+alias studio.ansible='cd $STUDIO_ANSIBLE/ansible-aws'
+alias studio.awsprofile='export AWS_PROFILE=studio && aws configure list'
+
+
+##############################################################################################################
+#   PORTALTEK.CLEAN-CODE    
+##############################################################################################################
+
+alias cleancode.awsprofile='export AWS_PROFILE=cleancode && aws configure list'
+alias cleancode.ssh='eval $(ssh-agent) | ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem | ssh-add -l'
+
+
+
+
+
+
