@@ -56,13 +56,7 @@ OPTIONAL:
      
  DB-Cluster
  
-    Conditions:
-      UseDbSnapshot: !Not
-        - !Equals
-          - !Ref DBSnapshotIdentifier
-          - ''  
-          
-        SnapshotIdentifier: !If
-        - UseDbSnapshot
-        - !Ref DBSnapshotIdentifier
-        - !Ref 'AWS::NoValue'      
+    - Research how to send parameters to create DB for the first time.
+    - Enable automated snaptshots and backtrack feature.
+    - Upgrade MySQL version to 8.0???
+    - Upgrade DBTypeClass.

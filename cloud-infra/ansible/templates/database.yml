@@ -297,6 +297,10 @@ Resources:
 #        - UseDbSnapshot
 #        - !Ref 'AWS::NoValue'
 #        - !Ref DBUsername
+      DBClusterIdentifier: !Join
+        - '-'
+        - - !Ref ProjectId
+          - db-cluster
       DatabaseName: DBName
       MasterUsername: !Ref DBUsername
       MasterUserPassword: !Ref DBPassword
@@ -325,11 +329,14 @@ Resources:
         - Key: Tier
           Value: DB
 
-  DBInstance:
-    Type: 'AWS::RDS::DBInstance'
+  DBInstanceWriter:
     Properties:
       DBClusterIdentifier: !Ref DBCluster
       DBSubnetGroupName: !Ref DbSubnetGroup
+      DBInstanceIdentifier: !Join
+        - '-'
+        - - !Ref ProjectId
+          - db-writer
       AvailabilityZone: !Ref AvailabilityZone1
       Engine: aurora
       DBParameterGroupName: !Ref DBParameterGroup
@@ -344,27 +351,34 @@ Resources:
           Value: !Ref Environment
         - Key: Tier
           Value: DB
+    Type: 'AWS::RDS::DBInstance'
 
-#  ReplicaDBInstance:
-#    Type: 'AWS::RDS::DBInstance'
-#    Condition: CreateReplica
-#    Properties:
-#      DBClusterIdentifier: !Ref DBCluster
-#      DBSubnetGroupName: !Ref DbSubnetGroup
-#      AvailabilityZone: !Ref AvailabilityZone2
-#      Engine: aurora
-#      DBParameterGroupName: !Ref DBParameterGroup
-#      DBInstanceClass: !Ref RdsType
-#      Tags:
-#        - Key: Name
-#          Value: !Join
-#            - '-'
-#            - - !Ref ProjectId
-#              - db
-#        - Key: Environment
-#          Value: !Ref Environment
-#        - Key: Tier
-#          Value: DB
+  DBInstanceReader:
+    Condition: CreateReplica
+    Properties:
+      DBClusterIdentifier: !Ref DBCluster
+      DBSubnetGroupName: !Ref DbSubnetGroup
+      DBInstanceIdentifier: !Join
+        - '-'
+        - - !Ref ProjectId
+          - db-reader
+      AvailabilityZone: !Ref AvailabilityZone2
+      Engine: aurora
+      DBParameterGroupName: !Ref DBParameterGroup
+      DBInstanceClass: !Ref RdsType
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref ProjectId
+              - db
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: DB
+
+    Type: 'AWS::RDS::DBInstance'
+
 #Outputs:
 #  DbHost:
 #    Description: hostname for RDS instance
