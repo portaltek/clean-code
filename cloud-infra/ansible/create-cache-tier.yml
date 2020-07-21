@@ -38,6 +38,6 @@
           AutomaticClusterFailover  : "{{ cache_failover }}"
       register: cache
     - name: show app stack outputs
-      debug: msg="Created {{ app_stack_name }} created with these resources {{ cache.stack_outputs }}"
+      debug: msg="Created {{ cache_stack_name }} created with these resources {{ cache.stack_outputs }}"
 
 

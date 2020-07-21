@@ -21,6 +21,7 @@ Ansible Scripts.
     
     # 0- Initialization scripts.
     ansible-playbook -e "env=dv" _create-log-bucket.yml
+    ansible-playbook -e "env=dv" _create-credentials-bucket.yml
         
         
     # 1- VPC Tier

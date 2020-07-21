@@ -22,6 +22,8 @@ log_bucket_stack_name: "{{ project_id }}-log-bucket"
 log_bucket_name: "{{ project_id }}-log-bucket"
 log_bucket_username: "{{ project }}-log-bucket-user"
 
+credentials_bucket_stack_name: "{{ project_id }}-credentials-bucket"
+credentials_bucket_name: "{{ project_id }}-credentials-bucket"
 
 # Consul Tier Parameters
 consul_stack_name: "{{ project_id }}-consul"
