@@ -2,8 +2,8 @@ project: "ccd"
 env: "dv"
 project_id: "{{ project }}-{{ env }}"
 region: "us-east-2"
-keyname: "{{ project_id }}_keypair_{{ region }}"
-key_name: "ansible_tutorial"
+#keyname: "{{ project_id }}_keypair_{{ region }}"
+#key_name: "ansible_tutorial"
 
 
 

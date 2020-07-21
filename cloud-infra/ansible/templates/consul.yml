@@ -348,7 +348,7 @@ Resources:
           Value:
             Fn::Join:
               - "-"
-              - - Ref: ProjectId
+              - - Ref: Environment
                 - consul-server
           PropagateAtLaunch: 'true'
         - Key: role

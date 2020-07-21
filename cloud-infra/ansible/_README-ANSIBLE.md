@@ -29,10 +29,17 @@ Ansible Scripts.
     
     # Database Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-database-tier.yml
+    
+    # Setup Consul Tier
+    ansible-playbook -e "env=dv" cloud-infra/ansible/setup-consul-tier.yml
+        
+        
+        
     # TODO
     - Create a db-cluster script.
  
-    
+    ansible-inventory -i demo.aws_ec2.yml --graph
+    ansible-inventory -i cloud-infra/ansible/aws_ec2.yml --graph
 
 OPTIONAL:
 

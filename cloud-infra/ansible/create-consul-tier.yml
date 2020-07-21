@@ -15,7 +15,6 @@
   - set_fact:
       vpc: "{{ vpc_stack.ansible_facts.cloudformation[vpc_stack_name].stack_outputs }}"
 
-    #- debug                   : msg="{{ keyname }}"
   - name                    : "CREATE STACK: {{ consul_stack_name }} "
     cloudformation:
       stack_name            : "{{ consul_stack_name }}"
@@ -23,6 +22,7 @@
       region                : "{{ region }}"
       template              : "templates/consul.yml"
       template_parameters:
+        KeyName             : "{{ key_name }}"
         Environment         : "{{ env }}"
         ProjectId           : "{{ project_id }}"
         VPC                 : "{{ vpc.VpcId }}"
@@ -32,11 +32,11 @@
         PrivateRouteTable1  : "{{ vpc.PrivateRouteTable1 }}"
         PrivateRouteTable2  : "{{ vpc.PrivateRouteTable2 }}"
         BastionSecurityGroup: "{{ vpc.BastionSecurityGroup }}"
+
         ConsulSubnet1Cidr   : "{{ consul_subnet_1_cidr }}"
         ConsulSubnet2Cidr   : "{{ consul_subnet_2_cidr }}"
         InstanceType        : "{{ consul_instance_type }}"
         InstanceCount       : "{{ consul_server_count }}"
-        KeyName             : "{{ key_name }}"
         ConsulAMI           : "{{ consul_ami }}"
     register: consul
   - name: show consul stack outputs

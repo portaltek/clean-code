@@ -22,7 +22,7 @@
           #Environment         : "{{ env }}"
           EC2InstanceType     : "t2.micro"
           EC2AMI              : '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
-          KeyName             : 'ansible_tutorial'
+          KeyName             : "{{ key_name }}"
           #PublicSubnet        : "{{ project_id }}-pbl-subnet-1"
 
       register: bucket

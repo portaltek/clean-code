@@ -15,7 +15,6 @@
     consul_stack_name         : "{{ project_id }}-consul"
     bucket_name               : "{{ project_id }}-{{ region }}-web-access-logs"
   tasks:
-    #- debug                   : msg="{{ keyname }}"
     - name                    : "CREATE STACK: {{ vpc_stack_name }} "
       cloudformation:
         stack_name            : "{{ vpc_stack_name }}"
@@ -26,11 +25,12 @@
           VpcCidr             : "{{ vpc_cidr }}"
           PublicSubnet1Cidr   : "{{ public_subnet_1_cidr }}"
           PublicSubnet2Cidr   : "{{ public_subnet_2_cidr }}"
+          KeyName             : "{{ key_name }}"
           Environment         : "{{ env }}"
           ProjectId           : "{{ project_id }}"
 
+
           BastionAMI          : "{{ bastion_ami }}"
-          KeyName             : 'ansible_tutorial'
           BastionAccessCIDR   : "{{ bastion_access_cidr }}"
           BastionInstanceType : "{{ bastion_instance_type }}"
 
