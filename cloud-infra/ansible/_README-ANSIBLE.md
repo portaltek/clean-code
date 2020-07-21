@@ -17,46 +17,47 @@ Set SSH Keys and AWS Profile.
 
 Ansible Scripts.
 
+    cd cloud-infra/ansible/
+    
     # 0- Initialization scripts.
-    ansible-playbook -e "env=dv" cloud-infra/ansible/_create-log-bucket.yml
+    ansible-playbook -e "env=dv" _create-log-bucket.yml
         
         
     # 1- VPC Tier
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc-tier.yml
+    ansible-playbook -e "env=dv" create-vpc-tier.yml
     
     # 2- Consul Tier
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul-tier.yml
+    ansible-playbook -e "env=dv" create-consul-tier.yml
     
     # 3- Database Tier
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-database-tier.yml
+    ansible-playbook -e "env=dv" create-database-tier.yml
     
     # 4- Setup Consul Tier
-    ansible-playbook -e "env=dv" cloud-infra/ansible/setup-consul-tier.yml
-    ansible-playbook -e "env=qa" cloud-infra/ansible/setup-consul-tier.yml
+    ansible-playbook -e "env=dv" setup-consul-tier.yml
+    ansible-playbook -e "env=qa" setup-consul-tier.yml
         
     # X- CREATE ALL Script
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-all.yml        
+    ansible-playbook -e "env=dv" create-all.yml        
         
     # TODO
     - Create a db-cluster script.
  
     ansible-inventory -i demo.aws_ec2.yml --graph
-    ansible-inventory -i cloud-infra/ansible/aws_ec2.yml --graph
-    ansible-inventory -i cloud-infra/ansible/inventory/aws_ec2.yml --graph
-    ansible-inventory -i cloud-infra/ansible/inventory/aws_ec2.yml --list
+    ansible-inventory -i aws_ec2.yml --graph
+    ansible-inventory -i inventory/aws_ec2.yml --graph
+    ansible-inventory -i inventory/aws_ec2.yml --list
     
     
 
 OPTIONAL:
 
-    ansible-playbook -e "env=dv" cloud-infra/ansible/create-bastionhost.yml
+    ansible-playbook -e "env=dv" create-bastionhost.yml
     
     aws ec2 describe-instances --filters "Name=tag:Name,Values=ccd-dv-bastion-host" "Name=instance-state-name,Values=running" | jq -r .Reservations[].Instances[].PublicDnsName
     aws ec2 describe-instances | jq -r .Reservations[].Instances[].PublicDnsName
     
  Ansible-vault  
  
-     cd cloud-infra/ansible/
      echo 'myPassword' > vault/password-file.txt #Usually this file can be stored in AWS S3
      echo 'HELLO WORLD!!!' > vault/encrypted-file.txt 
      ansible-vault --vault-password-file=./vault/password-file.txt encrypt vault/encrypted-file.txt 

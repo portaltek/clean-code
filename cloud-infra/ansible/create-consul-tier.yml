@@ -65,7 +65,8 @@
     add_host: name={{ item }} groups="tag_Name_{{ project_id }}_bastion_host_public"
     with_items: "{{ bastion_host.stdout_lines }}"
 
-
+  - name: END OF create-consul-tier.yml
+    debug: msg="END OF create-consul-tier.yml"
 
   ###################### Configure SumoLogic collector in BastionHost ######################
 

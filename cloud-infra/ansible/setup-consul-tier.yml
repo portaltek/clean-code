@@ -5,8 +5,8 @@
   user: ubuntu
   gather_facts: no
   vars_files:
-    #- "inventory/group_vars/{{ env }}/config.yml"
-    - "inventory/group_vars/dv/config.yml"
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/dv/config.yml"
  #   - "inventory/group_vars/{{ env }}/secrets.yml"
   tasks:
 #    - name: clear known_hosts entry in case of new instance
