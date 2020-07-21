@@ -379,11 +379,11 @@ Resources:
 
     Type: 'AWS::RDS::DBInstance'
 
-#Outputs:
-#  DbHost:
-#    Description: hostname for RDS instance
-#    Value: !GetAtt
-#      - DBCluster
-#      - Endpoint.Address
-#  DbClientSecurityGroup:
-#    Value: !Ref DbClientSecurityGroup
+Outputs:
+  DbHost:
+    Description: hostname for RDS instance
+    Value: !GetAtt
+      - DBCluster
+      - Endpoint.Address
+  DbClientSecurityGroup:
+    Value: !Ref DbClientSecurityGroup
