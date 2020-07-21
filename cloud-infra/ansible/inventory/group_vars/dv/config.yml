@@ -36,9 +36,10 @@ db_subnet_2_cidr: 172.16.6.0/24
 db_instance_type: db.t2.small #db.t2.small, db.r3.large
 db_create_replica: 'true'
 
-# Application Tier Parameters
-app_subnet_1_cidr: 172.16.7.0/24
-app_subnet_2_cidr: 172.16.8.0/24
+# Cache Tier Parameters
+cache_stack_name: "{{ project_id }}-cache"
+cache_subnet_1_cidr: 172.16.7.0/24
+cache_subnet_2_cidr: 172.16.8.0/24
 cache_node_type: cache.t2.micro
 cache_node_count: '1'
 cache_failover: 'false'

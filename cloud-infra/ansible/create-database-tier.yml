@@ -53,11 +53,10 @@
           RdsType             : "{{ db_instance_type }}"
           DBSnapshotIdentifier: "{{ db_snapshot | default('') }}"
           CreateFailoverReplica: "{{ db_create_replica }}"
+      register: database
 
-
-#      register: database
-#    - name: show {{ database_stack_name }} stack outputs
-#      debug: msg="Created {{ database_stack_name }} created with these resources {{ database.stack_outputs }}"
+    - name: show {{ database_stack_name }} stack outputs
+      debug: msg="Created {{ database_stack_name }} created with these resources {{ database.stack_outputs }}"
 
 
 
