@@ -1,20 +1,30 @@
 ---
 #- hosts: "tag_Name_{{ project_id }}_consul_server[0]"
 - hosts: "tag_Name_{{ env }}_consul_server[0]"
+#- hosts: "tag_Name*"
   user: ubuntu
   gather_facts: no
   vars_files:
-    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/config.yml"
+    - "inventory/group_vars/dv/config.yml"
  #   - "inventory/group_vars/{{ env }}/secrets.yml"
   tasks:
-    - name: wait for agent to be ready
-      wait_for: port=8500
-    - name: load variables
-      uri:
-        url: "http://localhost:8500/v1/kv/beacon/studio/{{item.key|upper}}"
-        method: PUT
-        body: "{{item.value}}"
-      with_dict: "{{ config }}"
+#    - name: clear known_hosts entry in case of new instance
+#      known_hosts: name={{ item }}
+#      with_items: "{{ item }}"
+    - name: show all the hosts matching the pattern, i.e. all but the group www
+      debug:
+        msg: "{{ item }}"
+      with_inventory_hostnames:
+        - all:!www
+#    - name: wait for agent to be ready
+#      wait_for: port=8500
+#    - name: load variables
+#      uri:
+#        url: "http://localhost:8500/v1/kv/beacon/studio/{{item.key|upper}}"
+#        method: PUT
+#        body: "{{item.value}}"
+#      with_dict: "{{ config }}"
 #      no_log: True
 #    - name: load database hostname
 #      uri:

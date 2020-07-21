@@ -32,6 +32,7 @@ Ansible Scripts.
     
     # 4- Setup Consul Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/setup-consul-tier.yml
+    ansible-playbook -e "env=qa" cloud-infra/ansible/setup-consul-tier.yml
         
     # X- CREATE ALL Script
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-all.yml        
@@ -41,6 +42,10 @@ Ansible Scripts.
  
     ansible-inventory -i demo.aws_ec2.yml --graph
     ansible-inventory -i cloud-infra/ansible/aws_ec2.yml --graph
+    ansible-inventory -i cloud-infra/ansible/aws_ec2.yml --graph
+    ansible-inventory -i cloud-infra/ansible/inventory/aws_ec2.yml --list
+    
+    
 
 OPTIONAL:
 
@@ -65,3 +70,6 @@ OPTIONAL:
     - Enable automated snaptshots and backtrack feature.
     - Upgrade MySQL version to 8.0???
     - Upgrade DBTypeClass.
+    
+      ansible --list-hosts all
+      

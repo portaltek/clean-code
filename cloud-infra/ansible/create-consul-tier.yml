@@ -70,3 +70,5 @@
   ###################### Configure SumoLogic collector in BastionHost ######################
 
   ## TODO: Configure SumoLogic collector in BastionHost use ansible-aws/bastion.yml
+
+
