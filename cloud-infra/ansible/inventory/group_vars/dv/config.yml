@@ -7,11 +7,12 @@ key_name: "ansible_tutorial"
 
 
 
-# VPC Parameters
+# VPC Tier Parameters
 vpc_stack_name: "{{ project_id }}-vpc"
 vpc_cidr: 172.16.0.0/16
 public_subnet_1_cidr: 172.16.1.0/24
 public_subnet_2_cidr: 172.16.2.0/24
+
 bastion_access_cidr: 0.0.0.0/0
 bastion_instance_type: t2.micro
 bastion_ami: ami-0d2e892aae344e175 #us-east-2, INFO:cloud-infra/packer/README.md
@@ -21,7 +22,7 @@ log_bucket_name: "{{ project_id }}-log-bucket"
 log_bucket_username: "{{ project }}-log-bucket-user"
 
 
-# Consul Cluster Parameters
+# Consul Tier Parameters
 consul_stack_name: "{{ project_id }}-consul"
 consul_subnet_1_cidr: 172.16.3.0/24
 consul_subnet_2_cidr: 172.16.4.0/24
@@ -44,7 +45,7 @@ cache_node_type: cache.t2.micro
 cache_node_count: '1'
 cache_failover: 'false'
 
-# Application Host Parameters
+# Web Tier Parameters
 app_instance_type: t2.small
 app_instance_count: '2'
 
