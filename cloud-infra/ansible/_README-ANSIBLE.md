@@ -42,7 +42,7 @@ Ansible Scripts.
  
     ansible-inventory -i demo.aws_ec2.yml --graph
     ansible-inventory -i cloud-infra/ansible/aws_ec2.yml --graph
-    ansible-inventory -i cloud-infra/ansible/aws_ec2.yml --graph
+    ansible-inventory -i cloud-infra/ansible/inventory/aws_ec2.yml --graph
     ansible-inventory -i cloud-infra/ansible/inventory/aws_ec2.yml --list
     
     
