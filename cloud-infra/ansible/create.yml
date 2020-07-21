@@ -1,5 +1,0 @@
-- Create env process.
-- Create VPC
-  + Firewall: BastionHost
-  + ServiceDescovery: Consul
-

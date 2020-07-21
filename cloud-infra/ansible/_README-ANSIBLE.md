@@ -6,10 +6,10 @@ Set SSH Keys and AWS Profile.
     ssh-add -D
 
     # SET SSH KEY 
-    eval $(ssh-agent) | ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem | ssh-add -l
+    eval $(ssh-agent) | ssh-add ~/.ssh/projects/cleancode/ccd-dv_keypair_us-east-2.pem | ssh-add -l
     
     # SET PROFILES AND DISPLAY CURRENT PROFILE
-    export AWS_PROFILE=ansible_tutorial && aws configure list
+    export AWS_PROFILE=cleancode && aws configure list
 
     # ALL-IN-ONE WITH ALIASES
     cleancode.aws
@@ -33,7 +33,8 @@ Ansible Scripts.
     # 4- Setup Consul Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/setup-consul-tier.yml
         
-        
+    # X- CREATE ALL Script
+    ansible-playbook -e "env=dv" cloud-infra/ansible/create-all.yml        
         
     # TODO
     - Create a db-cluster script.
