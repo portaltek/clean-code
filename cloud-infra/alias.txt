@@ -70,6 +70,9 @@ export STUDIO_HOME=$ILLUMINATE_HOME/STUDIO/studio
 export CATALINA_BASE=$ILLUMINATE_HOME/STUDIO/studio-tomcat-base
 export CATALINA_HOME=/usr/local/tomcat/tomcat8.5
 
+alias studio.home='cd $STUDIO_HOME'
+alias studio.cpviews='studio.home && cp -r src/main/webapp/views $CATALINA_BASE/webapps/ia/ && cp -r src/main/webapp/template $CATALINA_BASE/webapps/ia/ && cp -r src/main/webapp/resources $CATALINA_BASE/webapps/ia/'
+
 
 alias studio.fly='cd $STUDIO_HOME && ./gradlew flywayMigrate'
 alias studio.war='cd $STUDIO_HOME && ./gradlew -Pbuildlabel='' clean war'
@@ -84,20 +87,20 @@ alias studio.fulldeploy='studio.fly && studio.war && studio.deploy'
 
 alias studio.prssh='eval $(ssh-agent) && ssh-add ~/.ssh/studio-pem-files/prod*.pem && ssh-add -l '
 alias studio.qassh='eval $(ssh-agent) && ssh-add ~/.ssh/studio-pem-files/qa*.pem && ssh-add -l '
-alias studio.cpviews='studio.home && cp -r src/main/webapp/views $CATALINA_BASE/webapps/ia/ && cp -r src/main/webapp/template $CATALINA_BASE/webapps/ia/ && cp -r src/main/webapp/resources $CATALINA_BASE/webapps/ia/'
 
 
-alias studio.home='cd $STUDIO_HOME'
+
 alias studio.ansible='cd $STUDIO_ANSIBLE/ansible-aws'
-alias studio.awsprofile='export AWS_PROFILE=studio && aws configure list'
+alias studio.profile='export AWS_PROFILE=studio && aws configure list'
 
 
 ##############################################################################################################
-#   PORTALTEK.CLEAN-CODE    
+#   PORTALTEK.CLEANCODE
 ##############################################################################################################
 
-alias cleancode.awsprofile='export AWS_PROFILE=cleancode && aws configure list'
-alias cleancode.ssh='eval $(ssh-agent) | ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem | ssh-add -l'
+alias cleancode.ssh='ssh-add -D eval | $(ssh-agent) | ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem | ssh-add -l'
+alias cleancode.profile='export AWS_PROFILE=cleancode && aws configure list'
+alias cleancode.aws='cleancode.ssh || cleancode.profile'
 
 
 
