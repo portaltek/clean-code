@@ -42,9 +42,8 @@ Ansible Scripts.
         
     # TODO
     - Create a db-cluster script.
- 
-    ansible-inventory -i demo.aws_ec2.yml --graph
-    ansible-inventory -i aws_ec2.yml --graph
+    
+    # Remember to add AWS profile and add PEM keypair.
     ansible-inventory -i inventory/aws_ec2.yml --graph
 
     
