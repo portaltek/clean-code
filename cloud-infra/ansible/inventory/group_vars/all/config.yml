@@ -2,10 +2,13 @@ project: "ccd"
 env: "dv"
 project_id: "{{ project }}-{{ env }}"
 region: "us-east-2"
-key_name: "{{ env }}_keypair_{{ region }}"
+#key_name: "{{ env }}_keypair_{{ region }}"
+#key_name: "{{ project_id }}_keypair_{{ region }}"
+#key_name: "ansible_tutorial"
+key_name: ccd-dv_keypair_us-east-2
 
-#aws_account: 967267661750
-#ecr_endpoint: 967267661750.dkr.ecr.us-east-1.amazonaws.com
+aws_account: 793628107353
+#ecr_endpoint: 793628107353.dkr.ecr.us-east-1.amazonaws.com
 
 domain: cdd.net
 tm_domain: cdd.com

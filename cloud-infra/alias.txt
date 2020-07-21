@@ -98,9 +98,11 @@ alias studio.profile='export AWS_PROFILE=studio && aws configure list'
 #   PORTALTEK.CLEANCODE
 ##############################################################################################################
 
-alias cleancode.ssh='ssh-add -D eval | $(ssh-agent) | ssh-add ~/.ssh/projects/ansible_tutorial/ansible_tutorial.pem | ssh-add -l'
+export CLEAN_CODE_PEM=~/.ssh/projects/clean_code/ccd-dv_keypair_us-east-2.pem
+# chmod 400 $CLEAN_CODE_PEM
+alias cleancode.pem='ssh-add -D eval & $(ssh-agent) & ssh-add $CLEAN_CODE_PEM & ssh-add -l'
 alias cleancode.profile='export AWS_PROFILE=cleancode && aws configure list'
-alias cleancode.aws='cleancode.ssh || cleancode.profile'
+alias cleancode.aws='cleancode.pem || cleancode.profile'
 
 
 

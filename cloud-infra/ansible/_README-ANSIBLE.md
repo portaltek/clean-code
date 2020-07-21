@@ -17,20 +17,20 @@ Set SSH Keys and AWS Profile.
 
 Ansible Scripts.
 
-    # Initialization scripts.
+    # 0- Initialization scripts.
     ansible-playbook -e "env=dv" cloud-infra/ansible/_create-log-bucket.yml
-    ansible-playbook -e "env=dv" cloud-infra/ansible/_create-db-cluster.yml
         
-    # VPC Tier
+        
+    # 1- VPC Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-vpc-tier.yml
     
-    # Consul Tier
+    # 2- Consul Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-consul-tier.yml
     
-    # Database Tier
+    # 3- Database Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/create-database-tier.yml
     
-    # Setup Consul Tier
+    # 4- Setup Consul Tier
     ansible-playbook -e "env=dv" cloud-infra/ansible/setup-consul-tier.yml
         
         
