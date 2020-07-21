@@ -58,4 +58,3 @@ jvm_opts: -Xmx512M
 config:
   db_name                     : app_db_name
   db_username                 : username
-  db_password                 : password

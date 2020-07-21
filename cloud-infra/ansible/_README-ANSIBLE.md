@@ -46,7 +46,7 @@ Ansible Scripts.
     ansible-inventory -i demo.aws_ec2.yml --graph
     ansible-inventory -i aws_ec2.yml --graph
     ansible-inventory -i inventory/aws_ec2.yml --graph
-    ansible-inventory -i inventory/aws_ec2.yml --list
+
     
     
 
@@ -59,11 +59,11 @@ OPTIONAL:
     
  Ansible-vault  
  
-     echo 'myPassword' > vault/password-file.txt #Usually this file can be stored in AWS S3
-     echo 'HELLO WORLD!!!' > vault/encrypted-file.txt 
-     ansible-vault --vault-password-file=./vault/password-file.txt encrypt vault/encrypted-file.txt 
+     echo 'myPassword' > vault/vault-key.txt #Usually this file can be stored in AWS S3
+     echo 'password' > vault/encrypted-file.txt 
+     ansible-vault --vault-password-file=vault/vault-key.txt encrypt vault/encrypted-file.txt 
      
-     ansible-vault --vault-password-file=./vault/password-file.txt view vault/encrypted-file.txt 
+     ansible-vault --vault-password-file=vault/vault-key.txt view vault/encrypted-file.txt 
      
      
  DB-Cluster
@@ -74,4 +74,4 @@ OPTIONAL:
     - Upgrade DBTypeClass.
     
       ansible --list-hosts all
-      
+      aws s3 cp s3://ccd-dv-credentials-bucket/vault-key.txt -
