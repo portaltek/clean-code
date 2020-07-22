@@ -23,7 +23,7 @@
           EC2InstanceType     : "t2.micro"
           EC2AMI              : '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
           KeyName             : "{{ key_name }}"
-          #PublicSubnet        : "{{ project_id }}-pbl-subnet-1"
+          #PublicSubnet        : "{{ project_id }}-public-subnet-1"
 
       register: bucket
     - debug: msg="bucket:{{ bucket }}"

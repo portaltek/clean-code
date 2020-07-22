@@ -122,7 +122,7 @@ Resources:
           Value: !Join
             - '-'
             - - !Ref ProjectId
-              - pbl-subnet-1
+              - public-subnet-1
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -141,7 +141,7 @@ Resources:
           Value: !Join
             - '-'
             - - !Ref ProjectId
-              - pbl-subnet-2
+              - public-subnet-2
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -155,7 +155,7 @@ Resources:
           Value: !Join
             - '-'
             - - !Ref ProjectId
-              - pbl-route-table
+              - public-rtb
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -186,7 +186,7 @@ Resources:
           Value: !Join
             - '-'
             - - !Ref ProjectId
-              - pbl-subnet-acl
+              - public-subnet-acl
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -330,7 +330,7 @@ Resources:
           Value: !Join
             - '-'
             - - !Ref ProjectId
-              - pvt-rtb-1
+              - private-rtb-1
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
@@ -344,7 +344,7 @@ Resources:
           Value: !Join
             - '-'
             - - !Ref ProjectId
-              - pvt-rtb-2
+              - private-rtb-2
         - Key: Environment
           Value: !Ref Environment
         - Key: Tier
