@@ -5,14 +5,5 @@ Host *
   UserKnownHostsFile /dev/null
   StrictHostKeyChecking no
 
-Host 172.20.*.*
-  ProxyCommand ssh -o StrictHostKeyChecking=no -A -T ubuntu@`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=dev-bastion-host" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p
-
-Host 172.21.*.*
-  ProxyCommand ssh -o StrictHostKeyChecking=no -A -T ubuntu@`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=qa-bastion-host" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p
-
-Host 172.22.*.*
-  ProxyCommand ssh -o StrictHostKeyChecking=no -A -T ubuntu@`aws ec2 describe-instances --region us-west-2 --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=stg-bastion-host" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p
-
-Host 172.23.*.*
-  ProxyCommand ssh -o StrictHostKeyChecking=no -A -T ubuntu@`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=prod-bastion-host" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p
+Host 172.16.*.*
+  ProxyCommand ssh -o StrictHostKeyChecking=no -A  ubuntu@`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values=cdd-dv-bastion-host" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p

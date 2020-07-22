@@ -45,9 +45,11 @@ Ansible Scripts.
     
     # Remember to add AWS profile and add PEM keypair.
     ansible-inventory -i inventory/aws_ec2.yml --graph
-
+    ansible-playbook -e "env=dv" setup-consul-tier.yml
+    ssh -F ansible_ssh_config ubuntu@172.16.3.45
     
     
+    ansible-playbook -e "env=qa" setup-consul-tier.yml
 
 OPTIONAL:
 
