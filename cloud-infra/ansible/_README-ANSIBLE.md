@@ -35,7 +35,6 @@ Ansible Scripts.
     
     # 4- Setup Consul Tier
     ansible-playbook -e "env=dv" setup-consul-tier.yml
-    ansible-playbook -e "env=qa" setup-consul-tier.yml
         
     # X- CREATE ALL Script
     ansible-playbook -e "env=dv" create-all.yml        

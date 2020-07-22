@@ -1,0 +1,533 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Create application host resources, including load balancer, autoscaling
+  application group, and associated DNS records.
+Parameters:
+  VPC:
+    Description: ID of existing VPC
+    Type: 'AWS::EC2::VPC::Id'
+    ConstraintDescription: must be the name of an existing VPC.
+  VpcCidr:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Please specify the CIDR block as n.n.n.n/n
+    Default: 10.0.0.0/16
+    Description: CIDR block for this VPC
+    MaxLength: '18'
+    MinLength: '9'
+    Type: String
+  PublicSubnet1:
+    Description: Public facing subnet
+    Type: 'AWS::EC2::Subnet::Id'
+    ConstraintDescription: must be ID of existing subnet.
+  PublicSubnet2:
+    Description: Public facing subnet
+    Type: 'AWS::EC2::Subnet::Id'
+    ConstraintDescription: must be ID of existing subnet.
+  AppSubnet1:
+    Description: Application subnet
+    Type: 'AWS::EC2::Subnet::Id'
+    ConstraintDescription: must be ID of existing subnet.
+  AppSubnet2:
+    Description: Application subnet
+    Type: 'AWS::EC2::Subnet::Id'
+    ConstraintDescription: must be ID of existing subnet.
+  BastionSecurityGroup:
+    Description: Security group for Bastion host
+    Type: 'AWS::EC2::SecurityGroup::Id'
+    ConstraintDescription: must be a valid security group
+  DbClientSecurityGroup:
+    Description: Security group for RDS access
+    Type: 'AWS::EC2::SecurityGroup::Id'
+    ConstraintDescription: must be a valid security group
+  CacheClusterClientSecurityGroup:
+    Description: Security group for cache access
+    Type: 'AWS::EC2::SecurityGroup::Id'
+    ConstraintDescription: must be a valid security group
+  Environment:
+    Description: Application Environment
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - stg
+      - prod
+  InstanceType:
+    Description: Application Server EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - t2.xlarge
+      - t2.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - m4.16xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - g2.2xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - hs1.8xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+  InstanceCount:
+    Description: Number of EC2 instances to launch
+    Type: Number
+    Default: '1'
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  CacheEndpoint:
+    Description: Cache cluster address
+    Type: String
+  CollectorId:
+    Description: Identifier for the log collector
+    Type: String
+  CollectorSecretKey:
+    Description: Secret key for the log collector
+    Type: String
+  ConsulEc2Policy:
+    Description: Consul IAM Policy for Cluster Discovery
+    Type: String
+  ResourceAccessorPolicy:
+    Description: S3 IAM Policy for Resource Access
+    Type: String
+  Domain:
+    Description: Domain Name for Site
+    Type: String
+  StmDomain:
+    Description: Domain Name for STAAR TestMaker Studio
+    Type: String
+  TmDomain:
+    Description: Domain Name for TestMaker Studio
+    Type: String
+  AppName:
+    Description: Application Hostname
+    Type: String
+  ServiceName:
+    Description: API Service Hostname
+    Type: String
+  JvmOpts:
+    Description: Extra JVM Options
+    Type: String
+Mappings:
+  InstanceAmi:
+    us-east-1:
+      id: ami-0f48befd9be190b55
+    us-west-1:
+      id: ami-04287abe21421dfd8
+    us-west-2:
+      id: ami-0e6063166f59343f7
+  SslCertificate:
+    us-east-1:
+      arn: >-
+        arn:aws:acm:us-east-1:967267661750:certificate/db4249b6-d4c2-41df-b3a8-20b1f58f8cae
+    us-west-1:
+      arn: >-
+        arn:aws:acm:us-west-1:967267661750:certificate/8557fa32-db84-44f4-ae11-b6642b303499
+    us-west-2:
+      arn: >-
+        arn:aws:acm:us-west-2:967267661750:certificate/f102241d-a1eb-48ae-ae52-a4e18be939e0
+Resources:
+  AppHostInstanceTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Subscription:
+        - Endpoint: studio-dev@illuminateed.net
+          Protocol: email
+  ElasticLoadBalancer:
+    Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
+    Properties:
+      AccessLoggingPolicy:
+        Enabled: 'true'
+        EmitInterval: '5'
+        S3BucketName: !Join
+          - '-'
+          - - !Ref Environment
+            - !Ref 'AWS::Region'
+            - fluence-web-access-logs
+      SecurityGroups:
+        - !Ref LoadBalancerSecurityGroup
+      Subnets:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      Listeners:
+        - LoadBalancerPort: '80'
+          Protocol: HTTP
+          InstancePort: '80'
+          InstanceProtocol: HTTP
+        - LoadBalancerPort: '443'
+          Protocol: HTTPS
+          InstancePort: '80'
+          InstanceProtocol: HTTP
+          SSLCertificateId: !FindInMap
+            - SslCertificate
+            - !Ref 'AWS::Region'
+            - arn
+      CrossZone: 'true'
+      HealthCheck:
+        Target: 'HTTPS:443/ia/heartbeat.action'
+        HealthyThreshold: '3'
+        UnhealthyThreshold: '5'
+        Interval: '90'
+        Timeout: '60'
+      ConnectionDrainingPolicy:
+        Enabled: 'true'
+        Timeout: '600'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref Environment
+              - app-load-balancer
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: AppHost
+  LoadBalancerSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable HTTP access on port 80
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: icmp
+          FromPort: '-1'
+          ToPort: '-1'
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: icmp
+          FromPort: '-1'
+          ToPort: '-1'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref Environment
+              - app-load-balancer-security-group
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: AppHost
+  UnhealthyInstanceAlarm:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmDescription: Alarm triggered by unhealthy instances in this load balancer
+      AlarmActions:
+        - !Ref AppHostInstanceTopic
+      MetricName: UnHealthyHostCount
+      Namespace: AWS/ELB
+      Statistic: Average
+      Period: '60'
+      EvaluationPeriods: '3'
+      Threshold: '0'
+      ComparisonOperator: GreaterThanThreshold
+  AppServerGroup:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    Properties:
+      VPCZoneIdentifier:
+        - !Ref AppSubnet1
+        - !Ref AppSubnet2
+      LaunchConfigurationName: !Ref LaunchConfig
+      MinSize: '1'
+      MaxSize: '10'
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: '300'
+      TerminationPolicies:
+        - OldestLaunchConfiguration
+        - OldestInstance
+      DesiredCapacity: !Ref InstanceCount
+      NotificationConfigurations:
+        - TopicARN: !Ref AppHostInstanceTopic
+          NotificationTypes:
+            - 'autoscaling:EC2_INSTANCE_LAUNCH'
+            - 'autoscaling:EC2_INSTANCE_LAUNCH_ERROR'
+            - 'autoscaling:EC2_INSTANCE_TERMINATE'
+            - 'autoscaling:EC2_INSTANCE_TERMINATE_ERROR'
+      LoadBalancerNames:
+        - !Ref ElasticLoadBalancer
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref Environment
+              - app-server
+          PropagateAtLaunch: 'true'
+        - Key: Tier
+          Value: AppHost
+          PropagateAtLaunch: 'true'
+        - Key: hz-node
+          Value: !Ref Environment
+          PropagateAtLaunch: 'true'
+        - Key: Environment
+          Value: !Ref Environment
+          PropagateAtLaunch: 'true'
+  SendMailPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      Description: Policy for sending email through SES
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ses:SendEmail'
+              - 'ses:SendRawEmail'
+            Resource: '*'
+  EcrManagementPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      Description: Policy for managing containers through ECR
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ecr:GetAuthorizationToken'
+              - 'ecr:BatchCheckLayerAvailability'
+              - 'ecr:GetDownloadUrlForLayer'
+              - 'ecr:GetRepositoryPolicy'
+              - 'ecr:DescribeRepositories'
+              - 'ecr:ListImages'
+              - 'ecr:DescribeImages'
+              - 'ecr:BatchGetImage'
+              - 'ecr:InitiateLayerUpload'
+              - 'ecr:UploadLayerPart'
+              - 'ecr:CompleteLayerUpload'
+              - 'ecr:PutImage'
+            Resource: '*'
+  ResourceAccessorRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref ResourceAccessorPolicy
+        - !Ref ConsulEc2Policy
+        - !Ref SendMailPolicy
+        - !Ref EcrManagementPolicy
+  AppDeploymentPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      Description: Policy for deploying application container in given environment
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - 'ec2:Describe*'
+            Effect: Allow
+            Resource: '*'
+          - Action:
+              - 'elasticloadbalancing:Describe*'
+              - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+              - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+              - 'autoscaling:Describe*'
+            Effect: Allow
+            Resource: '*'
+      Users:
+        - build_user
+  AppHostInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref ResourceAccessorRole
+  LaunchConfig:
+    Type: 'AWS::AutoScaling::LaunchConfiguration'
+    Properties:
+      ImageId: !FindInMap
+        - InstanceAmi
+        - !Ref 'AWS::Region'
+        - id
+      KeyName: !Ref KeyName
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |+
+              #cloud-config
+
+            - |
+              bootcmd:
+            - |2
+               - [ cloud-init-per, once, mymkfs, mkfs, /dev/xvdb ]
+            - |
+              mounts:
+            - |2
+               - [ xvdb, /var/lib/docker ]
+            - |
+              runcmd:
+            - |2
+               - systemctl restart newrelic-infra
+            - |2
+               - eval $(aws ecr get-login --no-include-email --region us-east-1)
+            - ' - docker run -v /etc/localtime:/etc/localtime:ro -v /etc/hosts:/etc/hosts:ro -v /opt/logs/catalina:/opt/instances/studio/logs -d -p 5701:5701 -p 80:8080 -p 443:8443 -e IP_ADDRESS=`curl -s http://instance-data/latest//meta-data/local-ipv4` -e CONSUL_SERVER=10.0.0.10 -e REDIS_HOST='
+            - !Ref CacheEndpoint
+            - ' -e EXT_JVM_OPTS='
+            - !Ref JvmOpts
+            - ' -e ENV='
+            - !Ref Environment
+            - ' --name=studio_0 967267661750.dkr.ecr.us-east-1.amazonaws.com/studio-app:'
+            - !Ref Environment
+            - |+
+
+            - ' - docker run -v /etc/localtime:/etc/localtime:ro -v /opt/logs:/opt/logs -d --name=sumo_0 '
+            - ' -e ENVIRONMENT='
+            - !Ref Environment
+            - ' 967267661750.dkr.ecr.us-east-1.amazonaws.com/sumo-collector:latest'
+            - ' '
+            - !Ref CollectorId
+            - ' '
+            - !Ref CollectorSecretKey
+            - |+
+
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+        - !Ref DbClientSecurityGroup
+        - !Ref CacheClusterClientSecurityGroup
+      InstanceType: !Ref InstanceType
+      InstanceMonitoring: 'false'
+      IamInstanceProfile: !Ref AppHostInstanceProfile
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: >-
+        Enable HTTP/S access on the configured port, as well as SSH access from
+        bastion and consul ports.
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          SourceSecurityGroupId: !Ref BastionSecurityGroup
+        - CidrIp: !Ref VpcCidr
+          IpProtocol: tcp
+          FromPort: '8300'
+          ToPort: '8302'
+        - CidrIp: !Ref VpcCidr
+          IpProtocol: udp
+          FromPort: '8300'
+          ToPort: '8302'
+        - CidrIp: !Ref VpcCidr
+          IpProtocol: tcp
+          FromPort: '5701'
+          ToPort: '5703'
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref Environment
+              - app-server-security-group
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Tier
+          Value: AppHost
+  ApplicationRecordSet:
+    Type: 'AWS::Route53::RecordSetGroup'
+    Properties:
+      HostedZoneName: !Join
+        - ''
+        - - !Ref Domain
+          - .
+      Comment: Zone apex alias targeted to ElasticLoadBalancer.
+      RecordSets:
+        - Name: !Join
+            - ''
+            - - !Ref AppName
+              - .
+              - !Ref Domain
+              - .
+          Type: A
+          AliasTarget:
+            HostedZoneId: !GetAtt
+              - ElasticLoadBalancer
+              - CanonicalHostedZoneNameID
+            DNSName: !GetAtt
+              - ElasticLoadBalancer
+              - CanonicalHostedZoneName
+  ServiceRecordSet:
+    Type: 'AWS::Route53::RecordSetGroup'
+    Properties:
+      HostedZoneName: !Join
+        - ''
+        - - !Ref Domain
+          - .
+      Comment: Zone apex alias targeted to ElasticLoadBalancer.
+      RecordSets:
+        - Name: !Join
+            - ''
+            - - !Ref ServiceName
+              - .
+              - !Ref Domain
+              - .
+          Type: A
+          AliasTarget:
+            HostedZoneId: !GetAtt
+              - ElasticLoadBalancer
+              - CanonicalHostedZoneNameID
+            DNSName: !GetAtt
+              - ElasticLoadBalancer
+              - CanonicalHostedZoneName
+Outputs:
+  LoadBalancer:
+    Value: !GetAtt
+      - ElasticLoadBalancer
+      - DNSName
+  URL:
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !Ref AppName
+        - .
+        - !Ref Domain
+        - /ia
