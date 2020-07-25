@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Creates S3 buckets and associated IAM resources for storing Studio application
+  Creates S3 buckets and associated IAM resources for storing application
   files.
 Parameters:
   Environment:
@@ -15,7 +15,7 @@ Parameters:
   BucketName:
     Description: Name of Resource Bucket
     Type: String
-    Default: dev-fluence-resources
+    Default: ccd-dev-resources
   BucketExists:
     Description: Does this bucket already exist?
     Type: String
@@ -28,7 +28,7 @@ Conditions:
     - !Ref BucketExists
     - 'false'
 Resources:
-  StudioResourceBucket:
+  ResourceBucket:
     Type: 'AWS::S3::Bucket'
     Condition: CreateBucket
     DeletionPolicy: Retain
@@ -42,13 +42,13 @@ Resources:
             - '-'
             - - !Ref Environment
               - !Ref 'AWS::Region'
-              - fluence-resources
+              - resources
         - Key: Environment
           Value: !Ref Environment
   ResourceAccessorPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
-      Description: Policy for accessing studio resources
+      Description: Policy for accessing cleancode resources
       Path: /
       PolicyDocument:
         Version: 2012-10-17

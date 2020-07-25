@@ -50,6 +50,14 @@ Ansible Scripts.
     
     ansible-playbook -e "env=qa" setup-consul-tier.yml
 
+    ansible-playbook -e "env=dv" setup-consul-db-cluster.yml
+    
+
+
+
+
+
+
 OPTIONAL:
 
     ansible-playbook -e "env=dv" create-bastionhost.yml
@@ -94,13 +102,13 @@ Consul-Cluster
     ssh -F ansible_ssh_config ubuntu@172.21.4.116
     
     # Save the following output to do a validation at the end.
-    curl http://localhost:8500/v1/kv/beacon/studio/DB_HOSTNAME?format=text
+    curl http://localhost:8500/v1/kv/beacon/cleancode/DB_HOSTNAME?format=text
     
     # Use curl to setup the database cluster.
     curl \
         --request PUT \
         --data 'qa-db-dbcluster-1mpbmkvw1luni.cluster-cijbgtbkerbk.us-east-1.rds.amazonaws.com' \
-        http://localhost:8500/v1/kv/beacon/studio/DB_HOSTNAME
+        http://localhost:8500/v1/kv/beacon/cleancode/DB_HOSTNAME
         
     # Validate the value changed.
-    curl http://localhost:8500/v1/kv/beacon/studio/DB_HOSTNAME?format=text
+    curl http://localhost:8500/v1/kv/beacon/cleancode/DB_HOSTNAME?format=text

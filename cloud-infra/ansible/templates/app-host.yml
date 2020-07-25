@@ -113,10 +113,10 @@ Parameters:
     Description: Domain Name for Site
     Type: String
   StmDomain:
-    Description: Domain Name for STAAR TestMaker Studio
+    Description: Domain Name for STAAR TestMaker CleanCode
     Type: String
   TmDomain:
-    Description: Domain Name for TestMaker Studio
+    Description: Domain Name for TestMaker CleanCode
     Type: String
   AppName:
     Description: Application Hostname
@@ -150,7 +150,7 @@ Resources:
     Type: 'AWS::SNS::Topic'
     Properties:
       Subscription:
-        - Endpoint: studio-dev@illuminateed.net
+        - Endpoint: cleancode-dev@illuminateed.net
           Protocol: email
   ElasticLoadBalancer:
     Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
@@ -162,7 +162,7 @@ Resources:
           - '-'
           - - !Ref Environment
             - !Ref 'AWS::Region'
-            - fluence-web-access-logs
+            - web-access-logs
       SecurityGroups:
         - !Ref LoadBalancerSecurityGroup
       Subnets:
@@ -403,13 +403,13 @@ Resources:
                - systemctl restart newrelic-infra
             - |2
                - eval $(aws ecr get-login --no-include-email --region us-east-1)
-            - ' - docker run -v /etc/localtime:/etc/localtime:ro -v /etc/hosts:/etc/hosts:ro -v /opt/logs/catalina:/opt/instances/studio/logs -d -p 5701:5701 -p 80:8080 -p 443:8443 -e IP_ADDRESS=`curl -s http://instance-data/latest//meta-data/local-ipv4` -e CONSUL_SERVER=10.0.0.10 -e REDIS_HOST='
+            - ' - docker run -v /etc/localtime:/etc/localtime:ro -v /etc/hosts:/etc/hosts:ro -v /opt/logs/catalina:/opt/instances/cleancode/logs -d -p 5701:5701 -p 80:8080 -p 443:8443 -e IP_ADDRESS=`curl -s http://instance-data/latest//meta-data/local-ipv4` -e CONSUL_SERVER=10.0.0.10 -e REDIS_HOST='
             - !Ref CacheEndpoint
             - ' -e EXT_JVM_OPTS='
             - !Ref JvmOpts
             - ' -e ENV='
             - !Ref Environment
-            - ' --name=studio_0 967267661750.dkr.ecr.us-east-1.amazonaws.com/studio-app:'
+            - ' --name=cleancode_0 967267661750.dkr.ecr.us-east-1.amazonaws.com/cleancode-app:'
             - !Ref Environment
             - |+
 

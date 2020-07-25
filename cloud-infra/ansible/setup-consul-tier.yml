@@ -10,20 +10,20 @@
       wait_for: port=8500
 #    - name: load variables
 #      uri:
-#        url: "http://localhost:8500/v1/kv/beacon/studio/{{item.key|upper}}"
+#        url: "http://localhost:8500/v1/kv/beacon/cleancode/{{item.key|upper}}"
 #        method: PUT
 #        body: "{{item.value}}"
 #      with_dict: "{{ config }}"
 #      no_log: True
 #    - name: load database hostname
 #      uri:
-#        url: "http://localhost:8500/v1/kv/beacon/studio/DB_HOSTNAME"
+#        url: "http://localhost:8500/v1/kv/beacon/cleancode/DB_HOSTNAME"
 #        method: PUT
 #        body: "{{ hostvars.localhost.db.stack_outputs.DbHost }}"
 #      when: hostvars.localhost.db.stack_outputs.DbHost is defined
 #    - name: load cache hostname
 #      uri:
-#        url: "http://localhost:8500/v1/kv/beacon/studio/REDIS_HOST"
+#        url: "http://localhost:8500/v1/kv/beacon/cleancode/REDIS_HOST"
 #        method: PUT
 #        body: "{{ hostvars.localhost.app.stack_outputs.CacheEndpoint }}"
 #      when: hostvars.localhost.app.stack_outputs.CacheEndpoint is defined
