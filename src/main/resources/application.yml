@@ -3,3 +3,8 @@ server:
 management.endpoints.web.exposure.include: "*"
 management.endpoint.shutdown.enabled: true
 
+spring:
+  security:
+    user:
+      name: admin
+      password: admin
