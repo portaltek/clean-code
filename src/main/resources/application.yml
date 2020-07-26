@@ -6,5 +6,6 @@ management.endpoint.shutdown.enabled: true
 spring:
   security:
     user:
-      name: admin
-      password: admin
+      roles     : ENDPOINT_ADMIN
+      name      : admin
+      password  : admin
