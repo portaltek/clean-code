@@ -44,15 +44,15 @@ class ApiSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.csrf().disable()
+        http.csrf().ignoringAntMatchers("/actuator/shutdown");
+        http
                 .authorizeRequests()
                 .antMatchers("/actuator/**").hasRole("ENDPOINT_ADMIN")
                 .antMatchers(POST, "/post").hasRole("ENDPOINT_ADMIN")
                 .antMatchers(GET, "/hello").hasRole("ENDPOINT_ADMIN")
                 .antMatchers(GET, "/free").permitAll()
                 //.antMatchers("/**").denyAll()
-                .anyRequest().hasAnyAuthority()
+                .anyRequest().fullyAuthenticated()
                 .and()
                 .httpBasic();
 
