@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ENV MAIN_CLASS=portaltek.cleancode.api.web.CleanCodeApplication
+ENV MAIN_CLASS=portaltek.cleancode.CleanCodeApp
 ENV APP_DEPENDENCY=build/dependency
 
 

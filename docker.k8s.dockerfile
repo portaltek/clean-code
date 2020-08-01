@@ -8,7 +8,7 @@ RUN jar -xf ./app.jar
 
 FROM openjdk:8-jre-alpine
 VOLUME /tmp
-ENV MAIN_CLASS=portaltek.cleancode.api.web.CleanCodeApplication
+ENV MAIN_CLASS=portaltek.cleancode.CleanCodeApp
 ENV DEPENDENCY=build/dependency
 COPY --from=builder $DEPENDENCY/BOOT-INF/lib      /app/lib
 COPY --from=builder $DEPENDENCY/META-INF          /app/META-INF
