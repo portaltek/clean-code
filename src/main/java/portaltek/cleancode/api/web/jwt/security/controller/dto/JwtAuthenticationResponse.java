@@ -19,7 +19,7 @@ public class JwtAuthenticationResponse implements Serializable {
         return this.token;
     }
 
-	public String getRefreshToken() {
-		return refreshToken;
-	}
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 }

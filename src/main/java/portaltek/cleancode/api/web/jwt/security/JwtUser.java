@@ -9,8 +9,8 @@ import java.util.Collection;
 
 public class JwtUser implements UserDetails {
 
-	private static final long serialVersionUID = 1L;
-	private final Long id;
+    private static final long serialVersionUID = 1L;
+    private final Long id;
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;

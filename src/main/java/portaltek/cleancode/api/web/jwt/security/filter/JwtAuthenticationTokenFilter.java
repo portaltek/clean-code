@@ -23,64 +23,62 @@ import java.util.List;
 
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-	private final Log logger = LogFactory.getLog(this.getClass());
+    private final Log logger = LogFactory.getLog(this.getClass());
 
-	@Autowired
-	@Qualifier(value = "jwtUtilWithoutDbCheckImpl")
-	private JwtUtil jwtTokenUtil;
-	
-	@Value("${jwt.header}")
-	private String tokenHeader;
-	@Value("${jwt.refresh.header}")
-	private String refreshTokenHeader;
+    @Autowired
+    @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
+    private JwtUtil jwtTokenUtil;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws ServletException, IOException {
-		
-		response.addHeader("Access-Control-Allow-Headers",
+    @Value("${jwt.header}")
+    private String tokenHeader;
+    @Value("${jwt.refresh.header}")
+    private String refreshTokenHeader;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+
+        response.addHeader("Access-Control-Allow-Headers",
                 "Access-Control-Allow-Origin, Origin, Accept, X-Requested-With, Authorization, refreshauthorization, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Credentials");
         if (response.getHeader("Access-Control-Allow-Origin") == null)
             response.addHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-        if(response.getHeader("Access-Control-Allow-Credentials") == null)
-        	response.addHeader("Access-Control-Allow-Credentials", "true");
-        if(response.getHeader("Access-Control-Allow-Methods") == null)
-        	response.addHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
-        
+        if (response.getHeader("Access-Control-Allow-Credentials") == null)
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+        if (response.getHeader("Access-Control-Allow-Methods") == null)
+            response.addHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
+
         String token;
-        
-        if(!request.getMethod().equals("OPTIONS")){
-        	token = request.getHeader(this.tokenHeader).substring(6);
-        }else{
-        	token = request.getHeader(this.tokenHeader);
+
+        if (!request.getMethod().equals("OPTIONS")) {
+            token = request.getHeader(this.tokenHeader).substring(6);
+        } else {
+            token = request.getHeader(this.tokenHeader);
         }
-		
-		if (token != null && !token.equals("")) {
-			
-			if(jwtTokenUtil.isTokenExpired(token)){
-				response.setStatus(490);
-				return;
-			}
-			
-			if (jwtTokenUtil.validateToken(token)) {
-				
-				String username = jwtTokenUtil.getUsernameFromToken(token);
-				List<SimpleGrantedAuthority> autorities = jwtTokenUtil.getRolesFromToken(token);
-				logger.info("checking Validity of JWT for user ");
 
-					logger.info("checking authentication for user " + username);
+        if (token != null && !token.equals("")) {
 
-					if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtTokenUtil.isTokenExpired(token)) {
+                response.setStatus(490);
+                return;
+            }
 
-						UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, autorities);
-						authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-						logger.info("authenticated user " + username + ", setting security context");
-						SecurityContextHolder.getContext().setAuthentication(authentication);
-					}
-			}
-		}
-		chain.doFilter(request, response);
-		
-	}
+            if (jwtTokenUtil.validateToken(token)) {
+
+                String username = jwtTokenUtil.getUsernameFromToken(token);
+                List<SimpleGrantedAuthority> authorities = jwtTokenUtil.getRolesFromToken(token);
+                logger.info("checking authentication for user " + username);
+
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    logger.info("authenticated user " + username + ", setting security context");
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+        }
+        chain.doFilter(request, response);
+
+    }
 
 }

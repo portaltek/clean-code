@@ -14,18 +14,18 @@ import portaltek.cleancode.api.web.jwt.controller.dto.ServerResponse;
 public class GreetingController {
 
 
-	@RequestMapping(value = "admin", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "admin", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ServerResponse> greetingAdmin() throws Exception {
 
-    	String msg = "Hello Authenticated Admin";
-    	return ResponseEntity.ok(new ServerResponse(msg));
+        String msg = "Hello Authenticated Admin";
+        return ResponseEntity.ok(new ServerResponse(msg));
     }
-	
-	@RequestMapping(value = "user", method = RequestMethod.GET)
+
+    @RequestMapping(value = "user", method = RequestMethod.GET)
     public ResponseEntity<ServerResponse> greetingUser() throws Exception {
 
-    	String msg = "Hello Authenticated User";
-    	return ResponseEntity.ok(new ServerResponse(msg));
+        String msg = "Hello Authenticated User";
+        return ResponseEntity.ok(new ServerResponse(msg));
     }
 }
