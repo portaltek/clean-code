@@ -37,3 +37,8 @@
     docker run --rm -ti --entrypoint /bin/sh -p 8080:8080 portaltek/docker:1.0.0
     java -cp app:app/lib/* portaltek.cleancode.CleanCodeApp
     
+    
+    
+### RUN docker java app manually.
+    docker run --rm -ti --entrypoint /bin/sh -p 8080:8080 portaltek/docker:1.0.0
+    java -cp app:app/lib/* portaltek.cleancode.CleanCodeApp
