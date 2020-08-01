@@ -56,14 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
-                // we don't need CSRF because we store token in header
                 .csrf().disable()
-
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-
-                // don't create session // because socket need session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
                 .authorizeRequests()
 
                 // allow anonymous resource requests
@@ -73,14 +68,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/console/**").permitAll()
                 .anyRequest().authenticated();
 
-        // Custom JWT based security filter
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
         // disable page caching
         httpSecurity.headers().cacheControl().disable();
-        httpSecurity.headers().frameOptions().disable();
-        httpSecurity.headers().frameOptions().sameOrigin();
+
     }
 
     @Bean
