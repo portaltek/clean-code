@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+    public JwtAuthenticationTokenFilter authenticationTokenFilterBean(){
         return new JwtAuthenticationTokenFilter();
     }
 
@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, ANONYMOUS_RESOURCES).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/api/open/**").permitAll()
-                //.antMatchers("/actuator/**").permitAll()
+                .antMatchers("/console/**").permitAll()
                 .anyRequest().authenticated();
 
         // Custom JWT based security filter
@@ -79,6 +79,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // disable page caching
         httpSecurity.headers().cacheControl().disable();
+        httpSecurity.headers().frameOptions().disable();
+        httpSecurity.headers().frameOptions().sameOrigin();
     }
 
     @Bean

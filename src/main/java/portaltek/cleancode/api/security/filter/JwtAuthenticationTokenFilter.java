@@ -38,6 +38,22 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+        this.addResponseHeaders(response);
+        String token = this.extractToken(request);
+
+        if (token != null && !token.equals("")) {
+
+            if (jwtTokenUtil.isTokenExpired(token)) {
+                response.setStatus(490);
+                return;
+            }
+            this.validateToken(request, token);
+        }
+
+        chain.doFilter(request, response);
+    }
+
+    private void addResponseHeaders(HttpServletResponse response) {
         response.addHeader("Access-Control-Allow-Headers",
                 "Access-Control-Allow-Origin, Origin, Accept, X-Requested-With, Authorization, refreshauthorization, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Credentials");
         if (response.getHeader("Access-Control-Allow-Origin") == null)
@@ -46,39 +62,34 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             response.addHeader("Access-Control-Allow-Credentials", "true");
         if (response.getHeader("Access-Control-Allow-Methods") == null)
             response.addHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
+    }
 
+    private String extractToken(HttpServletRequest request) {
         String token;
-
         if (!request.getMethod().equals("OPTIONS")) {
             token = request.getHeader(this.tokenHeader).substring(6);
         } else {
             token = request.getHeader(this.tokenHeader);
         }
+        return token;
+    }
 
-        if (token != null && !token.equals("")) {
+    private void validateToken(HttpServletRequest request, String token) {
+        if (jwtTokenUtil.validateToken(token)) {
 
-            if (jwtTokenUtil.isTokenExpired(token)) {
-                response.setStatus(490);
-                return;
-            }
+            String username = jwtTokenUtil.getUsernameFromToken(token);
+            List<SimpleGrantedAuthority> authorities = jwtTokenUtil.getRolesFromToken(token);
+            logger.info("checking authentication for user " + username);
 
-            if (jwtTokenUtil.validateToken(token)) {
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                String username = jwtTokenUtil.getUsernameFromToken(token);
-                List<SimpleGrantedAuthority> authorities = jwtTokenUtil.getRolesFromToken(token);
-                logger.info("checking authentication for user " + username);
-
-                if (SecurityContextHolder.getContext().getAuthentication() == null) {
-
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    logger.info("authenticated user " + username + ", setting security context");
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                logger.info("authenticated user " + username + ", setting security context");
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        chain.doFilter(request, response);
-
     }
+
 
 }
