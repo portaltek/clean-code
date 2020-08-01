@@ -6,7 +6,6 @@ package portaltek.cleancode.api.web.jwt.security.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +21,8 @@ import portaltek.cleancode.api.web.jwt.security.controller.dto.JwtAuthentication
 import portaltek.cleancode.api.web.jwt.security.controller.dto.JwtAuthenticationResponse;
 import portaltek.cleancode.api.web.jwt.security.service.JwtUtil;
 
+import static org.springframework.http.HttpStatus.*;
+
 
 @RestController
 @RequestMapping("/api/open/")
@@ -31,31 +32,29 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
-    private JwtUtil jwtTokenUtil;
+    private JwtUtil jwtUtil;
 
-    @RequestMapping(value = "hello", method = {RequestMethod.GET, RequestMethod.OPTIONS})
-    public ResponseEntity<String> getAuthenticatedUser() {
-        return ResponseEntity.ok("Hello!!!");
-    }
+
     @RequestMapping(value = "${jwt.route.authentication.path}", method = {RequestMethod.POST, RequestMethod.OPTIONS})
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
+    public ResponseEntity<?> createJwt(@RequestBody JwtAuthenticationRequest req)
+            throws AuthenticationException {
 
-        // Perform the security
         try {
-            final Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authenticationRequest.getUsername(),
-                            authenticationRequest.getPassword()
-                    )
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    req.getUsername(),
+                    req.getPassword()
             );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            final Authentication authenticated = authenticationManager.authenticate(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authenticated);
         } catch (AuthenticationException e) {
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ServerResponse(e.getMessage()));
+            return ResponseEntity
+                    .status(UNAUTHORIZED)
+                    .body(new ServerResponse(e.getMessage()));
         }
 
-        final JwtAuthenticationResponse token = jwtTokenUtil.generateToken(authenticationRequest.getUsername());
-        jwtTokenUtil.generateToken(authenticationRequest.getUsername());
+        final JwtAuthenticationResponse token = jwtUtil.generateToken(req.getUsername());
+        jwtUtil.generateToken(req.getUsername());
 
         // Return the token
         return ResponseEntity.ok(token);
