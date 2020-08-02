@@ -3,8 +3,7 @@ ARG DEPENDENCY=build/dependency
 WORKDIR $DEPENDENCY
 ARG JAR=build/libs/*.jar
 COPY ${JAR} app.jar
-RUN jar -xf ./app.jar
-RUN ls -lht ./*
+
 
 
 FROM openjdk:8-jre-alpine

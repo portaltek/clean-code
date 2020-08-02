@@ -12,10 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import portaltek.cleancode.api.controller.dto.ServerResponse;
 import portaltek.cleancode.api.security.controller.dto.JwtAuthenticationRequest;
 import portaltek.cleancode.api.security.controller.dto.JwtAuthenticationResponse;
@@ -33,8 +30,6 @@ public class AuthController {
     @Autowired
     @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
     private JwtUtil jwtUtil;
-
-
     @RequestMapping(value = "${jwt.route.authentication.path}", method = {RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseEntity<?> createJwt(@RequestBody JwtAuthenticationRequest req)
             throws AuthenticationException {
@@ -58,5 +53,12 @@ public class AuthController {
 
         // Return the token
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping(value = "hello")
+    public ResponseEntity<ServerResponse> greetingUser() throws Exception {
+
+        String msg = "Hello World!!!";
+        return ResponseEntity.ok(new ServerResponse(msg));
     }
 }

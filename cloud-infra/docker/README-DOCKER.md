@@ -16,7 +16,7 @@
     
 ### BUILD images and RUN
     mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
-    docker build -t portaltek/docker:1.0.0 .
+    docker build -t portaltek/docker:1.0.0 -f cloud-infra/docker/build.dockerfile .
     docker run --rm -p 8080:8080 portaltek/docker:1.0.0
     docker run --rm -e "SPRING_PROFILES_ACTIVE=PR" -p 8080:8080 -t portaltek/docker:1.0.0
 
@@ -39,6 +39,8 @@
     
     
     
-### RUN docker java app manually.
-    docker run --rm -ti --entrypoint /bin/sh -p 8080:8080 portaltek/docker:1.0.0
-    java -cp app:app/lib/* portaltek.cleancode.CleanCodeApp
+### Upload docker image to AWS ECR.
+    $(aws ecr get-login --no-include-email --region us-east-2)
+    aws ecr create-repository --repository-name cleancode-app --region us-east-2
+    docker tag be5ca67ab234 793628107353.dkr.ecr.us-east-2.amazonaws.com/cleancode-app:dev
+    docker push 793628107353.dkr.ecr.us-east-2.amazonaws.com/cleancode-app:dev
