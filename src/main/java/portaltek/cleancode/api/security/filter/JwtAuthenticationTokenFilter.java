@@ -37,24 +37,26 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Value("${jwt.refresh.header}")
     private String refreshTokenHeader;
 
-    boolean hasToken(String requestTokenHeader) {
-        return requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ");
+    boolean hasToken(String header) {
+        return header != null && header.startsWith("Bearer ");
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain) throws ServletException, IOException {
 
         this.addResponseHeaders(response);
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            final String header = request.getHeader(this.tokenHeader);
-            if (this.hasToken(header)) {
-                String token = header.substring(7);
+        final String header = request.getHeader(this.tokenHeader);
+        if (this.hasToken(header)) {
+            String token = header.substring(7);
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 this.validateToken(request, token);
             }
-
         }
+
 
         chain.doFilter(request, response);
     }
@@ -81,10 +83,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         if (jwtTokenUtil.validateToken(token)) {
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             logger.info("authenticated user " + username + ", setting security context");
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
     }
