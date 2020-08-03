@@ -46,11 +46,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         this.addResponseHeaders(response);
-        final String requestTokenHeader = request.getHeader(this.tokenHeader);
-        if (this.hasToken(requestTokenHeader)) {
-            String token = requestTokenHeader.substring(7);
-            this.validateToken(request, token);
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            final String header = request.getHeader(this.tokenHeader);
+            if (this.hasToken(header)) {
+                String token = header.substring(7);
+                this.validateToken(request, token);
+            }
+
         }
+
         chain.doFilter(request, response);
     }
 
@@ -67,21 +72,21 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 
     private void validateToken(HttpServletRequest request, String token) {
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            //Claims claims = jwtTokenUtil.getClaimsFromToken(token);
-            String username = jwtTokenUtil.getUsernameFromToken(token);
-            List<SimpleGrantedAuthority> authorities = jwtTokenUtil.getRolesFromToken(token);
-            logger.info("checking authentication for user " + username);
+
+        //Claims claims = jwtTokenUtil.getClaimsFromToken(token);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        List<SimpleGrantedAuthority> authorities = jwtTokenUtil.getRolesFromToken(token);
+        logger.info("checking authentication for user " + username);
 
 
-            if (jwtTokenUtil.validateToken(token)) {
+        if (jwtTokenUtil.validateToken(token)) {
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                logger.info("authenticated user " + username + ", setting security context");
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            logger.info("authenticated user " + username + ", setting security context");
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
     }
 
 
