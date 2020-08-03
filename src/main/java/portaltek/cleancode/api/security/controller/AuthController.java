@@ -35,11 +35,11 @@ public class AuthController {
             throws AuthenticationException {
 
         try {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
+            Authentication auth = new UsernamePasswordAuthenticationToken(
                     req.getUsername(),
                     req.getPassword()
             );
-            final Authentication authenticated = authenticationManager.authenticate(authentication);
+            final Authentication authenticated = authenticationManager.authenticate(auth);
             SecurityContextHolder.getContext().setAuthentication(authenticated);
         } catch (AuthenticationException e) {
 
@@ -48,11 +48,9 @@ public class AuthController {
                     .body(new ServerResponse(e.getMessage()));
         }
 
-        final JwtAuthenticationResponse token = jwtUtil.generateToken(req.getUsername());
-        jwtUtil.generateToken(req.getUsername());
+        final JwtAuthenticationResponse response = jwtUtil.generateToken(req.getUsername());
 
-        // Return the token
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "hello")

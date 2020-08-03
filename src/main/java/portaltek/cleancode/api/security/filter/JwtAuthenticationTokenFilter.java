@@ -1,6 +1,8 @@
 package portaltek.cleancode.api.security.filter;
 
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import portaltek.cleancode.api.security.service.JwtUtil;
@@ -34,22 +37,20 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Value("${jwt.refresh.header}")
     private String refreshTokenHeader;
 
+    boolean hasToken(String requestTokenHeader) {
+        return requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ");
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
         this.addResponseHeaders(response);
-        String token = this.extractToken(request);
-
-        if (token != null && !token.equals("")) {
-
-            if (jwtTokenUtil.isTokenExpired(token)) {
-                response.setStatus(490);
-                return;
-            }
+        final String requestTokenHeader = request.getHeader(this.tokenHeader);
+        if (this.hasToken(requestTokenHeader)) {
+            String token = requestTokenHeader.substring(7);
             this.validateToken(request, token);
         }
-
         chain.doFilter(request, response);
     }
 
@@ -64,24 +65,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             response.addHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
     }
 
-    private String extractToken(HttpServletRequest request) {
-        String token;
-        if (!request.getMethod().equals("OPTIONS")) {
-            token = request.getHeader(this.tokenHeader).substring(6);
-        } else {
-            token = request.getHeader(this.tokenHeader);
-        }
-        return token;
-    }
 
     private void validateToken(HttpServletRequest request, String token) {
-        if (jwtTokenUtil.validateToken(token)) {
-
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            //Claims claims = jwtTokenUtil.getClaimsFromToken(token);
             String username = jwtTokenUtil.getUsernameFromToken(token);
             List<SimpleGrantedAuthority> authorities = jwtTokenUtil.getRolesFromToken(token);
             logger.info("checking authentication for user " + username);
 
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            if (jwtTokenUtil.validateToken(token)) {
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

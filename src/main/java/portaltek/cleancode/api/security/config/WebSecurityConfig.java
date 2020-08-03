@@ -32,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
+    public void configureAuthentication(AuthenticationManagerBuilder builder) throws Exception {
+        builder
                 .userDetailsService(this.userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
@@ -45,28 +45,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean(){
         return new JwtAuthenticationTokenFilter();
     }
 
     public static String[] ANONYMOUS_RESOURCES = {"/", "/*.html",
-            "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js"};
+            "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.jsp"};
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity
-                .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
+        httpSecurity.csrf().disable()
 
-                // allow anonymous resource requests
+                .authorizeRequests()
                 .antMatchers(HttpMethod.GET, ANONYMOUS_RESOURCES).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/api/open/**").permitAll()
                 .antMatchers("/console/**").permitAll()
-                .anyRequest().authenticated();
+
+                .anyRequest().authenticated().and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+        ;
 
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
@@ -76,9 +82,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+
 }
