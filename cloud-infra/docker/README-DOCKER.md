@@ -24,7 +24,7 @@
     docker run --rm -e "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n" -p 8080:8080 -p 5005:5005 -t portaltek/docker:1.0.0
     
 ### OPTIONAL: create docker image with gradle. Additional research required.
-    ./gradlew bootBuildImage --imageName=portaltek/docker:1.0.0
+    ./gradlew docker
 
 ### Check running container.
     docker exec -ti 25e1bfa93acc /bin/sh
