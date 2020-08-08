@@ -58,6 +58,7 @@ bootJar {
 docker {
     name    'portaltek/clean-code:1.0.0'
     files   'build/libs/clean-code.jar'
+    setDockerfile(file("build.dockerfile"))
 }
 
 dockerRun {
@@ -65,4 +66,5 @@ dockerRun {
     image   'portaltek/clean-code:1.0.0'
     ports   '8080:8080'
     clean   true
+
 }

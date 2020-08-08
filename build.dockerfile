@@ -2,8 +2,7 @@
 #ARG DEPENDENCY=build/dependency
 #WORKDIR $DEPENDENCY
 #ARG JAR=build/libs/*.jar
-#COPY ${JAR} app.jar
-#
+#COPY "clean-code.jar" "app.jar"
 #
 #
 #FROM openjdk:8-jre-alpine
@@ -13,7 +12,6 @@
 #COPY --from=builder $DEPENDENCY/BOOT-INF/lib      /app/lib
 #COPY --from=builder $DEPENDENCY/META-INF          /app/META-INF
 #COPY --from=builder $DEPENDENCY/BOOT-INF/classes  /app
-#
 #
 #ENTRYPOINT java -cp app:app/lib/* $MAIN_CLASS
 
