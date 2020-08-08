@@ -44,3 +44,4 @@
     aws ecr create-repository --repository-name cleancode-app --region us-east-2
     docker tag be5ca67ab234 793628107353.dkr.ecr.us-east-2.amazonaws.com/cleancode-app:dev
     docker push 793628107353.dkr.ecr.us-east-2.amazonaws.com/cleancode-app:dev
+    docker logout
