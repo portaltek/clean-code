@@ -7,7 +7,17 @@ Use Pronounceable Names.
 Use searchable names.
 Avoid Encodings.
 
-DEVELOP CHANGE
-FT-001
-FT-001-A
-FT-001-B
+Create a new Function:
+    - Does more than one thing.
+    - Is more than 20 lines long.
+    - Contains multiple levels of abstractions.
+    - Contains more than 4 levels of indentation.
+    - Contains nested loops with more than 2 or 3 levels.
+    - Contains nested try-catch blocks. Should be only one try-catch per function.
+
+
+Create a new Class:
+    - When function accepts more than 5 parameters.
+    - When classes contains to many fields that can be related.
+    - When classes contains to many methods that can be related.
+    -

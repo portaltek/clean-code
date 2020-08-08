@@ -1,0 +1,60 @@
+project: "ccd"
+env: "dv"
+project_id: "{{ project }}-{{ env }}"
+region: "us-east-2"
+#key_name: "{{ env }}_keypair_{{ region }}"
+#key_name: "{{ project_id }}_keypair_{{ region }}"
+#key_name: "ansible_tutorial"
+key_name: ccd-dv_keypair_us-east-2
+
+
+# VPC Tier Parameters
+vpc_stack_name: "{{ project_id }}-vpc"
+vpc_cidr: 172.16.0.0/16
+public_subnet_1_cidr: 172.16.1.0/24
+public_subnet_2_cidr: 172.16.2.0/24
+
+bastion_access_cidr: 0.0.0.0/0
+bastion_instance_type: t2.micro
+bastion_ami: ami-0d2e892aae344e175 #us-east-2, INFO:cloud-infra/packer/README.md
+
+log_bucket_stack_name: "{{ project_id }}-log-bucket"
+log_bucket_name: "{{ project_id }}-log-bucket"
+log_bucket_username: "{{ project }}-log-bucket-user"
+
+credentials_bucket_stack_name: "{{ project_id }}-credentials-bucket"
+credentials_bucket_name: "{{ project_id }}-credentials-bucket"
+
+# Consul Tier Parameters
+consul_stack_name: "{{ project_id }}-consul"
+consul_subnet_1_cidr: 172.16.3.0/24
+consul_subnet_2_cidr: 172.16.4.0/24
+consul_instance_type: t2.micro
+consul_server_count: '3'
+consul_ami: ami-05118ae2c05d5f65f #us-east-2, INFO:cloud-infra/packer/README.md
+
+# Database Tier Parameters
+database_stack_name: "{{ project_id }}-database"
+db_subnet_1_cidr: 172.16.5.0/24
+db_subnet_2_cidr: 172.16.6.0/24
+db_instance_type: db.t2.small #db.t2.small, db.r3.large
+db_create_replica: 'true'
+
+# Cache Tier Parameters
+cache_stack_name: "{{ project_id }}-cache"
+cache_subnet_1_cidr: 172.16.7.0/24
+cache_subnet_2_cidr: 172.16.8.0/24
+cache_node_type: cache.t2.micro
+cache_node_count: '1'
+cache_failover: 'false'
+
+# Web Tier Parameters
+app_instance_type: t2.small
+app_instance_count: '2'
+
+# Java Settings
+jvm_opts: -Xmx512M
+
+config:
+  db_name                     : app_db_name
+  db_username                 : username

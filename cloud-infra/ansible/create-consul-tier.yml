@@ -1,0 +1,75 @@
+---
+- hosts                       : localhost
+  connection                  : local
+  gather_facts                : no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  environment:
+    AWS_DEFAULT_REGION        : "{{ region }}"
+  vars:
+  tasks:
+  - cloudformation_facts:
+      all_facts: false
+    register: vpc_stack
+  - set_fact:
+      vpc: "{{ vpc_stack.ansible_facts.cloudformation[vpc_stack_name].stack_outputs }}"
+
+  - name                    : "CREATE STACK: {{ consul_stack_name }} "
+    cloudformation:
+      stack_name            : "{{ consul_stack_name }}"
+      state                 : "present"
+      region                : "{{ region }}"
+      template              : "templates/consul.yml"
+      template_parameters:
+        KeyName             : "{{ key_name }}"
+        Environment         : "{{ env }}"
+        ProjectId           : "{{ project_id }}"
+        VPC                 : "{{ vpc.VpcId }}"
+        VpcCidr             : "{{ vpc.VpcCidr }}"
+        AvailabilityZone1   : "{{ vpc.AvailabilityZone1 }}"
+        AvailabilityZone2   : "{{ vpc.AvailabilityZone2 }}"
+        PrivateRouteTable1  : "{{ vpc.PrivateRouteTable1 }}"
+        PrivateRouteTable2  : "{{ vpc.PrivateRouteTable2 }}"
+        BastionSecurityGroup: "{{ vpc.BastionSecurityGroup }}"
+
+        ConsulSubnet1Cidr   : "{{ consul_subnet_1_cidr }}"
+        ConsulSubnet2Cidr   : "{{ consul_subnet_2_cidr }}"
+        InstanceType        : "{{ consul_instance_type }}"
+        InstanceCount       : "{{ consul_server_count }}"
+        ConsulAMI           : "{{ consul_ami }}"
+    register: consul
+  - name: show consul stack outputs
+    debug: msg="Created {{ consul_stack_name }} created with these resources {{ consul.stack_outputs }}"
+
+
+
+  ###################### Update BastionHost ######################
+
+
+  - name: refresh inventory
+    meta: refresh_inventory
+
+  - name: get bastion host
+    shell: "aws ec2 describe-instances --filters \"Name=tag:Name,Values={{project_id}}-bastion-host\" \"Name=instance-state-name,Values=running\" | jq -r .Reservations[].Instances[].PublicDnsName"
+    register: bastion_host
+
+  - name: bastion host dnsName
+    debug: msg="bastion_host= {{ bastion_host.stdout_lines }} "
+
+  - name: clear known_hosts entry in case of new instance
+    known_hosts: name={{ item }} state=absent
+    with_items: "{{ bastion_host.stdout_lines }}"
+
+  - name: add public hostname for bastion host
+    add_host: name={{ item }} groups="tag_Name_{{ project_id }}_bastion_host_public"
+    with_items: "{{ bastion_host.stdout_lines }}"
+
+  - name: END OF create-consul-tier.yml
+    debug: msg="END OF create-consul-tier.yml"
+
+  ###################### Configure SumoLogic collector in BastionHost ######################
+
+  ## TODO: Configure SumoLogic collector in BastionHost use ansible-aws/bastion.yml
+
+

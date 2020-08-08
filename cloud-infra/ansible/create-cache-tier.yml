@@ -1,0 +1,43 @@
+---
+- hosts                       : localhost
+  connection                  : local
+  gather_facts                : no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  environment:
+    AWS_DEFAULT_REGION        : "{{ region }}"
+  vars:
+  tasks:
+    - cloudformation_facts:
+        all_facts: false
+      register: vpc_stack
+
+    - set_fact:
+        vpc: "{{ vpc_stack.ansible_facts.cloudformation[vpc_stack_name].stack_outputs }}"
+
+    - name                          : "CREATE STACK: {{ cache_stack_name }} "
+      cloudformation:
+        stack_name                  : "{{ cache_stack_name }}"
+        state                       : "present"
+        region                      : "{{ region }}"
+        template                    : "templates/cache.yml"
+        template_parameters:
+          VPC                       : "{{ vpc.VpcId }}"
+          AvailabilityZone1         : "{{ vpc.AvailabilityZone1 }}"
+          AvailabilityZone2         : "{{ vpc.AvailabilityZone2 }}"
+          PrivateRouteTable1        : "{{ vpc.PrivateRouteTable1 }}"
+          PrivateRouteTable2        : "{{ vpc.PrivateRouteTable2 }}"
+          Environment               : "{{ env }}"
+          ProjectId                 : "{{ project_id }}"
+
+          CacheSubnet1Cidr          : "{{ cache_subnet_1_cidr }}"
+          CacheSubnet2Cidr          : "{{ cache_subnet_2_cidr }}"
+          ClusterNodeType           : "{{ cache_node_type }}"
+          ClusterNodeCount          : "{{ cache_node_count }}"
+          AutomaticClusterFailover  : "{{ cache_failover }}"
+      register: cache
+    - name: show app stack outputs
+      debug: msg="Created {{ cache_stack_name }} created with these resources {{ cache.stack_outputs }}"
+
+

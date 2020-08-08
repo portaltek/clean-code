@@ -1,0 +1,15 @@
+---
+#- hosts: "tag_Name_{{ env }}_consul_server[0]"
+#  user: ubuntu
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - "inventory/group_vars/{{ env }}/config.yml"
+    #- "inventory/group_vars/{{ env }}/secrets.yml"
+  tasks:
+    - name: Output
+      debug:
+        msg: "HELLO WORLD"
+
+    - debug:
+        msg: "HELLO WORLD2"

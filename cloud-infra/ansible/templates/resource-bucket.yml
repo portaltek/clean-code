@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Creates S3 buckets and associated IAM resources for storing application
+  files.
+Parameters:
+  Environment:
+    Description: Application Environment
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - stg
+      - prod
+  BucketName:
+    Description: Name of Resource Bucket
+    Type: String
+    Default: ccd-dev-resources
+  BucketExists:
+    Description: Does this bucket already exist?
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+Conditions:
+  CreateBucket: !Equals
+    - !Ref BucketExists
+    - 'false'
+Resources:
+  ResourceBucket:
+    Type: 'AWS::S3::Bucket'
+    Condition: CreateBucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Name
+          Value: !Join
+            - '-'
+            - - !Ref Environment
+              - !Ref 'AWS::Region'
+              - resources
+        - Key: Environment
+          Value: !Ref Environment
+  ResourceAccessorPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      Description: Policy for accessing cleancode resources
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - 's3:GetObject'
+              - 's3:GetObjectVersion'
+              - 's3:ListBucket'
+              - 's3:ListBucketVersions'
+              - 's3:PutObject'
+              - 's3:DeleteObject'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref BucketName
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref BucketName
+Outputs:
+  ResourceAccessorPolicy:
+    Description: Resource Accessor Policy
+    Value: !Ref ResourceAccessorPolicy

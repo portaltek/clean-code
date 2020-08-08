@@ -1,0 +1,72 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "region": "",
+    "clone_regions": "",
+    "source_ami" : ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "{{user `region`}}",
+    "source_ami": "{{user `source_ami`}}",
+    "instance_type": "m3.medium",
+    "ami_regions": "{{user `clone_regions`}}",
+    "ssh_username": "ubuntu",
+    "ami_name": "consul host {{isotime \"2006-01-02 15.04\"}}"
+  }],
+  "provisioners": [
+    {
+      "type" : "file",
+      "source" : "conf/dhclient.conf",
+      "destination" : "/tmp/dhclient.conf"
+    },
+    {
+      "type" : "file",
+      "source" : "conf/consul.service",
+      "destination" : "/tmp/consul.service"
+    },
+    {
+      "type" : "file",
+      "source" : "conf/start_consul.sh",
+      "destination" : "/tmp/start_consul.sh"
+    },
+    {
+      "type" : "file",
+      "source" : "conf/server.json",
+      "destination" : "/tmp/server.json"
+    },
+    {
+      "type" : "file",
+      "source" : "conf/common.json",
+      "destination" : "/tmp/common.json"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sleep 30",
+        "curl https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg | sudo apt-key add -",
+        "printf \"deb [arch=amd64] https://download.newrelic.com/infrastructure_agent/linux/apt xenial main\" | sudo tee -a /etc/apt/sources.list.d/newrelic-infra.list",
+        "sudo DEBIAN_FRONTEND=noninteractive apt-get update",
+        "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y",
+        "sudo apt-get install -y unzip python-pip jq traceroute newrelic-infra",
+        "sudo pip install awscli httplib2 python-consul boto3",
+        "sudo curl -o /tmp/consul.zip -L https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip",
+        "sudo unzip /tmp/consul.zip -d /usr/bin/",
+        "sudo chmod +x /usr/bin/consul",
+        "sudo rm /tmp/consul.zip",
+        "sudo timedatectl set-timezone America/New_York",
+        "sudo mv /tmp/dhclient.conf /etc/dhcp/dhclient.conf",
+        "sudo mv /tmp/consul.service /etc/systemd/system/consul.service",
+        "sudo mv /tmp/start_consul.sh /usr/local/bin/start_consul.sh",
+        "sudo chmod a+x /usr/local/bin/start_consul.sh",
+        "sudo mkdir /etc/consul.d",
+        "sudo mv /tmp/*.json /etc/consul.d/",
+        "echo 'license_key: 2dd1db411fc68ac26db7f9ffec48a7e9f6b3783e' | sudo tee -a /etc/newrelic-infra.yml",
+        "sudo systemctl enable consul.service"
+      ]
+    }
+  ]
+}

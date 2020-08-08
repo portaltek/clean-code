@@ -1,0 +1,4 @@
+---
+- import_playbook: create-vpc-tier.yml
+- import_playbook: create-consul-tier.yml
+- import_playbook: setup-consul-tier.yml

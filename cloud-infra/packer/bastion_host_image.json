@@ -1,0 +1,39 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "region": "",
+    "clone_regions": "",
+    "source_ami" : ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "{{user `region`}}",
+    "source_ami": "{{user `source_ami`}}",
+    "instance_type": "m3.medium",
+    "ami_regions": "{{user `clone_regions`}}",
+    "ssh_username": "ubuntu",
+    "ami_name": "bastion host {{isotime \"2006-01-02 15.04\"}}"
+  }],
+  "provisioners": [
+    {
+      "type" : "file",
+      "source" : "conf/dhclient.conf",
+      "destination" : "/tmp/dhclient.conf"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sleep 30",
+        "sudo DEBIAN_FRONTEND=noninteractive apt-get update",
+        "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y",
+        "sudo apt-get install -y unzip python-minimal",
+        "sudo timedatectl set-timezone America/New_York",
+        "sudo mv /tmp/dhclient.conf /etc/dhcp/dhclient.conf"
+      ]
+    }
+  ]
+}
+                                                                                                                         
