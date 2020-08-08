@@ -58,7 +58,7 @@ bootJar {
 docker {
     name    'portaltek/clean-code:1.0.0'
     files   'build/libs/clean-code.jar'
-    setDockerfile(file("build.dockerfile"))
+    setDockerfile(file("cloud-infra/docker/build.dockerfile"))
 }
 
 dockerRun {
