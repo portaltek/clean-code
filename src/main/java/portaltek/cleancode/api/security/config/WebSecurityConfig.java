@@ -2,6 +2,7 @@ package portaltek.cleancode.api.security.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import portaltek.cleancode.api.security.filter.JwtAuthenticationEntryPoint;
 import portaltek.cleancode.api.security.filter.JwtAuthenticationTokenFilter;
+
+import javax.servlet.annotation.WebServlet;
 
 
 @Configuration
@@ -58,18 +61,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static String[] ANONYMOUS_RESOURCES = {"/", "/*.html",
             "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.jsp"};
 
+
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.csrf().disable()
-
-                .authorizeRequests()
+        httpSecurity.authorizeRequests()
                 .antMatchers(HttpMethod.GET, ANONYMOUS_RESOURCES).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/api/open/**").permitAll()
                 .antMatchers("/console/**").permitAll()
+                .anyRequest().authenticated()
 
-                .anyRequest().authenticated().and()
+                .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         ;
@@ -77,8 +81,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
-        // disable page caching
+        httpSecurity.csrf().disable();
         httpSecurity.headers().cacheControl().disable();
+        httpSecurity.headers().frameOptions().disable();
 
     }
 
