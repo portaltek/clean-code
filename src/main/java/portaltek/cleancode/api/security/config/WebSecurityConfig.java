@@ -71,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/api/open/**").permitAll()
                 .antMatchers("/console/**").permitAll()
+                .antMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

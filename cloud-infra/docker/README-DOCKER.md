@@ -42,8 +42,8 @@
 #### Upload docker image to AWS ECR.
     $(aws ecr get-login --no-include-email --region us-east-2)
     aws ecr create-repository --repository-name cleancode-app --region us-east-2
-    docker tag be5ca67ab234 793628107353.dkr.ecr.us-east-2.amazonaws.com/clean-code:dev
-    docker push 793628107353.dkr.ecr.us-east-2.amazonaws.com/clean-code:dev
+    docker tag be5ca67ab234 793628107353.dkr.ecr.us-east-2.amazonaws.com/clean-code:dv
+    docker push 793628107353.dkr.ecr.us-east-2.amazonaws.com/clean-code:dv
     docker logout
     
     
