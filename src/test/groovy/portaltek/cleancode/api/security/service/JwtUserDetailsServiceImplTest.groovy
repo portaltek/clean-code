@@ -8,15 +8,10 @@ import spock.lang.Specification
 
 class JwtUserDetailsServiceImplTest extends Specification {
 
-    UserRepo userRepo
-    User user
-    UserDetailsService service
+    UserRepo userRepo = Mock(UserRepo)
+    User user = new User("Username","Password", true)
+    UserDetailsService service = new JwtUserDetailsServiceImpl(userRepo);
 
-    void setup() {
-        userRepo = Mock(UserRepo)
-        user = new User("Username","Password", true)
-        service = new JwtUserDetailsServiceImpl(userRepo);
-    }
 
     def "load existing user by username returns UserDetails"() {
         given:

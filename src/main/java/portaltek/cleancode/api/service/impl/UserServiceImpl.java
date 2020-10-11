@@ -22,8 +22,7 @@ public class UserServiceImpl implements UserService {
 	
 	private UserRepo userRepo;
 	private RoleService roleService;
-	
-	 private PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	public UserServiceImpl(UserRepo userRepo, PasswordEncoder passwordEncoder, RoleService roleService) {
