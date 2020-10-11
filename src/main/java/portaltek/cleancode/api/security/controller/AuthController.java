@@ -12,10 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import portaltek.cleancode.api.controller.dto.ServerResponse;
 import portaltek.cleancode.api.security.controller.dto.JwtAuthenticationRequest;
 import portaltek.cleancode.api.security.controller.dto.JwtAuthenticationResponse;
@@ -33,18 +30,16 @@ public class AuthController {
     @Autowired
     @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
     private JwtUtil jwtUtil;
-
-
     @RequestMapping(value = "${jwt.route.authentication.path}", method = {RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseEntity<?> createJwt(@RequestBody JwtAuthenticationRequest req)
             throws AuthenticationException {
 
         try {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
+            Authentication auth = new UsernamePasswordAuthenticationToken(
                     req.getUsername(),
                     req.getPassword()
             );
-            final Authentication authenticated = authenticationManager.authenticate(authentication);
+            final Authentication authenticated = authenticationManager.authenticate(auth);
             SecurityContextHolder.getContext().setAuthentication(authenticated);
         } catch (AuthenticationException e) {
 
@@ -53,10 +48,15 @@ public class AuthController {
                     .body(new ServerResponse(e.getMessage()));
         }
 
-        final JwtAuthenticationResponse token = jwtUtil.generateToken(req.getUsername());
-        jwtUtil.generateToken(req.getUsername());
+        final JwtAuthenticationResponse response = jwtUtil.generateToken(req.getUsername());
 
-        // Return the token
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "hello")
+    public ResponseEntity<ServerResponse> greetingUser() throws Exception {
+
+        String msg = "Hello World!!!";
+        return ResponseEntity.ok(new ServerResponse(msg));
     }
 }

@@ -1,0 +1,22 @@
+{
+  "family": "sample-fargate",
+  "containerDefinitions": [
+    {
+      "name": "web",
+      "image": "793628107353.dkr.ecr.us-east-2.amazonaws.com/clean-code:dv",
+      "cpu": 128,
+      "memoryReservation": 128,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "command": [
+        "echo",
+        "hello world"
+      ],
+      "essential": true
+    }
+  ]
+}

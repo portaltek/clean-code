@@ -1,9 +1,12 @@
+
 FROM openjdk:8-jdk-alpine AS builder
 ARG DEPENDENCY=build/dependency
 WORKDIR $DEPENDENCY
 ARG JAR=build/libs/*.jar
-COPY ${JAR} app.jar
+COPY clean-code.jar app.jar
 RUN jar -xf ./app.jar
+
+
 
 
 FROM openjdk:8-jre-alpine
