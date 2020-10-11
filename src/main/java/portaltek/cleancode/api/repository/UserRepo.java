@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import portaltek.cleancode.api.model.User;
 
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepo extends JpaRepository<User, Long> {
 
     User findByUsername(String username);
 }

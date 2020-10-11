@@ -30,6 +30,8 @@ public class AuthController {
     @Autowired
     @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
     private JwtUtil jwtUtil;
+
+
     @RequestMapping(value = "${jwt.route.authentication.path}", method = {RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseEntity<?> createJwt(@RequestBody JwtAuthenticationRequest req)
             throws AuthenticationException {

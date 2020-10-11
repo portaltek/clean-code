@@ -6,7 +6,7 @@ package portaltek.cleancode.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.api.repository.RoleRepository;
+import portaltek.cleancode.api.repository.RoleRepo;
 import portaltek.cleancode.api.model.Role;
 import portaltek.cleancode.api.service.RoleService;
 
@@ -14,10 +14,10 @@ import portaltek.cleancode.api.service.RoleService;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-	private RoleRepository roleRepo;
+	private RoleRepo roleRepo;
 	
 	@Autowired
-	public RoleServiceImpl(RoleRepository roleRepo) {
+	public RoleServiceImpl(RoleRepo roleRepo) {
 		super();
 		this.roleRepo = roleRepo;
 	}

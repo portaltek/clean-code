@@ -27,6 +27,18 @@ public class User implements Serializable {
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
     private Set<Role> roles = new HashSet<>();
 
+
+    public User(String username, String password, boolean enabled) {
+        super();
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+    }
+
+    public User() {
+        super();
+    }
+
     public String getUsername() {
         return username;
     }
@@ -74,18 +86,10 @@ public class User implements Serializable {
     }
 
     public void removeRole(Role role) {
-        this.getRoles().removeIf(r -> r.getRoleName().equals(role.getRoleName()));
+        this.getRoles()
+                .removeIf(r -> r.getRoleName().equals(role.getRoleName()));
     }
 
-    public User(String username, String password, boolean enabled) {
-        super();
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-    }
 
-    public User() {
-        super();
-    }
 
 }

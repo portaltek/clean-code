@@ -38,38 +38,32 @@ public class JwtUtilWithoutDbCheckImpl implements JwtUtil, Serializable {
 
     @Override
     public String getIdFromToken(String token) {
-        String id;
         try {
             final Claims claims = getClaimsFromToken(token);
-            id = claims.getId();
+            return claims.getId();
         } catch (Exception e) {
-            id = null;
+            return null;
         }
-        return id;
     }
 
     @Override
     public Long getUserIdFromToken(String token) {
-        Long userId;
         try {
             final Claims claims = getClaimsFromToken(token);
-            userId = Long.parseLong(claims.get(CLAIM_KEY_USERID).toString());
+            return Long.parseLong(claims.get(CLAIM_KEY_USERID).toString());
         } catch (Exception e) {
-            userId = null;
+            return null;
         }
-        return userId;
     }
 
     @Override
     public String getUsernameFromToken(String token) {
-        String username;
         try {
             final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
+            return claims.getSubject();
         } catch (Exception e) {
-            username = null;
+            return null;
         }
-        return username;
     }
 
     @SuppressWarnings("unchecked")
@@ -82,44 +76,40 @@ public class JwtUtilWithoutDbCheckImpl implements JwtUtil, Serializable {
         } catch (Exception e) {
             roles = null;
         }
-        return roles != null ? roles.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()) : null;
+        return roles != null ? roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList()) : null;
     }
 
     @Override
     public Date getCreatedDateFromToken(String token) {
-        Date created;
         try {
             final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
+            return new Date((Long) claims.get(CLAIM_KEY_CREATED));
         } catch (Exception e) {
-            created = null;
+            return null;
         }
-        return created;
     }
 
     @Override
     public Date getExpirationDateFromToken(String token) {
-        Date expiration;
         try {
             final Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
+            return claims.getExpiration();
         } catch (Exception e) {
-            expiration = null;
+            return null;
         }
-        return expiration;
     }
 
     @Override
     public Claims getClaimsFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException,
             MalformedJwtException, SignatureException, IllegalArgumentException {
-        Claims claims;
 
-        claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims;
     }
 
 

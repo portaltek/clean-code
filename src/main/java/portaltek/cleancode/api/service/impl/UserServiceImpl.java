@@ -7,7 +7,7 @@ package portaltek.cleancode.api.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.api.repository.UserRepository;
+import portaltek.cleancode.api.repository.UserRepo;
 import portaltek.cleancode.api.model.Role;
 import portaltek.cleancode.api.model.User;
 import portaltek.cleancode.api.service.RoleService;
@@ -20,13 +20,13 @@ import javax.transaction.Transactional;
 @Transactional
 public class UserServiceImpl implements UserService {
 	
-	private UserRepository userRepo;
+	private UserRepo userRepo;
 	private RoleService roleService;
 	
 	 private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepo, PasswordEncoder passwordEncoder, RoleService roleService) {
+	public UserServiceImpl(UserRepo userRepo, PasswordEncoder passwordEncoder, RoleService roleService) {
 		this.userRepo = userRepo;
 		this.passwordEncoder = passwordEncoder;
 		this.roleService = roleService;
