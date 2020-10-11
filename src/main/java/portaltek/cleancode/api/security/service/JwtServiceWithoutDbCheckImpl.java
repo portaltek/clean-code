@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class JwtUtilWithoutDbCheckImpl implements JwtUtil, Serializable {
+public class JwtServiceWithoutDbCheckImpl implements JwtService, Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 

@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface JwtUtil {
+public interface JwtService {
 	
 	public String getIdFromToken(String token);
 	

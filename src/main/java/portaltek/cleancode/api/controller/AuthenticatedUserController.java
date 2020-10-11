@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import portaltek.cleancode.api.security.service.JwtUtil;
+import portaltek.cleancode.api.security.service.JwtService;
 import portaltek.cleancode.api.model.User;
 import portaltek.cleancode.api.service.UserService;
 
@@ -23,8 +23,8 @@ public class AuthenticatedUserController {
     private String tokenHeader;
 
     @Autowired
-    @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
-    private JwtUtil jwtTokenUtil;
+    @Qualifier(value = "jwtServiceWithoutDbCheckImpl")
+    private JwtService jwtTokenUtil;
     @Autowired
     private UserService userService;
 

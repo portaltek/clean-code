@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import portaltek.cleancode.api.controller.dto.ServerResponse;
 import portaltek.cleancode.api.security.controller.dto.JwtAuthenticationRequest;
 import portaltek.cleancode.api.security.controller.dto.JwtAuthenticationResponse;
-import portaltek.cleancode.api.security.service.JwtUtil;
+import portaltek.cleancode.api.security.service.JwtService;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -28,8 +28,8 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
-    private JwtUtil jwtUtil;
+    @Qualifier(value = "jwtServiceWithoutDbCheckImpl")
+    private JwtService jwtService;
 
 
     @RequestMapping(value = "${jwt.route.authentication.path}", method = {RequestMethod.POST, RequestMethod.OPTIONS})
@@ -50,7 +50,7 @@ public class AuthController {
                     .body(new ServerResponse(e.getMessage()));
         }
 
-        final JwtAuthenticationResponse response = jwtUtil.generateToken(req.getUsername());
+        final JwtAuthenticationResponse response = jwtService.generateToken(req.getUsername());
 
         return ResponseEntity.ok(response);
     }
