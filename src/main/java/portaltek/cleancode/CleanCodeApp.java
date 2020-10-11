@@ -7,8 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import portaltek.cleancode.api.model.Role;
 import portaltek.cleancode.api.model.User;
-import portaltek.cleancode.api.service.IRoleService;
-import portaltek.cleancode.api.service.IUserService;
+import portaltek.cleancode.api.service.RoleService;
+import portaltek.cleancode.api.service.UserService;
 
 import javax.transaction.Transactional;
 
@@ -16,9 +16,9 @@ import javax.transaction.Transactional;
 public class CleanCodeApp implements CommandLineRunner {
 
     @Autowired
-    IUserService userService;
+    UserService userService;
     @Autowired
-    IRoleService roleService;
+    RoleService roleService;
 
     public static void main(String[] args) {
         SpringApplication.run(CleanCodeApp.class, args);

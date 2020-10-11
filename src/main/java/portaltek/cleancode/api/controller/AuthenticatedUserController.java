@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import portaltek.cleancode.api.security.service.JwtUtil;
 import portaltek.cleancode.api.model.User;
-import portaltek.cleancode.api.service.IUserService;
+import portaltek.cleancode.api.service.UserService;
 
 
 @RestController
@@ -26,7 +26,7 @@ public class AuthenticatedUserController {
     @Qualifier(value = "jwtUtilWithoutDbCheckImpl")
     private JwtUtil jwtTokenUtil;
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @RequestMapping(value = "me", method = RequestMethod.GET)
     public ResponseEntity<String> getAuthenticatedUser(

@@ -7,7 +7,7 @@ package portaltek.cleancode.api.service;
 import portaltek.cleancode.api.model.Role;
 
 
-public interface IRoleService {
+public interface RoleService {
 
 	public Role create(Role role);
 	public Role read(Integer id);

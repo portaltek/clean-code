@@ -6,18 +6,18 @@ package portaltek.cleancode.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.api.repository.IRoleRepository;
+import portaltek.cleancode.api.repository.RoleRepository;
 import portaltek.cleancode.api.model.Role;
-import portaltek.cleancode.api.service.IRoleService;
+import portaltek.cleancode.api.service.RoleService;
 
 
 @Service
-public class RoleServiceImpl implements IRoleService {
+public class RoleServiceImpl implements RoleService {
 
-	private IRoleRepository roleRepo;
+	private RoleRepository roleRepo;
 	
 	@Autowired
-	public RoleServiceImpl(IRoleRepository roleRepo) {
+	public RoleServiceImpl(RoleRepository roleRepo) {
 		super();
 		this.roleRepo = roleRepo;
 	}

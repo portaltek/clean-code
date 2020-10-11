@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portaltek.cleancode.api.model.User;
-import portaltek.cleancode.api.repository.IUserRepository;
+import portaltek.cleancode.api.repository.UserRepository;
 import portaltek.cleancode.api.security.JwtUserFactory;
 
 
@@ -17,7 +17,7 @@ import portaltek.cleancode.api.security.JwtUserFactory;
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private IUserRepository userRepo;
+    private UserRepository userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
