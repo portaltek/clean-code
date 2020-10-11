@@ -27,18 +27,18 @@ class JwtUserDetailsServiceImplTest extends Specification {
 
         then:
         userFound != null
+        userFound.username == 'Username'
     }
 
     def "load non-existing user by username throws UsernameNotFoundException"() {
         given:
 
         when:
-        def userFound = service.loadUserByUsername("Username")
+        service.loadUserByUsername("Username")
 
         then:
         UsernameNotFoundException ex = thrown()
         ex.message == "No user found with username 'Username'."
-
     }
 
 }
