@@ -1,0 +1,44 @@
+{
+  "taskDefinition": {
+    "status": "ACTIVE",
+    "family": "clean-code-family",
+    "placementConstraints": [],
+    "requiresAttributes": [
+      {
+        "name": "com.amazonaws.ecs.capability.ecr-auth"
+      },
+      {
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+      }
+    ],
+    "compatibilities": [
+      "EC2"
+    ],
+    "volumes": [],
+    "taskDefinitionArn": "arn:aws:ecs:us-east-2:793628107353:task-definition/clean-code-family:1",
+    "containerDefinitions": [
+      {
+        "memoryReservation": 128,
+        "environment": [],
+        "name": "web",
+        "mountPoints": [],
+        "image": "793628107353.dkr.ecr.us-east-2.amazonaws.com/clean-code:dv",
+        "cpu": 128,
+        "portMappings": [
+          {
+            "protocol": "tcp",
+            "containerPort": 8080,
+            "hostPort": 0
+          }
+        ],
+        "command": [
+          "echo",
+          "hello world"
+        ],
+        "essential": true,
+        "volumesFrom": []
+      }
+    ],
+    "revision": 1
+  }
+}
