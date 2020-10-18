@@ -72,30 +72,64 @@ dockerRun {
 
 
 sourceSets {
-    intTest {
+    utest {
+//        compileClasspath += sourceSets.main.output
+//        runtimeClasspath += sourceSets.main.output
+//        java.srcDir file('src/utest/java')
+//        resources.srcDir file('src/utest/resources')
+//        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+//        runtimeClasspath += output + compileClasspath
+//        compileClasspath += sourceSets.main.output + configurations.testCompile
+//        runtimeClasspath += output + compileClasspath + configurations.testRuntime
+        java.srcDir "$projectDir/src/utest/java"
+        resources.srcDir "$projectDir/src/utest/resources"
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+    itest {
         compileClasspath += sourceSets.main.output
         runtimeClasspath += sourceSets.main.output
     }
 }
+
 configurations {
-    intTestImplementation.extendsFrom implementation
-    intTestRuntimeOnly.extendsFrom runtimeOnly
-    intTestRuntime.extendsFrom runtime
+    utestImplementation.extendsFrom implementation
+    utestRuntime.extendsFrom runtime
+
+    itestImplementation.extendsFrom testImplementation
+    itestRuntime.extendsFrom testRuntime
 }
 dependencies {
-    intTestImplementation       'org.junit.jupiter:junit-jupiter'
-    intTestImplementation       'org.codehaus.groovy:groovy:3.0.5'
-    intTestImplementation       'org.spockframework:spock-core:2.0-M3-groovy-3.0'
-    intTestImplementation       'org.springframework.boot:spring-boot-starter-test'
+    utestImplementation       'org.junit.jupiter:junit-jupiter'
+    utestImplementation       'org.codehaus.groovy:groovy:3.0.5'
+    utestImplementation       'org.spockframework:spock-core:2.0-M3-groovy-3.0'
+    utestImplementation       'org.springframework.boot:spring-boot-starter-test'
+    utestImplementation       'com.h2database:h2'
+
+    itestImplementation       'org.junit.jupiter:junit-jupiter'
+    itestImplementation       'org.codehaus.groovy:groovy:3.0.5'
+    itestImplementation       'org.spockframework:spock-core:2.0-M3-groovy-3.0'
+    itestImplementation       'org.springframework.boot:spring-boot-starter-test'
+    itestImplementation       'com.h2database:h2'
 }
 
-task integrationTest(type: Test) {
-    description = 'Runs integration tests.'
+task utest(type: Test) {
+    description = 'Runs unit tests.'
     group = 'verification'
-
-    testClassesDirs = sourceSets.intTest.output.classesDirs
-    classpath = sourceSets.intTest.runtimeClasspath
+    testClassesDirs = sourceSets.utest.output.classesDirs
+    classpath = sourceSets.utest.runtimeClasspath
     shouldRunAfter test
     useJUnitPlatform()
 }
-check.dependsOn integrationTest
+check.dependsOn utest
+
+task itest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.itest.output.classesDirs
+    classpath = sourceSets.itest.runtimeClasspath
+    shouldRunAfter test
+    useJUnitPlatform()
+}
+check.dependsOn itest
+

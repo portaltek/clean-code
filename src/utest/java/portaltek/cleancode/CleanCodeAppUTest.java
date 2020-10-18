@@ -8,14 +8,17 @@ import org.springframework.context.ApplicationContext;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class CleanCodeAppIT {
+class CleanCodeAppUTest {
 
     @Autowired
     ApplicationContext ctx;
 
     @Test
     public void contextLoads(){
-        //assertNotNull(null, "FROM UNIT_TEST!");
+        //assertNotNull(null, "FROM INT_TEST!");
         assertNotNull(ctx);
     }
+
+
+
 }
