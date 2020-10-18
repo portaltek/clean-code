@@ -23,6 +23,7 @@ dependencies {
     testRuntimeOnly         'com.h2database:h2'
     testImplementation      'org.springframework.boot:spring-boot-starter-test'
 
+
     implementation          'org.apache.commons:commons-collections4:4.4'
     implementation          'org.apache.commons:commons-lang3:3.9'
 
@@ -34,8 +35,8 @@ dependencies {
     annotationProcessor     'org.projectlombok:lombok:1.18.8'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
 
-    implementation 'org.codehaus.groovy:groovy:3.0.5'
-    testImplementation('org.spockframework:spock-core:2.0-M3-groovy-3.0')
+    implementation          'org.codehaus.groovy:groovy:3.0.5'
+    testImplementation      'org.spockframework:spock-core:2.0-M3-groovy-3.0'
 
 }
 
@@ -65,5 +66,36 @@ dockerRun {
     image   'portaltek/clean-code:1.0.0'
     ports   '8080:8080'
     clean   true
-
 }
+
+
+
+
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations {
+    intTestImplementation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+    intTestRuntime.extendsFrom runtime
+}
+dependencies {
+    intTestImplementation       'org.junit.jupiter:junit-jupiter'
+    intTestImplementation       'org.codehaus.groovy:groovy:3.0.5'
+    intTestImplementation       'org.spockframework:spock-core:2.0-M3-groovy-3.0'
+    intTestImplementation       'org.springframework.boot:spring-boot-starter-test'
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    shouldRunAfter test
+    useJUnitPlatform()
+}
+check.dependsOn integrationTest

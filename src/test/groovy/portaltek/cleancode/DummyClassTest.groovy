@@ -13,7 +13,7 @@ class DummyClassTest extends Specification {
 
     @Subject
     //DummyClass service = new DummyClass(userRepo); // Any advantage?
-    DummyClass service = Spy(constructorArgs: [userRepo]) as DummyClass //If I need to call myself.
+    DummyClass service = Spy(constructorArgs: [userRepo])  //If I need to call myself.
 
     def "load from dummy class"() {
         given:
@@ -39,6 +39,7 @@ class DummyClassTest extends Specification {
         service.myPackageLevelMethod(user, user)
 
         then:
+        //false == true
         noExceptionThrown()
         user.username == "Username3"
 
