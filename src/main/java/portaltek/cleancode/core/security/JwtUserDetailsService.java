@@ -15,13 +15,13 @@ import static java.util.Optional.ofNullable;
 
 @Service
 @Transactional
-public class JwtUserDetailsServiceImpl implements UserDetailsService {
+public class JwtUserDetailsService implements UserDetailsService {
 
     private UserRepo userRepo;
     private String NOT_FOUND = "No user found with username '%s'.";
 
     @Autowired
-    public JwtUserDetailsServiceImpl(UserRepo userRepo) {
+    public JwtUserDetailsService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 

@@ -6,11 +6,11 @@ import portaltek.cleancode.spi.datastore.model.User
 import portaltek.cleancode.spi.datastore.repository.UserRepo
 import spock.lang.Specification
 
-class JwtUserDetailsServiceImplTest extends Specification {
+class JwtUserDetailsServiceTest extends Specification {
 
     UserRepo userRepo = Mock(UserRepo)
     User user = new User("Username","Password", true)
-    UserDetailsService service = new JwtUserDetailsServiceImpl(userRepo);
+    UserDetailsService service = new JwtUserDetailsService(userRepo);
 
 
     def "load existing user by username returns UserDetails"() {
