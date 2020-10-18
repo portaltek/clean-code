@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import portaltek.cleancode.model.Role;
-import portaltek.cleancode.model.User;
-import portaltek.cleancode.service.RoleService;
-import portaltek.cleancode.service.UserService;
+import portaltek.cleancode.spi.datastore.model.Role;
+import portaltek.cleancode.spi.datastore.model.User;
+import portaltek.cleancode.core.service.RoleService;
+import portaltek.cleancode.core.service.UserService;
 
 import javax.transaction.Transactional;
 
