@@ -13,6 +13,18 @@ sourceCompatibility = 15
 targetCompatibility = 15
 version '1.0.0'
 
+
+configurations {
+    itestImplementation.extendsFrom testImplementation
+    itestRuntime.extendsFrom testRuntime
+}
+sourceSets {
+    itest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
 dependencies {
 
     implementation          'org.springframework.boot:spring-boot-starter-web'
@@ -35,6 +47,10 @@ dependencies {
     implementation          'org.codehaus.groovy:groovy:3.0.5'
     testImplementation      'org.spockframework:spock-core:2.0-M3-groovy-3.0'
 
+    itestImplementation       'org.junit.jupiter:junit-jupiter'
+    itestImplementation       'org.springframework.boot:spring-boot-starter-test'
+    itestImplementation       'com.h2database:h2'
+    itestAnnotationProcessor  'org.projectlombok:lombok:1.18.8'
 }
 
 repositories {
@@ -63,27 +79,6 @@ dockerRun {
     image   'portaltek/clean-code:1.0.0'
     ports   '8080:8080'
     clean   true
-}
-
-
-
-
-sourceSets {
-    itest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
-configurations {
-    itestImplementation.extendsFrom testImplementation
-    itestRuntime.extendsFrom testRuntime
-}
-dependencies {
-    itestImplementation       'org.junit.jupiter:junit-jupiter'
-    itestImplementation       'org.springframework.boot:spring-boot-starter-test'
-    itestImplementation       'com.h2database:h2'
-    itestAnnotationProcessor  'org.projectlombok:lombok:1.18.8'
 }
 
 task itest(type: Test) {
