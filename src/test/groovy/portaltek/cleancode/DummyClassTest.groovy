@@ -1,6 +1,6 @@
 package portaltek.cleancode
 
-import portaltek.cleancode.DummyClass
+
 import portaltek.cleancode.spi.datastore.model.User
 import portaltek.cleancode.spi.datastore.repository.UserRepo
 import spock.lang.Specification
@@ -10,10 +10,10 @@ class DummyClassTest extends Specification {
 
     UserRepo userRepo = Mock()
     User user = new User("Username","Password", true)
-    User expectedUser = new User("Username2","Password", true)
+
     @Subject
     //DummyClass service = new DummyClass(userRepo); // Any advantage?
-    DummyClass service = Spy(constructorArgs: [userRepo]) //If I need to call myself.
+    DummyClass service = Spy(constructorArgs: [userRepo]) as DummyClass //If I need to call myself.
 
     def "load from dummy class"() {
         given:
