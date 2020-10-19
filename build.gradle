@@ -104,3 +104,16 @@ task utest {
     tasks.findByName('assemble').mustRunAfter 'clean'
     tasks.findByName('test').mustRunAfter 'assemble'
 }
+
+
+task create_itest_docker_db(type: Exec) {
+    workingDir rootProject.projectDir
+    commandLine 'sh', '-c', './src/itest/resources/docker/db.sh create'
+    setIgnoreExitValue(false)
+}
+
+task delete_itest_docker_db(type: Exec) {
+    workingDir rootProject.projectDir
+    commandLine 'sh', '-c', './src/itest/resources/docker/db.sh delete'
+    setIgnoreExitValue(false)
+}
