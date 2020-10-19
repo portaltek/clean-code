@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 create_db() {
-    docker run --name cleancode_db_itest --env MYSQL_ROOT_PASSWORD=root_password -p 4306:3306 -d mysql
+    docker run --name cleancode_db_itest --env MYSQL_ROOT_PASSWORD=root_password -p 4306:3306 -d mysql:8.0.21
 }
 
 delete_db() {
