@@ -81,22 +81,6 @@ dockerRun {
     clean   true
 }
 
-task itest(type: Test) {
-    description = 'Runs integration tests.'
-    group = 'verification'
-    testClassesDirs = sourceSets.itest.output.classesDirs
-    classpath = sourceSets.itest.runtimeClasspath
-    useJUnitPlatform()
-    //shouldRunAfter test
-
-    dependsOn 'clean'
-    dependsOn 'assemble'
-    dependsOn 'test'
-    tasks.findByName('assemble').mustRunAfter 'clean'
-    tasks.findByName('test').mustRunAfter 'assemble'
-}
-check.dependsOn itest
-
 task utest {
     dependsOn 'clean'
     dependsOn 'assemble'
@@ -105,6 +89,15 @@ task utest {
     tasks.findByName('test').mustRunAfter 'assemble'
 }
 
+task itest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.itest.output.classesDirs
+    classpath = sourceSets.itest.runtimeClasspath
+    useJUnitPlatform()
+    dependsOn 'test'
+}
+check.dependsOn itest
 
 task create_itest_docker_db(type: Exec) {
     workingDir rootProject.projectDir
