@@ -84,11 +84,9 @@ dockerRun {
 }
 
 task utest {
-    dependsOn 'clean'
-    dependsOn 'assemble'
-    dependsOn 'test'
-    tasks.findByName('assemble').mustRunAfter 'clean'
-    tasks.findByName('test').mustRunAfter 'assemble'
+    //tasks.findByName('test').mustRunAfter 'assemble'
+    def tasks = [clean, assemble, test]; dependsOn(tasks)
+    for (int i = 0; i < tasks.size() - 1; i++) { tasks[i + 1].mustRunAfter(tasks[i]) }
 }
 
 task deleteDockerDB(type: Exec) {
@@ -109,11 +107,9 @@ task itest(type: Test) {
     testClassesDirs = sourceSets.itest.output.classesDirs
     classpath = sourceSets.itest.runtimeClasspath
     useJUnitPlatform()
+
+    def tasks = [utest, deleteDockerDB, createDockerDB]
+    for (int i = 0; i < tasks.size() - 1; i++) { tasks[i + 1].mustRunAfter(tasks[i]) }
+    dependsOn(tasks)
 }
 
-task ci {
-    dependsOn 'utest', 'deleteDockerDB', 'createDockerDB', 'itest'
-    tasks.findByName('deleteDockerDB').mustRunAfter('utest')
-    tasks.findByName('createDockerDB').mustRunAfter('deleteDockerDB')
-    tasks.findByName('itest').mustRunAfter('createDockerDB')
-}
