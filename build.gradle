@@ -66,7 +66,9 @@ bootJar {
     archiveVersion = '1.0.0'
     archiveFileName = 'clean-code.jar'
     //archiveFileName = archiveBaseName + '-' + archiveVersion + '.jar'
+    mainClassName = 'portaltek.cleancode.CleanCodeApp'
 }
+
 
 docker {
     name    'portaltek/clean-code:1.0.0'
@@ -89,24 +91,29 @@ task utest {
     tasks.findByName('test').mustRunAfter 'assemble'
 }
 
+task deleteDockerDB(type: Exec) {
+    workingDir rootProject.projectDir
+    commandLine 'sh', '-c', './src/itest/resources/docker/db.sh delete'
+    setIgnoreExitValue(true)
+}
+
+task createDockerDB(type: Exec) {
+    workingDir rootProject.projectDir
+    commandLine 'sh', '-c', './src/itest/resources/docker/db.sh create'
+    setIgnoreExitValue(false)
+}
+
 task itest(type: Test) {
     description = 'Runs integration tests.'
     group = 'verification'
     testClassesDirs = sourceSets.itest.output.classesDirs
     classpath = sourceSets.itest.runtimeClasspath
     useJUnitPlatform()
-    dependsOn 'test'
-}
-check.dependsOn itest
-
-task create_itest_docker_db(type: Exec) {
-    workingDir rootProject.projectDir
-    commandLine 'sh', '-c', './src/itest/resources/docker/db.sh create'
-    setIgnoreExitValue(false)
 }
 
-task delete_itest_docker_db(type: Exec) {
-    workingDir rootProject.projectDir
-    commandLine 'sh', '-c', './src/itest/resources/docker/db.sh delete'
-    setIgnoreExitValue(false)
+task ci {
+    dependsOn 'utest', 'deleteDockerDB', 'createDockerDB', 'itest'
+    tasks.findByName('deleteDockerDB').mustRunAfter('utest')
+    tasks.findByName('createDockerDB').mustRunAfter('deleteDockerDB')
+    tasks.findByName('itest').mustRunAfter('createDockerDB')
 }
