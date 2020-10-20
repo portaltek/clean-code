@@ -1,6 +1,8 @@
 package portaltek.cleancode.core.config;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +27,17 @@ import portaltek.cleancode.core.security.filter.JwtAuthenticationTokenFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final Log log = LogFactory.getLog(this.getClass());
+
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    public WebSecurityConfig() {
+        log.info("init WebSecurityConfig");
+    }
 
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder builder) throws Exception {
@@ -37,7 +45,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(this.userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

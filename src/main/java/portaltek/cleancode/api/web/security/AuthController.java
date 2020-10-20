@@ -4,6 +4,8 @@
 package portaltek.cleancode.api.web.security;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,14 @@ public class AuthController {
     @Autowired
     @Qualifier(value = "jwtServiceWithoutDbCheckImpl")
     private JwtService jwtService;
+
+    private final Log log = LogFactory.getLog(this.getClass());
+
+    public AuthController() {
+        log.info("init AuthController");
+    }
+
+
 
 
     @RequestMapping(value = "${jwt.route.authentication.path}", method = {RequestMethod.POST, RequestMethod.OPTIONS})

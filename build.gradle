@@ -48,7 +48,8 @@ dependencies {
     itestImplementation(
             'org.junit.jupiter:junit-jupiter',
             'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE',
-            'com.h2database:h2'
+            'com.h2database:h2',
+            'org.mockito:mockito-junit-jupiter:2.23.0'
     )
     itestAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
 }

@@ -2,6 +2,8 @@
  * 
  */
 package portaltek.cleancode.core.config;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -11,6 +13,11 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class RestConfig {
+    private final Log log = LogFactory.getLog(this.getClass());
+
+    public RestConfig() {
+        log.info("init RestConfig");
+    }
 
     @Bean
     public CorsFilter corsFilter() {
