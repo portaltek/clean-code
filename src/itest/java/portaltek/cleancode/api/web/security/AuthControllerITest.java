@@ -15,9 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import portaltek.cleancode.CleanCodeApp;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 
 @RunWith(SpringRunner.class)
@@ -25,23 +24,17 @@ import static org.assertj.core.api.BDDAssertions.then;
 class AuthControllerITest {
 
     @LocalServerPort
-    private int port;
+    int port;
 
     @Autowired
-    private AuthController controller;
-    @Autowired
-    private TestRestTemplate testRestTemplate;
+    TestRestTemplate template;
 
     final String EXPECTED_MSG = "{\"message\":\"Hello World!!!\"}";
 
-
     @Test
-    public void contextLoads() {
-        assertThat(controller).isNotNull();
-        final String url = "http://localhost:" + this.port + "/api/open/hello";
-        ResponseEntity<String> entity = testRestTemplate
-                .getForEntity(url, String.class);
-
+    public void helloShouldReturnHelloWorld() {
+        String url = "http://localhost:" + this.port + "/api/open/hello";
+        ResponseEntity<String> entity = template.getForEntity(url, String.class);
 
         then(entity.getBody()).isEqualTo(EXPECTED_MSG);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
