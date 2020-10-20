@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.assertj.core.api.BDDAssertions.then;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(webEnvironment = RANDOM_PORT)
-//@SpringBootTest
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CleanCodeApp.class, webEnvironment = RANDOM_PORT)
