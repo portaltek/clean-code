@@ -33,7 +33,7 @@ class AuthControllerITest {
     @Autowired
     TestRestTemplate template;
 
-    final String EXPECTED_MSG = "{\"message\":\"Hello World!!!\"}";
+    final String EXPECTED_MSG = "{\"message\":\"Pong!\"}";
     final String BASE_URL = "http://localhost:";
 
     String url(String endpoint){
@@ -41,8 +41,8 @@ class AuthControllerITest {
     }
 
     @Test
-    public void helloShouldReturnHelloWorld() {
-        var url = url("/api/open/hello");
+    public void getPingShouldReturnPong() {
+        var url = url("/api/open/ping");
         var entity = template.getForEntity(url, String.class);
         then(entity.getBody()).isEqualTo(EXPECTED_MSG);
         then(entity.getStatusCode()).isEqualTo(OK);

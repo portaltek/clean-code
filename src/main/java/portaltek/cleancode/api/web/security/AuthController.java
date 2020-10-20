@@ -65,10 +65,9 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "hello")
+    @GetMapping(value = "ping")
     public ResponseEntity<ServerResponse> greetingUser() throws Exception {
-
-        String msg = "Hello World!!!";
+        String msg = "Pong!";
         return ResponseEntity.ok(new ServerResponse(msg));
     }
 }
