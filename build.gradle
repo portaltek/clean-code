@@ -40,16 +40,16 @@ dependencies {
             'org.codehaus.groovy:groovy:3.0.5'
     )
 
-    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2:1.4.200'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
     testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-3.0'
 
     itestImplementation(
             'org.projectlombok:lombok:1.18.8',
-            'org.junit.jupiter:junit-jupiter',
+            'org.junit.jupiter:junit-jupiter:5.6.2',
             'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE',
-            'com.h2database:h2',
+            'com.h2database:h2:1.4.200',
             'org.mockito:mockito-junit-jupiter:2.23.0',
             'org.codehaus.groovy:groovy:3.0.5',
             'org.spockframework:spock-core:2.0-M3-groovy-3.0'
