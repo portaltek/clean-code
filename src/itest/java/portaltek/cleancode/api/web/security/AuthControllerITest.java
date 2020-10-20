@@ -39,9 +39,11 @@ class AuthControllerITest {
     public void contextLoads() {
         assertThat(controller).isNotNull();
         final String url = "http://localhost:" + this.port + "/api/open/hello";
-        ResponseEntity<String> entity = this.testRestTemplate
+        ResponseEntity<String> entity = testRestTemplate
                 .getForEntity(url, String.class);
 
+
+        then(entity.getBody()).isEqualTo(EXPECTED_MSG);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
