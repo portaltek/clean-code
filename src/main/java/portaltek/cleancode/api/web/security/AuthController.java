@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +20,7 @@ import portaltek.cleancode.api.web.security.dto.JwtAuthenticationResponse;
 import portaltek.cleancode.core.security.JwtService;
 
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 
 @RestController
@@ -28,7 +28,7 @@ import static org.springframework.http.HttpStatus.*;
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager authManager;
     @Autowired
     @Qualifier(value = "jwtServiceWithoutDbCheckImpl")
     private JwtService jwtService;
@@ -42,16 +42,16 @@ public class AuthController {
 
 
 
-    @RequestMapping(value = "${jwt.route.authentication.path}", method = {RequestMethod.POST, RequestMethod.OPTIONS})
+    @RequestMapping(value = "${jwt.route.auth.path}", method = {POST, OPTIONS})
     public ResponseEntity<?> createJwt(@RequestBody JwtAuthenticationRequest req)
             throws AuthenticationException {
 
         try {
-            Authentication auth = new UsernamePasswordAuthenticationToken(
+            var auth = new UsernamePasswordAuthenticationToken(
                     req.getUsername(),
                     req.getPassword()
             );
-            final Authentication authenticated = authenticationManager.authenticate(auth);
+            final var authenticated = authManager.authenticate(auth);
             SecurityContextHolder.getContext().setAuthentication(authenticated);
         } catch (AuthenticationException e) {
 
@@ -60,7 +60,7 @@ public class AuthController {
                     .body(new ServerResponse(e.getMessage()));
         }
 
-        final JwtAuthenticationResponse response = jwtService.generateToken(req.getUsername());
+        final var response = jwtService.generateToken(req.getUsername());
 
         return ResponseEntity.ok(response);
     }
