@@ -52,19 +52,19 @@ class LoginControllerITest {
     @Test
     public void getPing_shouldReturnPong() {
         var url = url("ping");
-        var entity = template.getForEntity(url, String.class);
-        then(entity.getBody()).isEqualTo(EXPECTED_MSG);
-        then(entity.getStatusCode()).isEqualTo(OK);
+        var response = template.getForEntity(url, String.class);
+        then(response.getBody()).isEqualTo(EXPECTED_MSG);
+        then(response.getStatusCode()).isEqualTo(OK);
     }
 
     @Test
     public void postValidLogin_shouldReturnToken() {
         var url = url("token");
         HttpEntity<JwtRequest> req = getEntity("admin", "admin");
-        ResponseEntity<JwtResponse> entity = template.postForEntity(url, req, JwtResponse.class);
+        ResponseEntity<JwtResponse> response = template.postForEntity(url, req, JwtResponse.class);
 
-        then(entity.getStatusCode()).isEqualTo(OK);
-        then(entity.getBody().getToken()).isNotEmpty();
+        then(response.getStatusCode()).isEqualTo(OK);
+        then(response.getBody().getToken()).isNotEmpty();
     }
 
 //    @Test
