@@ -52,7 +52,10 @@ dependencies {
             'com.h2database:h2:1.4.200',
             'org.mockito:mockito-junit-jupiter:2.23.0',
             'org.codehaus.groovy:groovy:3.0.5',
-            'org.spockframework:spock-core:2.0-M3-groovy-3.0'
+            'org.spockframework:spock-core:2.0-M3-groovy-3.0',
+            "io.rest-assured:rest-assured:4.1.1",
+            "io.rest-assured:json-path:4.1.1",
+            "io.rest-assured:xml-path:4.1.1",
     )
     itestAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
 }

@@ -58,27 +58,6 @@ class TokenControllerITest {
         then(response.getBody().getToken()).isNotEmpty();
     }
 
-//    @Test
-//    public void postInvalidLogin_shouldReturnErrorMsg() {
-//        var url = url("/api/open/login");
-//        HttpEntity<JwtRequest> req = getEntity("admin", "admin2");
-//        ResponseEntity<ServerResponse> response = template.postForEntity(url, req, ServerResponse.class);
-//        then(response.getStatusCode()).isEqualTo(UNAUTHORIZED);
-//        then(response.getBody()).isNotNull();
-//    }
-
-//
-//    @Test
-//    public void find_bookIdNotFound_404() throws Exception {
-//
-//        var expected = "{status:404,error:\"Not Found\",message:\"Book id not found : 5\",path:\"/books/5\"}";
-//        var url = url("/api/open/login");
-//        var httpEntity = getEntity("admin", "admin2");
-//        ResponseEntity<String> response = template.exchange(url, HttpMethod.POST, httpEntity, String.class);
-//
-//        then(response.getStatusCode()).isEqualTo(UNAUTHORIZED);
-//    }
-
 
 }
 

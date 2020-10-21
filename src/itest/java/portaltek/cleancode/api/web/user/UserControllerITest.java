@@ -1,16 +1,13 @@
 package portaltek.cleancode.api.web.user;
 
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import portaltek.cleancode.CleanCodeApp;
 import portaltek.cleancode.api.web.token.dto.JwtRequest;
@@ -18,6 +15,8 @@ import portaltek.cleancode.api.web.token.dto.JwtResponse;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpStatus.OK;
 import static portaltek.cleancode.api.web.token.dto.JwtRequest.getEntity;
 
@@ -32,14 +31,12 @@ class UserControllerITest {
     @Autowired
     TestRestTemplate rest;
 
-    final String EXPECTED_MSG = "{\"message\":\"Pong!\"}";
     final String HOST = "http://localhost:";
     final String ENDPOINT = "/api/auth/user/";
 
-    private String url(String suffix){
+    private String url(String suffix) {
         return HOST + port + ENDPOINT + suffix;
     }
-
 
     private String getToken() {
         var url = HOST + port + "/api/open/token/create";
@@ -49,17 +46,21 @@ class UserControllerITest {
                 .getToken();
     }
 
-    @Test
-    public void test() {}
+    private HttpHeaders getHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add(AUTHORIZATION, "Bearer " + getToken());
+        return headers;
+    }
 
-//    @Test
-//    public void postValidLogin_shouldReturnToken() {
-//        var url = url("me");
-//        var response = rest.getForObject(url, String.class);
-//
-//        then(response).isNotNull();
-//
-//    }
+
+    @Test
+    public void getPing_shouldReturnPong() {
+        var entity = new HttpEntity<>("ping", getHeader());
+        var response = rest.exchange(url("ping"), GET, entity, String.class);
+        then(response.getStatusCode()).isEqualTo(OK);
+        then(response.getBody()).isEqualTo("Pong!");
+    }
 
 
 }
