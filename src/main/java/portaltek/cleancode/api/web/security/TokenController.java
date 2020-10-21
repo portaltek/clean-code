@@ -24,7 +24,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping("/api/open/token")
-public class TokenController {
+class TokenController {
 
     private final Log log = LogFactory.getLog(this.getClass());
 

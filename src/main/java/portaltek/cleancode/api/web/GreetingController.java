@@ -11,7 +11,7 @@ import portaltek.cleancode.api.web.dto.ServerResponse;
 
 @RestController
 @RequestMapping("/api/auth/")
-public class GreetingController {
+class GreetingController {
 
 
     @RequestMapping(value = "admin", method = RequestMethod.GET)

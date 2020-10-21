@@ -19,7 +19,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/api/auth/user/")
-public class UserController {
+class UserController {
 
 
     @Value("${jwt.header}")
