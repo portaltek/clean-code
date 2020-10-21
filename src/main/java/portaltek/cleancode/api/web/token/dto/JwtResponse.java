@@ -1,4 +1,4 @@
-package portaltek.cleancode.api.web.security.dto;
+package portaltek.cleancode.api.web.token.dto;
 
 import java.io.Serializable;
 

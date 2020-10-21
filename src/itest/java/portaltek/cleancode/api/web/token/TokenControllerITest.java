@@ -1,7 +1,7 @@
 /**
  *
  */
-package portaltek.cleancode.api.web.security;
+package portaltek.cleancode.api.web.token;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -15,9 +15,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import portaltek.cleancode.CleanCodeApp;
-import portaltek.cleancode.api.web.dto.ServerResponse;
-import portaltek.cleancode.api.web.security.dto.JwtRequest;
-import portaltek.cleancode.api.web.security.dto.JwtResponse;
+import portaltek.cleancode.api.web.token.dto.JwtRequest;
+import portaltek.cleancode.api.web.token.dto.JwtResponse;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;

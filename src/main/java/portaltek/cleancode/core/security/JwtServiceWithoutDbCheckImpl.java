@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import portaltek.cleancode.api.web.security.dto.JwtResponse;
+import portaltek.cleancode.api.web.token.dto.JwtResponse;
 
 import java.io.Serializable;
 import java.util.*;

@@ -1,7 +1,7 @@
 /**
  *
  */
-package portaltek.cleancode.api.web.security;
+package portaltek.cleancode.api.web.token;
 
 
 import org.apache.commons.logging.Log;
@@ -14,7 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portaltek.cleancode.api.web.dto.ServerResponse;
-import portaltek.cleancode.api.web.security.dto.JwtRequest;
+import portaltek.cleancode.api.web.token.dto.JwtRequest;
 import portaltek.cleancode.core.security.JwtService;
 
 import static org.springframework.http.HttpStatus.*;

@@ -1,4 +1,4 @@
-package portaltek.cleancode.api.web;
+package portaltek.cleancode.api.web.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

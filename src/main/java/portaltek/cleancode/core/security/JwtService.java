@@ -3,7 +3,7 @@ package portaltek.cleancode.core.security;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import portaltek.cleancode.api.web.security.dto.JwtResponse;
+import portaltek.cleancode.api.web.token.dto.JwtResponse;
 
 import java.util.Date;
 import java.util.List;
