@@ -1,5 +1,7 @@
 package portaltek.cleancode.api.web.token.dto;
 
+import org.springframework.http.HttpEntity;
+
 import java.io.Serializable;
 
 
@@ -33,5 +35,11 @@ public class JwtRequest implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public static HttpEntity<JwtRequest> getEntity(String username, String password) {
+        var req = new JwtRequest(username, password);
+        var httpEntity = new HttpEntity<>(req);
+        return httpEntity;
     }
 }

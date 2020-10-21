@@ -1,6 +1,3 @@
-/**
- *
- */
 package portaltek.cleancode.api.web.token;
 
 
@@ -21,6 +18,7 @@ import portaltek.cleancode.api.web.token.dto.JwtResponse;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
+import static portaltek.cleancode.api.web.token.dto.JwtRequest.getEntity;
 
 
 @RunWith(SpringRunner.class)
@@ -40,12 +38,6 @@ class TokenControllerITest {
         return BASE_URL + this.port + "/api/open/token/" + endpoint;
     }
 
-    @NotNull
-    private HttpEntity<JwtRequest> getEntity(String username, String password) {
-        var req = new JwtRequest(username, password);
-        var httpEntity = new HttpEntity<>(req);
-        return httpEntity;
-    }
 
 
     @Test

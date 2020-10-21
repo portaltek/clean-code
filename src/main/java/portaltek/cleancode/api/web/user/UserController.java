@@ -36,7 +36,8 @@ class UserController {
 
         Long userId = jwtService.getUserIdFromToken(token.substring(6));
         User user = userService.read(userId);
-        return ok(user.getUsername());
+        var msg = "Hello, " + user.getUsername();
+        return ok(msg);
     }
 
     @RequestMapping(value = "ping", method = GET)
