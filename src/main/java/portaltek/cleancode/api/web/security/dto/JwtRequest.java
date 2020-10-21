@@ -3,18 +3,18 @@ package portaltek.cleancode.api.web.security.dto;
 import java.io.Serializable;
 
 
-public class JwtAuthenticationRequest implements Serializable {
+public class JwtRequest implements Serializable {
 
     private static final long serialVersionUID = -8445943548965154778L;
 
     private String username;
     private String password;
 
-    public JwtAuthenticationRequest() {
+    public JwtRequest() {
         super();
     }
 
-    public JwtAuthenticationRequest(String username, String password) {
+    public JwtRequest(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
     }

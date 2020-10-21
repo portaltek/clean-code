@@ -3,7 +3,7 @@ package portaltek.cleancode.core.security;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import portaltek.cleancode.api.web.security.dto.JwtAuthenticationResponse;
+import portaltek.cleancode.api.web.security.dto.JwtResponse;
 
 import java.util.Date;
 import java.util.List;
@@ -35,9 +35,9 @@ public interface JwtService {
     
 //    public Boolean ignoreTokenExpiration(String token);
 
-    public JwtAuthenticationResponse generateToken(String username);
+    public JwtResponse generateToken(String username);
 
-    public JwtAuthenticationResponse refreshToken(String token);
+    public JwtResponse refreshToken(String token);
 
     public Boolean validateToken(String token);
     

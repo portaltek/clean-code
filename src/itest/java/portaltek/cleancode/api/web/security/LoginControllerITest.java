@@ -1,0 +1,95 @@
+/**
+ *
+ */
+package portaltek.cleancode.api.web.security;
+
+
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
+import portaltek.cleancode.CleanCodeApp;
+import portaltek.cleancode.api.web.dto.ServerResponse;
+import portaltek.cleancode.api.web.security.dto.JwtRequest;
+import portaltek.cleancode.api.web.security.dto.JwtResponse;
+
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpStatus.*;
+
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = CleanCodeApp.class, webEnvironment = RANDOM_PORT)
+class LoginControllerITest {
+
+    @LocalServerPort
+    int port;
+
+    @Autowired
+    TestRestTemplate template;
+
+    final String EXPECTED_MSG = "{\"message\":\"Pong!\"}";
+    final String BASE_URL = "http://localhost:";
+
+    private String url(String endpoint){
+        return BASE_URL + this.port + "/api/open/login/" + endpoint;
+    }
+
+    @NotNull
+    private HttpEntity<JwtRequest> getEntity(String username, String password) {
+        var req = new JwtRequest(username, password);
+        var httpEntity = new HttpEntity<>(req);
+        return httpEntity;
+    }
+
+
+    @Test
+    public void getPing_shouldReturnPong() {
+        var url = url("ping");
+        var entity = template.getForEntity(url, String.class);
+        then(entity.getBody()).isEqualTo(EXPECTED_MSG);
+        then(entity.getStatusCode()).isEqualTo(OK);
+    }
+
+    @Test
+    public void postValidLogin_shouldReturnToken() {
+        var url = url("token");
+        HttpEntity<JwtRequest> req = getEntity("admin", "admin");
+        ResponseEntity<JwtResponse> entity = template.postForEntity(url, req, JwtResponse.class);
+
+        then(entity.getStatusCode()).isEqualTo(OK);
+        then(entity.getBody().getToken()).isNotEmpty();
+    }
+
+//    @Test
+//    public void postInvalidLogin_shouldReturnErrorMsg() {
+//        var url = url("/api/open/login");
+//        HttpEntity<JwtRequest> req = getEntity("admin", "admin2");
+//        ResponseEntity<ServerResponse> response = template.postForEntity(url, req, ServerResponse.class);
+//        then(response.getStatusCode()).isEqualTo(UNAUTHORIZED);
+//        then(response.getBody()).isNotNull();
+//    }
+
+//
+//    @Test
+//    public void find_bookIdNotFound_404() throws Exception {
+//
+//        var expected = "{status:404,error:\"Not Found\",message:\"Book id not found : 5\",path:\"/books/5\"}";
+//        var url = url("/api/open/login");
+//        var httpEntity = getEntity("admin", "admin2");
+//        ResponseEntity<String> response = template.exchange(url, HttpMethod.POST, httpEntity, String.class);
+//
+//        then(response.getStatusCode()).isEqualTo(UNAUTHORIZED);
+//    }
+
+
+}
+
+
+

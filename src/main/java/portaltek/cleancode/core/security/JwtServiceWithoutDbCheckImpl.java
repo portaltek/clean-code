@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import portaltek.cleancode.api.web.security.dto.JwtAuthenticationResponse;
+import portaltek.cleancode.api.web.security.dto.JwtResponse;
 
 import java.io.Serializable;
 import java.util.*;
@@ -137,16 +137,16 @@ public class JwtServiceWithoutDbCheckImpl implements JwtService, Serializable {
     }
 
     @Override
-    public JwtAuthenticationResponse generateToken(String username) {
+    public JwtResponse generateToken(String username) {
 
         Map<String, Object> claims = generateClaims(username);
         String token = doGenerateToken(claims);
         String refreshToken = doGenerateRefreshToken(claims);
-        return new JwtAuthenticationResponse(token, refreshToken);
+        return new JwtResponse(token, refreshToken);
     }
 
     @Override
-    public JwtAuthenticationResponse refreshToken(String username) {
+    public JwtResponse refreshToken(String username) {
 
         String newToken;
         String newRefreshToken;
@@ -158,7 +158,7 @@ public class JwtServiceWithoutDbCheckImpl implements JwtService, Serializable {
             newToken = null;
             newRefreshToken = null;
         }
-        return new JwtAuthenticationResponse(newToken, newRefreshToken);
+        return new JwtResponse(newToken, newRefreshToken);
     }
 
     private Map<String, Object> generateClaims(String username) {
