@@ -26,7 +26,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CleanCodeApp.class, webEnvironment = RANDOM_PORT)
-class LoginControllerITest {
+class TokenControllerITest {
 
     @LocalServerPort
     int port;
@@ -38,7 +38,7 @@ class LoginControllerITest {
     final String BASE_URL = "http://localhost:";
 
     private String url(String endpoint){
-        return BASE_URL + this.port + "/api/open/login/" + endpoint;
+        return BASE_URL + this.port + "/api/open/token/" + endpoint;
     }
 
     @NotNull
@@ -59,7 +59,7 @@ class LoginControllerITest {
 
     @Test
     public void postValidLogin_shouldReturnToken() {
-        var url = url("token");
+        var url = url("create");
         HttpEntity<JwtRequest> req = getEntity("admin", "admin");
         ResponseEntity<JwtResponse> response = template.postForEntity(url, req, JwtResponse.class);
 

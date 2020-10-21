@@ -23,8 +23,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 
 @RestController
-@RequestMapping("/api/open/login")
-public class LoginController {
+@RequestMapping("/api/open/token")
+public class TokenController {
 
     private final Log log = LogFactory.getLog(this.getClass());
 
@@ -33,14 +33,14 @@ public class LoginController {
     @Autowired
     private JwtService jwtService;
 
-    public LoginController() {
+    public TokenController() {
         log.info("init AuthController");
     }
 
 
 
 
-    @RequestMapping(value = "${jwt.route.open.login.token}", method = {POST, OPTIONS})
+    @RequestMapping(value = "${jwt.route.open.token.create}", method = {POST, OPTIONS})
     public ResponseEntity<?> createJwt(@RequestBody JwtRequest req)
             throws AuthenticationException {
 
