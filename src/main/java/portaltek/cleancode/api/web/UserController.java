@@ -18,8 +18,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 
 @RestController
-@RequestMapping("/api/auth/")
-public class AuthenticatedUserController {
+@RequestMapping("/api/auth/user/")
+public class UserController {
 
 
     @Value("${jwt.header}")
@@ -31,7 +31,7 @@ public class AuthenticatedUserController {
     private UserService userService;
 
     @RequestMapping(value = "me", method = GET)
-    public ResponseEntity<String> getAuthenticatedUser(
+    public ResponseEntity<String> getUserMe(
             @RequestHeader(value = "${jwt.header}") String token) {
 
         Long userId = jwtService.getUserIdFromToken(token.substring(6));
@@ -40,7 +40,7 @@ public class AuthenticatedUserController {
     }
 
     @RequestMapping(value = "ping", method = GET)
-    public ResponseEntity<String> getAuthenticatedUser() {
+    public ResponseEntity<String> ping() {
         return ok("Pong!");
     }
 

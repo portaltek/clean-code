@@ -24,25 +24,21 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Role create(Role role) {
-		// TODO Auto-generated method stub
 		return roleRepo.save(role);
 	}
 
 	@Override
 	public Role read(Integer id) {
-		// TODO Auto-generated method stub
 		return roleRepo.findById(id).get();
 	}
 
 	@Override
 	public Role update(Role role) {
-		// TODO Auto-generated method stub
 		return roleRepo.save(role);
 	}
 
 	@Override
 	public boolean delete(Integer id) {
-		// TODO Auto-generated method stub
 		try{
 			roleRepo.deleteById(id);
 			return true;

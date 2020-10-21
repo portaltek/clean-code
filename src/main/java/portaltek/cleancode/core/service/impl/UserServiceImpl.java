@@ -25,7 +25,9 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public UserServiceImpl(UserRepo userRepo, PasswordEncoder passwordEncoder, RoleService roleService) {
+	public UserServiceImpl(UserRepo userRepo,
+												 PasswordEncoder passwordEncoder,
+												 RoleService roleService) {
 		this.userRepo = userRepo;
 		this.passwordEncoder = passwordEncoder;
 		this.roleService = roleService;
@@ -33,13 +35,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserByUsername(String username) {
-		// TODO Auto-generated method stub
+
 		return userRepo.findByUsername(username);
 	}
 
 	@Override
 	public User create(User u) {
-		// TODO Auto-generated method stub
 		String hashedPass = passwordEncoder.encode(u.getPassword());
 		u.setPassword(hashedPass);
 		u.setEnabled(true);
@@ -50,19 +51,16 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User read(Long id) {
-		// TODO Auto-generated method stub
 		return userRepo.findById(id).get();
 	}
 
 	@Override
 	public User update(User u) {
-		// TODO Auto-generated method stub
 		return userRepo.save(u);
 	}
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
 		userRepo.deleteById(id);
 	}
 }

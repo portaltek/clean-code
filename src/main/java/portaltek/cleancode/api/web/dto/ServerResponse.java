@@ -11,7 +11,6 @@ public class ServerResponse {
 
 	public ServerResponse() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getMessage() {

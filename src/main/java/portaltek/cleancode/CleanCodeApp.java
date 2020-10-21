@@ -27,7 +27,7 @@ public class CleanCodeApp implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // TODO Auto-generated method stub
+
         Role role_admin = new Role("ADMIN");
         Role role_user = new Role("USER");
         roleService.create(role_admin);
