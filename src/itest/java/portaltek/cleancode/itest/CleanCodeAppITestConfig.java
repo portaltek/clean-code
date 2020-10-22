@@ -18,11 +18,11 @@ public class CleanCodeAppITestConfig {
     String tokenEndpoint = "/api/open/token/create";
 
     @Bean
-    public Rest api(TestRestTemplate rest){
+    public Rest rest(TestRestTemplate rest){
         return new Rest(rest, host, port);
     }
     @Bean
-    public Api token(Rest rest){
+    public Api api(Rest rest){
         return new Api(rest, tokenEndpoint);
     }
 

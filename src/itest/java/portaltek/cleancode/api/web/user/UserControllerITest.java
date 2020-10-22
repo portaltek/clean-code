@@ -2,7 +2,7 @@ package portaltek.cleancode.api.web.user;
 
 
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import portaltek.cleancode.CleanCodeApp;
-import portaltek.cleancode.api.web.Rest;
 import portaltek.cleancode.api.web.Api;
 import portaltek.cleancode.itest.CleanCodeAppITestConfig;
 
@@ -29,20 +28,19 @@ class UserControllerITest {
 
     @Autowired
     Api api;
+    String hello;
+    HttpHeaders headers;
+    String pingUrl;
 
-//    HttpHeaders headers;
-//    String pingUrl;
-//
-//    @Before
-//    public void init(){
-//        headers = api.header("admin", "admin");
-//        pingUrl = api.url("/api/auth/user/ping");
-//    }
+    @BeforeEach
+    public void init() {
+        headers = api.header("admin", "admin");
+        pingUrl = api.url("/api/auth/user/ping");
+    }
 
     @Test
     public void getPing_shouldReturnPong() {
-        HttpHeaders headers = api.header("admin", "admin");
-        String pingUrl = api.url("/api/auth/user/ping");
+
         var entity = new HttpEntity<>("ping", headers);
         var response = api.rest()
                 .exchange(pingUrl, GET, entity, String.class);
