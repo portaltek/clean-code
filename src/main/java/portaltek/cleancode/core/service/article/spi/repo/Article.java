@@ -1,19 +1,23 @@
-package portaltek.cleancode.core.service.article.api.web;
+package portaltek.cleancode.core.service.article.spi.repo;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@EqualsAndHashCode
 @Accessors(fluent = true)
-class ArticleDto {
+public class Article {
     private String title;
     private LocalDate published;
     private String body;
     private String author;
+
+
 }

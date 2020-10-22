@@ -1,16 +1,15 @@
-package portaltek.cleancode.core.service.article.api.web;
-
+package portaltek.cleancode.core.service.article.spi.repo;
 
 import org.springframework.stereotype.Service;
 import portaltek.cleancode.core.service.Converter;
 import portaltek.cleancode.core.service.article.core.ArticleDO;
 
 @Service
-class ArticleConverter implements Converter<ArticleDto, ArticleDO> {
+class ArticleRepoConverter implements Converter<Article, ArticleDO> {
 
     @Override
-    public ArticleDto fromDomain(ArticleDO domain) {
-        return ArticleDto.builder()
+    public Article fromDomain(ArticleDO domain) {
+        return Article.builder()
                 .title(domain.title())
                 .published(domain.published())
                 .body(domain.body())
@@ -19,7 +18,7 @@ class ArticleConverter implements Converter<ArticleDto, ArticleDO> {
     }
 
     @Override
-    public ArticleDO toDomain(ArticleDto dto) {
+    public ArticleDO toDomain(Article dto) {
         return ArticleDO.builder()
                 .title(dto.title())
                 .published(dto.published())

@@ -21,14 +21,14 @@ class ArticleFacade {
     public ArticleDto findByTitle(String title) {
         requireNonNull(title);
         ArticleDO article = articleRepo.findById(title);
-        return articleConverter.convert(article);
+        return articleConverter.fromDomain(article);
     }
 
     public Page<ArticleDto> findAll(Pageable pageable) {
         requireNonNull(pageable);
         return articleRepo
                 .findAll(pageable)
-                .map(articleConverter::convert);
+                .map(articleConverter::fromDomain);
     }
 
 }
