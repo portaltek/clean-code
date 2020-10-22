@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import portaltek.cleancode.core.service.article.core.ArticleService;
 
 @Configuration
-class ArticleApiWebConfig {
+class ArticleWebConfig {
 
     @Bean
-    ArticleFacade articleFacade(ArticleService service,
-                                ArticleConverter converter) {
-        return new ArticleFacade(service, converter);
+    ArticleWebFacade articleWebFacade(ArticleService service,
+                                   ArticleConverter converter) {
+        return new ArticleWebFacade(service, converter);
     }
 
 

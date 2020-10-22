@@ -1,4 +1,4 @@
-package portaltek.cleancode.core.service.article;
+package portaltek.cleancode.core.service.util;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

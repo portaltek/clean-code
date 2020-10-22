@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
 
 @AllArgsConstructor
 @Service
-class ArticleFacade {
+class ArticleWebFacade {
 
     private ArticleService articleService;
     private ArticleConverter articleConverter;
