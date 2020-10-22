@@ -18,8 +18,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import portaltek.cleancode.core.security.filter.JwtAuthenticationEntryPoint;
-import portaltek.cleancode.core.security.filter.JwtAuthenticationTokenFilter;
+import portaltek.cleancode.core.security.JwtEntryPoint;
+import portaltek.cleancode.core.security.JwtFilter;
 
 
 @Configuration
@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final Log log = LogFactory.getLog(this.getClass());
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private JwtEntryPoint unauthorizedHandler;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -58,8 +58,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean(){
-        return new JwtAuthenticationTokenFilter();
+    public JwtFilter authenticationTokenFilterBean(){
+        return new JwtFilter();
     }
 
     public static String[] ANONYMOUS_RESOURCES = {"/", "/*.html",
@@ -79,12 +79,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
 
                 .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        ;
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
 
-        httpSecurity
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and();
+
+        httpSecurity.addFilterBefore(
+                authenticationTokenFilterBean(),
+                UsernamePasswordAuthenticationFilter.class
+        );
 
         httpSecurity.csrf().disable();
         httpSecurity.headers().cacheControl().disable();

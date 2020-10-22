@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import portaltek.cleancode.CleanCodeApp;
 import portaltek.cleancode.api.web.Api;
+import portaltek.cleancode.core.security.JwtService;
 import portaltek.cleancode.itest.CleanCodeAppITestConfig;
 
 import static org.assertj.core.api.BDDAssertions.then;
@@ -37,12 +38,15 @@ class TokenControllerITest {
         pingUrl = api.url("/api/open/token/ping");
         createUrl = api.url("/api/open/token/create");
     }
+    @Autowired
+    JwtService jwtService;
 
     @Test
     public void postValidLogin_shouldReturnToken() {
 
         String token = api.token("admin", "admin");
         then(token).isNotNull();
+
     }
 
     @Test
