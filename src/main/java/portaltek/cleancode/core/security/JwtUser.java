@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 
-public class JwtUser implements UserDetails {
+class JwtUser implements UserDetails {
 
     private static final long serialVersionUID = 1L;
     private final Long id;

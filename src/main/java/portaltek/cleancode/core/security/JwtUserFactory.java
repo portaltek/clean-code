@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public final class JwtUserFactory {
+final class JwtUserFactory {
 
     private JwtUserFactory() {
     }

@@ -15,7 +15,7 @@ import static java.util.Optional.ofNullable;
 
 @Service
 @Transactional
-public class JwtUserDetailsService implements UserDetailsService {
+class JwtUserDetailsService implements UserDetailsService {
 
     private UserRepo userRepo;
     private String NOT_FOUND = "No user found with username '%s'.";
