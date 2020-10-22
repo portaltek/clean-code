@@ -7,11 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import portaltek.cleancode.CleanCodeApp;
 import portaltek.cleancode.api.web.Api;
-import portaltek.cleancode.core.security.JwtService;
 import portaltek.cleancode.itest.CleanCodeAppITestConfig;
 
 import static org.assertj.core.api.BDDAssertions.then;
