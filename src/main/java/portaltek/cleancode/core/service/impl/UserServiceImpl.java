@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
 	
 	private UserRepo userRepo;
 	private RoleService roleService;

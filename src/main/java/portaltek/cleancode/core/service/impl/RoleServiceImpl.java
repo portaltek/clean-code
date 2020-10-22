@@ -12,7 +12,7 @@ import portaltek.cleancode.core.service.RoleService;
 
 
 @Service
-public class RoleServiceImpl implements RoleService {
+class RoleServiceImpl implements RoleService {
 
 	private RoleRepo roleRepo;
 	
