@@ -10,15 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class ArticleRepoInMemory implements ArticleRepo {
 
-    private ConcurrentHashMap<String, ArticleDO> map = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Article> map = new ConcurrentHashMap<>();
 
     @Override
-    public ArticleDO findById(String title) {
+    public Article findById(String title) {
         return map.get(title);
     }
 
     @Override
-    public Page<ArticleDO> findAll(Pageable pageable) {
+    public Page<Article> findAll(Pageable pageable) {
         return new PageImpl<>(new ArrayList<>(map.values()), pageable, map.size());
     }
 }

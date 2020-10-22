@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Accessors(fluent = true)
-public class Article {
+class Article {
     private String title;
     private LocalDate published;
     private String body;

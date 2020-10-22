@@ -3,15 +3,15 @@ package portaltek.cleancode.core.service.article.api.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import portaltek.cleancode.core.service.article.spi.repo.ArticleRepo;
+import portaltek.cleancode.core.service.article.core.ArticleService;
 
 @Configuration
 class ArticleApiWebConfig {
 
     @Bean
-    ArticleFacade articleFacade(ArticleRepo repo,
+    ArticleFacade articleFacade(ArticleService service,
                                 ArticleConverter converter) {
-        return new ArticleFacade(repo, converter);
+        return new ArticleFacade(service, converter);
     }
 
 

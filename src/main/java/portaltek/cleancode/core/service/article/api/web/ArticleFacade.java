@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import portaltek.cleancode.core.service.article.core.ArticleDO;
-import portaltek.cleancode.core.service.article.spi.repo.ArticleRepo;
+import portaltek.cleancode.core.service.article.core.ArticleService;
 
 import static java.util.Objects.requireNonNull;
 
@@ -14,19 +14,19 @@ import static java.util.Objects.requireNonNull;
 @Service
 class ArticleFacade {
 
-    private ArticleRepo articleRepo;
+    private ArticleService articleService;
     private ArticleConverter articleConverter;
 
 
     public ArticleDto findByTitle(String title) {
         requireNonNull(title);
-        ArticleDO article = articleRepo.findById(title);
+        ArticleDO article = articleService.findByTitle(title);
         return articleConverter.fromDomain(article);
     }
 
     public Page<ArticleDto> findAll(Pageable pageable) {
         requireNonNull(pageable);
-        return articleRepo
+        return articleService
                 .findAll(pageable)
                 .map(articleConverter::fromDomain);
     }
