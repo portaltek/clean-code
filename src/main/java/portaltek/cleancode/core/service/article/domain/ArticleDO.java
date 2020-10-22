@@ -3,6 +3,7 @@ package portaltek.cleancode.core.service.article.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import portaltek.cleancode.core.service.article.api.web.ArticleDto;
 
 import java.time.LocalDate;
 

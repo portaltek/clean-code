@@ -1,4 +1,4 @@
-package portaltek.cleancode.core.service.article.domain;
+package portaltek.cleancode.core.service.article.api.web;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
