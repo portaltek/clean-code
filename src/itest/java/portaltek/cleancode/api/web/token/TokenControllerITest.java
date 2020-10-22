@@ -28,25 +28,25 @@ class TokenControllerITest {
 
     @Autowired
     Api api;
-    HttpHeaders headers;
     String pingUrl;
     String createUrl;
 
     @BeforeEach
     public void init() {
-        headers = api.header("admin", "admin");
         pingUrl = api.url("/api/open/token/ping");
         createUrl = api.url("/api/open/token/create");
     }
-    @Autowired
-    JwtService jwtService;
 
     @Test
     public void postValidLogin_shouldReturnToken() {
-
         String token = api.token("admin", "admin");
         then(token).isNotNull();
+    }
 
+    @Test
+    public void postInvalidLogin_shouldReturnNull() {
+        String token = api.token("admin", "admin2");
+        then(token).isNull();
     }
 
     @Test
