@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static java.util.Optional.ofNullable;
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+
 @Service
 class JwtValidator {
 
@@ -33,16 +36,14 @@ class JwtValidator {
     private String refreshTokenHeader;
 
 
-
     public void validate(HttpServletRequest request) {
 
-        final String header = request.getHeader(tokenHeader);
-        if (jwtService.hasToken(header)) {
-            String token = header.substring(7);
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                validateToken(request, token);
-            }
-        }
+        ofNullable(request.getHeader(tokenHeader))
+                .filter(jwtService::hasToken)
+                .filter(e -> getContext().getAuthentication() == null)
+                .map(e -> e.substring(7))
+                .ifPresent(e -> validateToken(request, e));
+
     }
 
 
@@ -65,7 +66,7 @@ class JwtValidator {
         var auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         logger.info("authenticated user " + username + ", setting security context");
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        getContext().setAuthentication(auth);
     }
 
 

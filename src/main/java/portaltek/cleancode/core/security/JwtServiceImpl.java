@@ -25,6 +25,7 @@ class JwtServiceImpl implements JwtService, Serializable {
     static final String CLAIM_KEY_USERNAME = "sub";
     static final String CLAIM_KEY_CREATED = "created";
     static final String CLAIM_KEY_ROLES = "roles";
+    static final String BEARER = "Bearer ";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -201,7 +202,7 @@ class JwtServiceImpl implements JwtService, Serializable {
     }
 
     public boolean hasToken(String header) {
-        return header != null && header.startsWith("Bearer ");
+        return header != null && header.startsWith(BEARER);
     }
 
 }
