@@ -2,43 +2,48 @@ package portaltek.cleancode.api.web;
 
 
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import portaltek.cleancode.api.web.token.dto.JwtRequest;
+import portaltek.cleancode.api.web.token.dto.JwtResponse;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static portaltek.cleancode.api.web.token.dto.JwtRequest.getEntity;
 
 
 public class Api {
 
-    final private Integer port;
-    final private String host;
-    final private String urlBase;
-    final private TestRestTemplate rest;
+    final private Rest rest;
+    final private String tokenEndpoint;
 
-
-    public Api(TestRestTemplate rest, String host, Integer port) {
+    public Api(Rest rest, String tokenEndpoint) {
         this.rest = rest;
-        this.port = port;
-        this.host = host;
-        this.urlBase = host + port;
+        this.tokenEndpoint = tokenEndpoint;
     }
 
-    public Integer getPort() {
-        return port;
+    public String token(String username, String password) {
+        var url = rest.urlBase() + tokenEndpoint;
+        HttpEntity<JwtRequest> req = getEntity(username, password);
+        return rest.template().postForEntity(url, req, JwtResponse.class)
+                .getBody()
+                .getToken();
     }
 
-    public String getHost() {
-        return host;
+    public HttpHeaders header(String username, String password) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add(AUTHORIZATION, "Bearer " + token(username,password));
+        return headers;
     }
 
-    public String url(String endpoint) {
-        return urlBase + endpoint;
+    public TestRestTemplate rest(){
+        return rest.template();
     }
 
-    public String urlBase() {
-        return urlBase;
+    public String url(String endpoint){
+        return rest.url(endpoint);
     }
-
-    public TestRestTemplate rest() {
-        return rest;
-    }
-
 
 }
 

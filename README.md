@@ -88,7 +88,7 @@ Create project structure under MY_PROJECT folder:
     @RestController
     public class MyProject {
     
-        @GetMapping("/api/open/hello")
+        @GetMapping("/rest/open/hello")
         public String helloWorld(){
             return "Hello World!!!";
         }

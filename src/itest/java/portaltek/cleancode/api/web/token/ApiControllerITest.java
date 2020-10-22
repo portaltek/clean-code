@@ -23,7 +23,7 @@ import static portaltek.cleancode.api.web.token.dto.JwtRequest.getEntity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CleanCodeApp.class, webEnvironment = RANDOM_PORT)
-class TokenControllerITest {
+class ApiControllerITest {
 
     @LocalServerPort
     int port;
