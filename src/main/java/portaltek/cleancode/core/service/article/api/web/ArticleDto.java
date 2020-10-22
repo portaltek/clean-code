@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @EqualsAndHashCode
-public class ArticleDto {
+class ArticleDto {
     private String title;
     private LocalDate published;
     private String body;

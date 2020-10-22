@@ -1,4 +1,4 @@
-package portaltek.cleancode.core.service.article.domain;
+package portaltek.cleancode.core.service.article;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
 
-class AbstractRepoInMemory<T, ID> {
+public class AbstractRepoInMemory<T, ID> {
     private ConcurrentHashMap<ID, T> map = new ConcurrentHashMap<>();
 
     public T findById(ID id) {

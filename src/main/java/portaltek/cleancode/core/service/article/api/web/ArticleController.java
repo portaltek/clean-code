@@ -1,21 +1,19 @@
 package portaltek.cleancode.core.service.article.api.web;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import portaltek.cleancode.core.service.article.domain.ArticleFacade;
 
 @RestController
+@AllArgsConstructor
 class ArticleController {
 
-    final private ArticleFacade facade;
+    final ArticleFacade facade;
 
-    public ArticleController(ArticleFacade facade) {
-        this.facade = facade;
-    }
 
     @GetMapping("article")
     Page<ArticleDto> getPage(Pageable pageable) {
@@ -24,6 +22,6 @@ class ArticleController {
 
     @GetMapping("article/{title}")
     ArticleDto getByTitle(@PathVariable String title) {
-        return facade.find(title);
+        return facade.findByTitle(title);
     }
 }
