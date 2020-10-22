@@ -1,13 +1,12 @@
-package portaltek.cleancode.core.service.article.domain;
+package portaltek.cleancode.core.service.article.spi.repo;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import portaltek.cleancode.core.service.article.core.ArticleDO;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static java.util.Objects.requireNonNull;
 
 class ArticleRepoInMemory implements ArticleRepo {
 

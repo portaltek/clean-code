@@ -2,7 +2,7 @@ package portaltek.cleancode.core.service.article.api.web;
 
 
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.core.service.article.domain.ArticleDO;
+import portaltek.cleancode.core.service.article.core.ArticleDO;
 
 @Service
 class ArticleConverter {

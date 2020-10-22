@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.core.service.article.api.web.ArticleDto;
-import portaltek.cleancode.core.service.article.domain.ArticleDO;
-import portaltek.cleancode.core.service.article.domain.ArticleRepo;
+import portaltek.cleancode.core.service.article.core.ArticleDO;
+import portaltek.cleancode.core.service.article.spi.repo.ArticleRepo;
 
 import static java.util.Objects.requireNonNull;
 

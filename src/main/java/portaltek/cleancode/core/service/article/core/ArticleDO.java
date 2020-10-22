@@ -1,4 +1,4 @@
-package portaltek.cleancode.core.service.article.domain;
+package portaltek.cleancode.core.service.article.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
