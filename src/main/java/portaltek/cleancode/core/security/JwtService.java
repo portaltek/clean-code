@@ -10,14 +10,14 @@ import java.util.List;
 
 
 public interface JwtService {
-	
-	public String getIdFromToken(String token);
-	
-	public Long getUserIdFromToken(String token);
-    
+
+    public String getIdFromToken(String token);
+
+    public Long getUserIdFromToken(String token);
+
     public String getUsernameFromToken(String token);
-    
-	public List<SimpleGrantedAuthority> getRolesFromToken(String token);
+
+    public List<SimpleGrantedAuthority> getRolesFromToken(String token);
 
     public Date getCreatedDateFromToken(String token);
 
@@ -32,7 +32,7 @@ public interface JwtService {
     public Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset);
 
 //    public String generateAudience(Device device);
-    
+
 //    public Boolean ignoreTokenExpiration(String token);
 
     public JwtResponse generateToken(String username);
@@ -40,6 +40,9 @@ public interface JwtService {
     public JwtResponse refreshToken(String token);
 
     public Boolean validateToken(String token);
-    
+
 //    public UserDetails getUserDetailsFromToken(String token);
+
+    boolean hasToken(String header);
+
 }

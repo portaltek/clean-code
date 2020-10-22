@@ -23,15 +23,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JwtValidator validator;
 
-    @Value("${jwt.header}")
-    private String tokenHeader;
-    @Value("${jwt.refresh.header}")
-    private String refreshTokenHeader;
-
-    boolean hasToken(String header) {
-        return header != null && header.startsWith("Bearer ");
-    }
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,

@@ -32,15 +32,12 @@ class JwtValidator {
     @Value("${jwt.refresh.header}")
     private String refreshTokenHeader;
 
-    boolean hasToken(String header) {
-        return header != null && header.startsWith("Bearer ");
-    }
 
 
     public void validate(HttpServletRequest request) {
 
         final String header = request.getHeader(tokenHeader);
-        if (this.hasToken(header)) {
+        if (jwtService.hasToken(header)) {
             String token = header.substring(7);
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 validateToken(request, token);

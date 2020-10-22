@@ -199,4 +199,9 @@ class JwtServiceImpl implements JwtService, Serializable {
             return false;
         }
     }
+
+    public boolean hasToken(String header) {
+        return header != null && header.startsWith("Bearer ");
+    }
+
 }
