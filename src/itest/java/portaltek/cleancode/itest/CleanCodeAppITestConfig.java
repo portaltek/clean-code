@@ -5,8 +5,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
-import portaltek.cleancode.api.web.Rest;
-import portaltek.cleancode.api.web.Api;
 
 @Lazy
 @TestConfiguration
