@@ -1,9 +1,7 @@
 package portaltek.cleancode.core.service.article.spi.repo;
 
-import org.springframework.stereotype.Service;
 import portaltek.cleancode.core.service.util.Converter;
 import portaltek.cleancode.core.service.article.core.ArticleDO;
-
 
 class ArticleRepoConverter implements Converter<Article, ArticleDO> {
 
