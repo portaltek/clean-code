@@ -1,4 +1,4 @@
-package portaltek.cleancode.token.core.service.util;
+package portaltek.cleancode.infra.util;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

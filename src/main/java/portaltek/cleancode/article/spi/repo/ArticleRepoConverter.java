@@ -1,6 +1,6 @@
 package portaltek.cleancode.article.spi.repo;
 
-import portaltek.cleancode.token.core.service.util.Converter;
+import portaltek.cleancode.infra.util.Converter;
 import portaltek.cleancode.article.core.ArticleDO;
 
 class ArticleRepoConverter implements Converter<Article, ArticleDO> {

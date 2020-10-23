@@ -1,4 +1,4 @@
-package portaltek.cleancode.token.core.config;
+package portaltek.cleancode.infra;
 
 
 import org.apache.commons.logging.Log;
@@ -25,7 +25,7 @@ import portaltek.cleancode.token.core.security.JwtFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final Log log = LogFactory.getLog(this.getClass());
 

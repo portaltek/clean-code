@@ -1,4 +1,4 @@
-package portaltek.cleancode.token.core.service.util;
+package portaltek.cleancode.infra.util;
 
 public interface Converter<DTO, DO> {
     DTO fromDomain(DO domain);
