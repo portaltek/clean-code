@@ -8,8 +8,8 @@ import portaltek.cleancode.core.service.article.core.ArticleService;
 @Configuration
 class ArticleWebConfig {
 
-    @Bean
-    ArticleWebFacade articleWebFacade(ArticleService service,
+//    @Bean
+    public ArticleWebFacade articleWebFacade(ArticleService service,
                                    ArticleConverter converter) {
         return new ArticleWebFacade(service, converter);
     }

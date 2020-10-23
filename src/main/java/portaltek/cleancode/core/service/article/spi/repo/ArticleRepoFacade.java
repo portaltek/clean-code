@@ -11,7 +11,6 @@ import portaltek.cleancode.core.service.article.core.ArticleRepoFacade;
 import static java.util.Objects.requireNonNull;
 
 @AllArgsConstructor
-@Service
 class ArticleRepoFacadeImpl implements ArticleRepoFacade {
 
     private ArticleRepo articleRepo;

@@ -1,18 +1,23 @@
 package portaltek.cleancode.core.service.article.api.web;
 
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@AllArgsConstructor
-@RestController
+
+//@RestController
 class ArticleController {
 
     final ArticleWebFacade facade;
+
+    @Autowired
+    public ArticleController(ArticleWebFacade facade) {
+        this.facade = facade;
+    }
 
     @GetMapping("article")
     Page<ArticleDto> getPage(Pageable pageable) {

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import portaltek.cleancode.core.service.util.Converter;
 import portaltek.cleancode.core.service.article.core.ArticleDO;
 
-@Service
+
 class ArticleRepoConverter implements Converter<Article, ArticleDO> {
 
     @Override
