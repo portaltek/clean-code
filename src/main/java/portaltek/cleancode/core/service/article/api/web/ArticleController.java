@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 
-//@RestController
+@RestController
 class ArticleController {
 
     final ArticleWebFacade facade;
 
-    @Autowired
     public ArticleController(ArticleWebFacade facade) {
         this.facade = facade;
     }

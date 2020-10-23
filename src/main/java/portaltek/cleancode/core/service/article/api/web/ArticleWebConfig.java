@@ -9,10 +9,14 @@ import portaltek.cleancode.core.service.article.core.ArticleService;
 class ArticleWebConfig {
 
 //    @Bean
-    public ArticleWebFacade articleWebFacade(ArticleService service,
-                                   ArticleConverter converter) {
-        return new ArticleWebFacade(service, converter);
-    }
+//    public ArticleWebFacade articleWebFacade(ArticleService service,
+//                                   ArticleConverter converter) {
+//        return new ArticleWebFacade(service, converter);
+//    }
 
+    @Bean
+    public ArticleWebFacade articleWebFacade(ArticleConverter converter) {
+        return new ArticleWebFacade(null, converter);
+    }
 
 }
