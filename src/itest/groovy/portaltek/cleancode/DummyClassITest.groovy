@@ -4,7 +4,7 @@ package portaltek.cleancode
 import spock.lang.Specification
 import spock.lang.Subject
 
-class DummyClassTest extends Specification {
+class DummyClassITest extends Specification {
 
     @Subject
 //    DummyClass service = new DummyClass(DummyClass); // Any advantage?

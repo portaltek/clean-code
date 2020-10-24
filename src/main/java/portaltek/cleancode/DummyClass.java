@@ -1,36 +1,27 @@
 package portaltek.cleancode;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import portaltek.cleancode.module.security.spi.repo.User;
-import portaltek.cleancode.module.security.spi.repo.UserRepo;
 
 
 class DummyClass {
 
-    final UserRepo userRepo;
     final String NOT_FOUND = "No user found with username '%s'.";
 
-    @Autowired
-    public DummyClass(UserRepo userRepo) {
-        this.userRepo = userRepo;
+    public void myPublicLevelMethod(StringBuilder sb) throws UsernameNotFoundException {
+        sb.append(1);
+        myPackageLevelMethod(sb);
+        myPackageLevelMethod(sb);
+        myProtectedLevelMethod(sb);
+
     }
 
-    public void myPublicLevelMethod(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
-        user.setUsername(user.getUsername() + "2");
-        myPackageLevelMethod(user, user);
-        myPackageLevelMethod(user, user);
-        userRepo.save(user);
+    void myPackageLevelMethod(StringBuilder sb){
+        sb.append(2);
     }
 
-    void myPackageLevelMethod(User user, User user2){
-        user.setUsername(user.getUsername() + "3");
-    }
-
-    protected void myProtectedLevelMethod(User user){
-        user.setUsername(user.getUsername() + "3");
+    protected void myProtectedLevelMethod(StringBuilder sb){
+        sb.append(3);
     }
 
 
