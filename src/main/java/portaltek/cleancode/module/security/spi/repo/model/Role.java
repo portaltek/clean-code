@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.spi.datastore.model;
+package portaltek.cleancode.module.security.spi.repo.model;
 
 import javax.persistence.*;
 import java.util.HashSet;

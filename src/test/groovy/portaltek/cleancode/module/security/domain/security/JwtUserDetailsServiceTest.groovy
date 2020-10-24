@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 class JwtUserDetailsServiceTest extends Specification {
 
-    def userRepo = Mock(portaltek.cleancode.module.security.spi.datastore.repository.UserRepo)
+    def userRepo = Mock(portaltek.cleancode.module.security.spi.repo.repository.UserRepo)
     User user = new User("Username","Password", true)
     UserDetailsService service = new JwtUserDetailsService(userRepo);
 
