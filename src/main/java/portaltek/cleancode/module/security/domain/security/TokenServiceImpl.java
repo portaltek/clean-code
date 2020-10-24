@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import portaltek.cleancode.module.security.api.web.token.JwtResponse;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.TokenService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-class JwtServiceImpl implements JwtService, Serializable {
+class TokenServiceImpl implements TokenService, Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 

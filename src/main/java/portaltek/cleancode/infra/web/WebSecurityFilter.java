@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.security;
+package portaltek.cleancode.infra.web;
 
 
 import org.apache.commons.logging.Log;
@@ -13,14 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-public class JwtFilter extends OncePerRequestFilter {
+class WebSecurityFilter extends OncePerRequestFilter {
 
     private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private JwtValidator validator;
+    private WebSecurityValidator validator;
 
     @Override
     protected void doFilterInternal(

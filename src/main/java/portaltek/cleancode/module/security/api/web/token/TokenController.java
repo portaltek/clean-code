@@ -14,7 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portaltek.cleancode.module.security.api.web.ServerResponse;
-import portaltek.cleancode.module.security.domain.security.JwtService;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.TokenService;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.ok;
@@ -30,7 +30,7 @@ class TokenController {
     @Autowired
     private AuthenticationManager authManager;
     @Autowired
-    private JwtService jwtService;
+    private TokenService tokenService;
 
     public TokenController() {
         log.info("init AuthController");
@@ -57,7 +57,7 @@ class TokenController {
                     .body(new ServerResponse(e.getMessage()));
         }
 
-        var response = jwtService.generateToken(req.getUsername());
+        var response = tokenService.generateToken(req.getUsername());
         return ok(response);
     }
 

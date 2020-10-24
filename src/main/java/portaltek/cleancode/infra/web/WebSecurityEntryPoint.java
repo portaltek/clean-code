@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.security;
+package portaltek.cleancode.infra.web;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 
 @Component
-public class JwtEntryPoint implements AuthenticationEntryPoint, Serializable {
+class WebSecurityEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     private static final long serialVersionUID = -8970718410437077606L;
 

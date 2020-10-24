@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.security;
+package portaltek.cleancode.module.security.domain.published.port.spi.repo;
 
 
 import io.jsonwebtoken.Claims;
@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface JwtService {
+public interface TokenService {
 
     public String getIdFromToken(String token);
 

@@ -1,4 +1,4 @@
-package portaltek.cleancode.infra;
+package portaltek.cleancode.infra.web;
 
 
 import org.apache.commons.logging.Log;
@@ -18,8 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import portaltek.cleancode.module.security.domain.security.JwtEntryPoint;
-import portaltek.cleancode.module.security.domain.security.JwtFilter;
 
 
 @Configuration
@@ -30,7 +28,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final Log log = LogFactory.getLog(this.getClass());
 
     @Autowired
-    private JwtEntryPoint unauthorizedHandler;
+    private WebSecurityEntryPoint unauthorizedHandler;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -58,8 +56,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtFilter authenticationTokenFilterBean(){
-        return new JwtFilter();
+    public WebSecurityFilter authenticationTokenFilterBean(){
+        return new WebSecurityFilter();
     }
 
     public static String[] ANONYMOUS_RESOURCES = {"/", "/*.html",
