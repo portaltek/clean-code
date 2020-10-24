@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import portaltek.cleancode.module.security.spi.repo.UserRepo;
 import portaltek.cleancode.module.security.spi.repo.Role;
 import portaltek.cleancode.module.security.spi.repo.User;
-import portaltek.cleancode.module.security.domain.service.RoleService;
-import portaltek.cleancode.module.security.domain.service.UserService;
+import portaltek.cleancode.module.security.domain.published.service.RoleService;
+import portaltek.cleancode.module.security.domain.published.service.UserService;
 
 import javax.transaction.Transactional;
 

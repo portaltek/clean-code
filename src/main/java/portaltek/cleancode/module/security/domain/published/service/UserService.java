@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.service;
+package portaltek.cleancode.module.security.domain.published.service;
 
 
 import portaltek.cleancode.module.security.spi.repo.User;

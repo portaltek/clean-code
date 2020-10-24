@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.security;
+package portaltek.cleancode.module.security.domain.jwt;
 
 
 import org.springframework.security.core.GrantedAuthority;

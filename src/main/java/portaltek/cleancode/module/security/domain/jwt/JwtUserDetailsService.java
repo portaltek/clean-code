@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.security;
+package portaltek.cleancode.module.security.domain.jwt;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

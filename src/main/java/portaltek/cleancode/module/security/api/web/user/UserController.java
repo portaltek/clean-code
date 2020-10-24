@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.TokenService;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.JwtService;
 import portaltek.cleancode.module.security.spi.repo.User;
-import portaltek.cleancode.module.security.domain.service.UserService;
+import portaltek.cleancode.module.security.domain.published.service.UserService;
 
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -24,7 +24,7 @@ class UserController {
     private String tokenHeader;
 
     @Autowired
-    private TokenService tokenService;
+    private JwtService jwtService;
     @Autowired
     private UserService userService;
 
@@ -32,7 +32,7 @@ class UserController {
     public ResponseEntity<String> getUserMe(
             @RequestHeader(value = "${jwt.header}") String token) {
 
-        Long userId = tokenService.getUserIdFromToken(token.substring(6));
+        Long userId = jwtService.getUserIdFromToken(token.substring(6));
         User user = userService.read(userId);
         var msg = "Hello, " + user.getUsername();
         return ok(msg);
