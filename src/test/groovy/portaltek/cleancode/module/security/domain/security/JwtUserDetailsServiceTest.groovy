@@ -3,11 +3,12 @@ package portaltek.cleancode.module.security.domain.security
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import portaltek.cleancode.module.security.spi.datastore.model.User
+import portaltek.cleancode.module.security.spi.repo.UserRepo
 import spock.lang.Specification
 
 class JwtUserDetailsServiceTest extends Specification {
 
-    def userRepo = Mock(portaltek.cleancode.module.security.spi.repo.repository.UserRepo)
+    def userRepo = Mock(UserRepo)
     User user = new User("Username","Password", true)
     UserDetailsService service = new JwtUserDetailsService(userRepo);
 

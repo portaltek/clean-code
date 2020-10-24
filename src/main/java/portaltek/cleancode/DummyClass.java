@@ -3,8 +3,8 @@ package portaltek.cleancode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import portaltek.cleancode.module.security.spi.repo.model.User;
-import portaltek.cleancode.module.security.spi.repo.repository.UserRepo;
+import portaltek.cleancode.module.security.spi.repo.User;
+import portaltek.cleancode.module.security.spi.repo.UserRepo;
 
 
 class DummyClass {

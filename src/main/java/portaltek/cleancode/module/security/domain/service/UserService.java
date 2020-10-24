@@ -1,7 +1,7 @@
 package portaltek.cleancode.module.security.domain.service;
 
 
-import portaltek.cleancode.module.security.spi.repo.model.User;
+import portaltek.cleancode.module.security.spi.repo.User;
 
 public interface UserService {
 	

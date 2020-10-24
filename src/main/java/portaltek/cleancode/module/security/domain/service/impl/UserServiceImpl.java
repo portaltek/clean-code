@@ -7,9 +7,9 @@ package portaltek.cleancode.module.security.domain.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.module.security.spi.repo.repository.UserRepo;
-import portaltek.cleancode.module.security.spi.repo.model.Role;
-import portaltek.cleancode.module.security.spi.repo.model.User;
+import portaltek.cleancode.module.security.spi.repo.UserRepo;
+import portaltek.cleancode.module.security.spi.repo.Role;
+import portaltek.cleancode.module.security.spi.repo.User;
 import portaltek.cleancode.module.security.domain.service.RoleService;
 import portaltek.cleancode.module.security.domain.service.UserService;
 

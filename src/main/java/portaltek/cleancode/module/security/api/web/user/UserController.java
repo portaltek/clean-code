@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import portaltek.cleancode.module.security.domain.security.JwtService;
-import portaltek.cleancode.module.security.spi.repo.model.User;
+import portaltek.cleancode.module.security.spi.repo.User;
 import portaltek.cleancode.module.security.domain.service.UserService;
 
 import static org.springframework.http.ResponseEntity.ok;

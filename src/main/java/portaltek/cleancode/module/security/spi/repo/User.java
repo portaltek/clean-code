@@ -1,7 +1,9 @@
 /**
  *
  */
-package portaltek.cleancode.module.security.spi.repo.model;
+package portaltek.cleancode.module.security.spi.repo;
+
+import portaltek.cleancode.module.security.spi.repo.Role;
 
 import javax.persistence.*;
 import java.io.Serializable;

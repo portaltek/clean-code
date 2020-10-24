@@ -6,8 +6,8 @@ package portaltek.cleancode.module.security.domain.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.module.security.spi.repo.repository.RoleRepo;
-import portaltek.cleancode.module.security.spi.repo.model.Role;
+import portaltek.cleancode.module.security.spi.repo.RoleRepo;
+import portaltek.cleancode.module.security.spi.repo.Role;
 import portaltek.cleancode.module.security.domain.service.RoleService;
 
 

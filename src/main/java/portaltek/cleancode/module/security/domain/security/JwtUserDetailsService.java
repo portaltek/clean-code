@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import portaltek.cleancode.module.security.spi.repo.repository.UserRepo;
+import portaltek.cleancode.module.security.spi.repo.UserRepo;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;

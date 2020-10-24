@@ -3,8 +3,8 @@ package portaltek.cleancode.module.security.domain.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import portaltek.cleancode.module.security.spi.repo.model.Role;
-import portaltek.cleancode.module.security.spi.repo.model.User;
+import portaltek.cleancode.module.security.spi.repo.Role;
+import portaltek.cleancode.module.security.spi.repo.User;
 
 
 import java.util.ArrayList;
