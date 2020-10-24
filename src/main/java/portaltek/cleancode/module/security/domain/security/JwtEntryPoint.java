@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.core.security;
+package portaltek.cleancode.module.security.domain.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

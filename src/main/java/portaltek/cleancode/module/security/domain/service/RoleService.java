@@ -1,7 +1,7 @@
 /**
  * 
  */
-package portaltek.cleancode.module.security.core.service;
+package portaltek.cleancode.module.security.domain.service;
 
 
 import portaltek.cleancode.module.security.spi.datastore.model.Role;

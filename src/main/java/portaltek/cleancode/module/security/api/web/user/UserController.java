@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import portaltek.cleancode.module.security.core.security.JwtService;
+import portaltek.cleancode.module.security.domain.security.JwtService;
 import portaltek.cleancode.module.security.spi.datastore.model.User;
-import portaltek.cleancode.module.security.core.service.UserService;
+import portaltek.cleancode.module.security.domain.service.UserService;
 
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;

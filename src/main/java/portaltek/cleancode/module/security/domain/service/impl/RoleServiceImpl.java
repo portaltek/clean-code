@@ -1,14 +1,14 @@
 /**
  * 
  */
-package portaltek.cleancode.module.security.core.service.impl;
+package portaltek.cleancode.module.security.domain.service.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import portaltek.cleancode.module.security.spi.datastore.repository.RoleRepo;
 import portaltek.cleancode.module.security.spi.datastore.model.Role;
-import portaltek.cleancode.module.security.core.service.RoleService;
+import portaltek.cleancode.module.security.domain.service.RoleService;
 
 
 @Service
