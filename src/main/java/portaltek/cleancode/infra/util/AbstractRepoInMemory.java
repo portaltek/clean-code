@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
 
-public class AbstractRepoInMemory<T, ID> {
+public abstract class AbstractRepoInMemory<T, ID> {
     private ConcurrentHashMap<ID, T> map = new ConcurrentHashMap<>();
 
     public T findById(ID id) {
@@ -20,9 +20,11 @@ public class AbstractRepoInMemory<T, ID> {
         return new PageImpl<>(new ArrayList<>(map.values()), pageable, map.size());
     }
 
-    public T save(T entity, ID id) {
+    public T save(T entity) {
         requireNonNull(entity);
-        map.put(id, entity);
+        map.put(getId(entity), entity);
         return entity;
     }
+
+    abstract protected ID getId(T entity);
 }
