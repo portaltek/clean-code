@@ -1,8 +1,8 @@
 package portaltek.cleancode
 
 
-import portaltek.cleancode.token.spi.datastore.model.User
-import portaltek.cleancode.token.spi.datastore.repository.UserRepo
+import portaltek.cleancode.module.security.spi.datastore.model.User
+import portaltek.cleancode.module.security.spi.datastore.repository.UserRepo
 import spock.lang.Specification
 import spock.lang.Subject
 

@@ -1,7 +1,7 @@
 package portaltek.cleancode
 
 
-import portaltek.cleancode.token.spi.datastore.model.User
+import portaltek.cleancode.module.security.spi.datastore.model.User
 import spock.lang.Specification
 
 class SimpleITest extends Specification {
