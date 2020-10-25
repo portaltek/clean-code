@@ -11,7 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import portaltek.cleancode.CleanCodeApp;
 import portaltek.cleancode.itest.CleanCodeAppITestConfig;
-import portaltek.cleancode.module.security.api.web.ServerResponse;
+import portaltek.cleancode.infra.web.ServerResponse;
 import portaltek.cleancode.module.security.api.web.token.Api;
 import portaltek.cleancode.module.security.api.web.token.Header;
 

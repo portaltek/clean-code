@@ -6,7 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import portaltek.cleancode.module.security.api.web.ServerResponse;
+import portaltek.cleancode.infra.web.ServerResponse;
 
 
 @RestController

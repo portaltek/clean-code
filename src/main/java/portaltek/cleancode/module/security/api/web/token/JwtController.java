@@ -6,19 +6,17 @@ package portaltek.cleancode.module.security.api.web.token;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import portaltek.cleancode.module.security.api.web.ServerResponse;
+import portaltek.cleancode.infra.web.ServerResponse;
 import portaltek.cleancode.module.security.domain.published.service.JwtService;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 
 @RestController

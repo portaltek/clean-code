@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.api.web;
+package portaltek.cleancode.infra.web;
 
 public class ServerResponse {
 	
