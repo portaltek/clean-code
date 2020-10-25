@@ -24,6 +24,11 @@ class UserRepoPortImpl implements UserRepoPort {
         return userConverter.toDomain(user);
     }
 
+    public UserDO findUserByUsername(String username) {
+        User user = userRepo.findByUsername(username);
+        return userConverter.toDomain(user);
+    }
+
     public UserDO create(UserDO u){
         User user = userConverter.fromDomain(u);
         userRepo.save(user);

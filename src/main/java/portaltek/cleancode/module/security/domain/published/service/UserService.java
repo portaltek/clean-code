@@ -6,7 +6,7 @@ import portaltek.cleancode.module.security.spi.repo.User;
 
 public interface UserService {
 	
-	public User findUserByUsername(String username);
+	public UserDO findUserByUsername(String username);
 	public UserDO create(UserDO u);
 	public UserDO read(Long id);
 	public User update(User u);
