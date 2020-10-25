@@ -3,9 +3,6 @@
  */
 package portaltek.cleancode.module.security.spi.repo;
 
-import lombok.Builder;
-import lombok.experimental.Accessors;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
