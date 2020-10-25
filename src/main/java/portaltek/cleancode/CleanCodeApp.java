@@ -9,11 +9,8 @@ import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.core.RoleDOBuilder;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 import portaltek.cleancode.module.security.domain.published.core.UserDOBuilder;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
 import portaltek.cleancode.module.security.domain.published.service.UserService;
-import portaltek.cleancode.module.security.spi.repo.RoleConverter;
 
 import javax.transaction.Transactional;
 
@@ -24,13 +21,6 @@ public class CleanCodeApp implements CommandLineRunner {
     UserService userService;
     @Autowired
     RoleService roleService;
-    @Autowired
-    RoleConverter roleConverter;
-
-    @Autowired
-    RoleRepoPort roleRepoPort;
-    @Autowired
-    UserRepoPort userRepoPort;
 
     public static void main(String[] args) {
         SpringApplication.run(CleanCodeApp.class, args);
@@ -54,20 +44,6 @@ public class CleanCodeApp implements CommandLineRunner {
         UserDO userDO = UserDOBuilder.get("user");
         userDO.roles().add(roleDOUser);
         userService.create(userDO);
-
-//        Role roleAdmin = new Role("ADMIN");
-//        Role roleUser = new Role("USER");
-//        Role roleAdmin = roleConverter.fromDomain(roleDOAdmin);
-//        Role roleUser = roleConverter.fromDomain(roleDOUser);
-
-//        UserDO adminDO = UserDOBuilder.get("admin");
-//        adminDO.roles().add(roleAdmin);
-//        adminDO.roles().add(roleUser);
-//        userService.create(adminDO);
-//
-//        UserDO userDO = UserDOBuilder.get("user");
-//        userDO.roles().add(roleUser);
-//        userService.create(userDO);
 
 
     }

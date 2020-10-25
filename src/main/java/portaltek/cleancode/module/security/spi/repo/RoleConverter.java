@@ -4,7 +4,7 @@ package portaltek.cleancode.module.security.spi.repo;
 import portaltek.cleancode.infra.util.Converter;
 import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 
-public class RoleConverter implements Converter<Role, RoleDO> {
+class RoleConverter implements Converter<Role, RoleDO> {
 
 
     @Override
