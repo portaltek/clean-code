@@ -13,6 +13,6 @@ import java.util.Set;
 @Accessors(fluent = true)
 public class RoleDO {
     private Integer id;
-    private String roleName;
-    private Set<UserDO> users;
+    private String name;
+
 }

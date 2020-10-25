@@ -1,6 +1,3 @@
-/**
- *
- */
 package portaltek.cleancode.module.security.spi.repo;
 
 import javax.persistence.*;
@@ -82,7 +79,7 @@ class User implements Serializable {
     public void addRole(Role role) {
 
         this.getRoles().add(role);
-        role.getUsers().add(this);
+//        role.getUsers().add(this);
     }
 
     public void removeRole(Role role) {

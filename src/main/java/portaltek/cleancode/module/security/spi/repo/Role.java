@@ -14,8 +14,8 @@ public class Role {
     private Integer id;
     @Column(unique = true)
     private String roleName;
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<User> users = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -33,13 +33,13 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+//    public Set<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
 
     public Role() {
         super();
