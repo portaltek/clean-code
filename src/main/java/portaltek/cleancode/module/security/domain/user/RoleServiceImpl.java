@@ -6,18 +6,15 @@ import org.springframework.stereotype.Service;
 import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
-import portaltek.cleancode.module.security.spi.repo.RoleRepo;
 
 
 @Service
 class RoleServiceImpl implements RoleService {
 
-    private RoleRepo roleRepo;
     private RoleRepoPort port;
 
     @Autowired
-    public RoleServiceImpl(RoleRepo roleRepo, RoleRepoPort port) {
-        this.roleRepo = roleRepo;
+    public RoleServiceImpl(RoleRepoPort port) {
         this.port = port;
     }
 
@@ -39,12 +36,13 @@ class RoleServiceImpl implements RoleService {
 
     @Override
     public boolean delete(Integer id) {
-        try {
-            roleRepo.deleteById(id);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
+        return false;
+//        try {
+//            roleRepo.deleteById(id);
+//            return true;
+//        } catch (Exception ex) {
+//            return false;
+//        }
 
     }
 
