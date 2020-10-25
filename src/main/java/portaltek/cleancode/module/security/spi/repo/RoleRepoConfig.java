@@ -8,8 +8,9 @@ import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRe
 class RoleRepoConfig {
 
     @Bean
-    public RoleRepoPort roleRepoPort(RoleRepo roleRepo) {
-        return new RoleRepoPortImpl(roleRepo);
+    public RoleRepoPort roleRepoPort(RoleRepo roleRepo,
+                                     RoleConverter converter) {
+        return new RoleRepoPortImpl(roleRepo, converter);
     }
 
     @Bean

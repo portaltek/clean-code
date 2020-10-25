@@ -7,19 +7,26 @@ import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRe
 class RoleRepoPortImpl implements RoleRepoPort {
 
     private RoleRepo roleRepo;
+    private RoleConverter converter;
 
-    public RoleRepoPortImpl(RoleRepo roleRepo) {
+    public RoleRepoPortImpl(RoleRepo roleRepo,
+                            RoleConverter converter) {
         this.roleRepo = roleRepo;
+        this.converter = converter;
     }
 
     @Override
-    public RoleDO create(RoleDO role) {
-        return null;
+    public RoleDO create(RoleDO domain) {
+        Role role = converter.fromDomain(domain);
+        roleRepo.save(role);
+        return converter.toDomain(role);
     }
 
     @Override
     public RoleDO read(Integer id) {
-        return null;
+        Role role = roleRepo.findById(id)
+                .orElseThrow(NoRecordFoundException::new);
+        return converter.toDomain(role);
     }
 
     @Override
