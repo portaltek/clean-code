@@ -4,9 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
 
+import javax.transaction.Transactional;
+
 @Configuration
 class RoleRepoConfig {
 
+    @Transactional
     @Bean
     public RoleRepoPort roleRepoPort(RoleRepo roleRepo,
                                      RoleConverter converter) {

@@ -5,12 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import portaltek.cleancode.module.security.domain.published.core.RoleDO;
+import portaltek.cleancode.module.security.domain.published.core.RoleDOBuilder;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 import portaltek.cleancode.module.security.domain.published.core.UserDOBuilder;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
 import portaltek.cleancode.module.security.domain.published.service.UserService;
-import portaltek.cleancode.module.security.spi.repo.Role;
+import portaltek.cleancode.module.security.spi.repo.RoleConverter;
 
 import javax.transaction.Transactional;
 
@@ -22,8 +25,12 @@ public class CleanCodeApp implements CommandLineRunner {
     @Autowired
     RoleService roleService;
     @Autowired
-    UserRepoPort userPort;
+    RoleConverter roleConverter;
 
+    @Autowired
+    RoleRepoPort roleRepoPort;
+    @Autowired
+    UserRepoPort userRepoPort;
 
     public static void main(String[] args) {
         SpringApplication.run(CleanCodeApp.class, args);
@@ -33,21 +40,34 @@ public class CleanCodeApp implements CommandLineRunner {
     @Transactional
     public void run(String... args) {
 
-        Role roleAdmin = new Role("ADMIN");
-        Role roleUser = new Role("USER");
-//      RoleDO roleAdmin =  RoleDOBuilder.get("ADMIN");
-        roleService.create(roleAdmin);
-        roleService.create(roleUser);
 
+        RoleDO roleDOAdmin = RoleDOBuilder.get("ADMIN");
+        RoleDO roleDOUser = RoleDOBuilder.get("USER");
+        roleService.create(roleDOAdmin);
+        roleService.create(roleDOUser);
 
         UserDO adminDO = UserDOBuilder.get("admin");
-        adminDO.roles().add(roleAdmin);
-        adminDO.roles().add(roleUser);
+        adminDO.roles().add(roleDOAdmin);
+        adminDO.roles().add(roleDOUser);
         userService.create(adminDO);
 
         UserDO userDO = UserDOBuilder.get("user");
-        userDO.roles().add(roleUser);
+        userDO.roles().add(roleDOUser);
         userService.create(userDO);
+
+//        Role roleAdmin = new Role("ADMIN");
+//        Role roleUser = new Role("USER");
+//        Role roleAdmin = roleConverter.fromDomain(roleDOAdmin);
+//        Role roleUser = roleConverter.fromDomain(roleDOUser);
+
+//        UserDO adminDO = UserDOBuilder.get("admin");
+//        adminDO.roles().add(roleAdmin);
+//        adminDO.roles().add(roleUser);
+//        userService.create(adminDO);
+//
+//        UserDO userDO = UserDOBuilder.get("user");
+//        userDO.roles().add(roleUser);
+//        userService.create(userDO);
 
 
     }

@@ -4,7 +4,7 @@ package portaltek.cleancode.module.security.domain.published.core;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import portaltek.cleancode.module.security.spi.repo.Role;
+
 
 import java.util.Set;
 
@@ -17,5 +17,5 @@ public class UserDO {
     private String username;
     private String password;
     private boolean enabled;
-    private Set<Role> roles;
+    private Set<RoleDO> roles;
 }

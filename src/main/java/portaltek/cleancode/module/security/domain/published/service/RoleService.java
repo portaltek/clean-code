@@ -1,16 +1,16 @@
-/**
- * 
- */
 package portaltek.cleancode.module.security.domain.published.service;
 
 
-import portaltek.cleancode.module.security.spi.repo.Role;
+import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 
 
 public interface RoleService {
 
-	public Role create(Role role);
-	public Role read(Integer id);
-	public Role update(Role role);
-	public boolean delete(Integer id);
+    RoleDO create(RoleDO role);
+
+    RoleDO read(Integer id);
+
+    RoleDO update(RoleDO role);
+
+    boolean delete(Integer id);
 }

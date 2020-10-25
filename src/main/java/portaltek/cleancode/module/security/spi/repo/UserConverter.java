@@ -23,7 +23,8 @@ class UserConverter implements Converter<User, UserDO> {
                 domain.password(),
                 domain.enabled());
         user.setEnabled(domain.enabled());
-        user.setRoles(domain.roles());
+//        user.setRoles(domain.roles());
+        user.setRoles(getRoles(domain));
         return user;
     }
 
@@ -34,7 +35,8 @@ class UserConverter implements Converter<User, UserDO> {
                 .username(dto.getUsername())
                 .password(dto.getPassword())
                 .enabled(dto.isEnabled())
-                .roles(dto.getRoles())
+                .roles(getRoles(dto))
+//                .roles(dto.getRoles())
                 .build();
     }
 
@@ -44,9 +46,9 @@ class UserConverter implements Converter<User, UserDO> {
                 .collect(toSet());
     }
 
-//    public Set<Role> getRoles(UserDO domain) {
-//        return domain.roles().stream()
-//                .map(e -> roleConverter.fromDomain(e))
-//                .collect(toSet());
-//    }
+    public Set<Role> getRoles(UserDO domain) {
+        return domain.roles().stream()
+                .map(e -> roleConverter.fromDomain(e))
+                .collect(toSet());
+    }
 }

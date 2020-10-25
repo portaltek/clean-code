@@ -3,11 +3,10 @@ package portaltek.cleancode.module.security.domain.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
-import portaltek.cleancode.module.security.spi.repo.NoRecordFoundException;
-import portaltek.cleancode.module.security.spi.repo.RoleRepo;
-import portaltek.cleancode.module.security.spi.repo.Role;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
+import portaltek.cleancode.module.security.spi.repo.RoleRepo;
 
 
 @Service
@@ -23,21 +22,20 @@ class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role create(Role role) {
-
-        return roleRepo.save(role);
+    public RoleDO create(RoleDO role) {
+        return port.create(role);
     }
 
     @Override
-    public Role read(Integer id) {
-        return roleRepo.findById(id)
-                .orElseThrow(NoRecordFoundException::new);
+    public RoleDO read(Integer id) {
+        return port.read(id);
     }
 
     @Override
-    public Role update(Role role) {
-        return roleRepo.save(role);
+    public RoleDO update(RoleDO role) {
+        return null;
     }
+
 
     @Override
     public boolean delete(Integer id) {

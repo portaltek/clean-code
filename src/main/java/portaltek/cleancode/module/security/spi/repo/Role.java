@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

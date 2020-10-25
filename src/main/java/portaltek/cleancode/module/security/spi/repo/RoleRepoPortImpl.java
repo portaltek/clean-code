@@ -4,6 +4,9 @@ package portaltek.cleancode.module.security.spi.repo;
 import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
 
+import javax.transaction.Transactional;
+
+@Transactional
 class RoleRepoPortImpl implements RoleRepoPort {
 
     private RoleRepo roleRepo;
@@ -18,8 +21,9 @@ class RoleRepoPortImpl implements RoleRepoPort {
     @Override
     public RoleDO create(RoleDO domain) {
         Role role = converter.fromDomain(domain);
-        roleRepo.save(role);
-        return converter.toDomain(role);
+        return converter.toDomain(domain, roleRepo.save(role));
+//        domain = converter.toDomain(roleRepo.save(role));
+//        return domain;
     }
 
     @Override
