@@ -55,8 +55,17 @@ class UserServiceImpl implements UserService {
 		u.setEnabled(true);
 		Role role = roleService.read(2);
 		u.addRole(role);
-		return temporalToRefactor(u);
-		//return userRepo.save(u);
+		return userRepo.save(u);
+	}
+
+	@Override
+	public UserDO create(UserDO u) {
+		String hashedPass = passwordEncoder.encode(u.password());
+		u.password(hashedPass);
+		u.enabled(true);
+		Role role = roleService.read(2);
+		u.roles().add(role);
+		return port.create(u);
 	}
 
 	private User temporalToRefactor(User u) {

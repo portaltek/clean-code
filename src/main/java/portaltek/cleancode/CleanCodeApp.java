@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import portaltek.cleancode.module.security.domain.published.core.UserDO;
+import portaltek.cleancode.module.security.domain.published.core.UserDOBuilder;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
 import portaltek.cleancode.module.security.spi.repo.Role;
 import portaltek.cleancode.module.security.spi.repo.User;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
@@ -19,6 +22,9 @@ public class CleanCodeApp implements CommandLineRunner {
     UserService userService;
     @Autowired
     RoleService roleService;
+    @Autowired
+    UserRepoPort userPort;
+
 
     public static void main(String[] args) {
         SpringApplication.run(CleanCodeApp.class, args);
@@ -33,14 +39,19 @@ public class CleanCodeApp implements CommandLineRunner {
         roleService.create(role_admin);
         roleService.create(role_user);
 
-        User admin = new User("admin", "admin", true);
-        admin.addRole(role_admin);
-        admin.addRole(role_user);
+
+        UserDO adminDO = UserDOBuilder.get("admin");
+        adminDO.roles().add(role_admin);
+        adminDO.roles().add(role_user);
+        userService.create(adminDO);
+
+
+
 
         User u = new User("user", "user", true);
         u.addRole(role_user);
 
-        userService.create(admin);
+
         userService.create(u);
     }
 }
