@@ -1,6 +1,7 @@
 package portaltek.cleancode.module.security.spi.repo;
 
 
+import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
 
 class RoleRepoPortImpl implements RoleRepoPort {
@@ -17,7 +18,7 @@ class RoleRepoPortImpl implements RoleRepoPort {
     }
 
     @Override
-    public Role read(Integer id) {
+    public RoleDO read(Integer id) {
         return null;
     }
 
