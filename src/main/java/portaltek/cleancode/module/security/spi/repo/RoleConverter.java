@@ -3,7 +3,6 @@ package portaltek.cleancode.module.security.spi.repo;
 
 import portaltek.cleancode.infra.util.Converter;
 import portaltek.cleancode.module.security.domain.published.core.RoleDO;
-import portaltek.cleancode.module.security.domain.published.core.UserDO;
 
 class RoleConverter implements Converter<Role, RoleDO> {
 
@@ -11,13 +10,17 @@ class RoleConverter implements Converter<Role, RoleDO> {
     @Override
     public Role fromDomain(RoleDO domain) {
         Role dto = new Role();
-
+        dto.setId(domain.id());
+        dto.setRoleName(domain.roleName());
         return dto;
     }
 
     @Override
-    public RoleDO toDomain(Role role) {
+    public RoleDO toDomain(Role dto) {
         return RoleDO.builder()
+                .id(dto.getId())
+                .roleName(dto.getRoleName())
                 .build();
     }
+
 }
