@@ -4,7 +4,7 @@ package portaltek.cleancode.module.security.spi.repo;
 import portaltek.cleancode.infra.util.Converter;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 
-class UserConverter implements Converter<User, UserDO> {
+public class UserConverter implements Converter<User, UserDO> {
 
     public UserConverter() {
     }
@@ -15,6 +15,7 @@ class UserConverter implements Converter<User, UserDO> {
                 domain.password(),
                 domain.enabled());
         user.setEnabled(domain.enabled());
+        user.setRoles(domain.roles());
         return user;
     }
 
@@ -25,6 +26,7 @@ class UserConverter implements Converter<User, UserDO> {
                 .username(dto.getUsername())
                 .password(dto.getPassword())
                 .enabled(dto.isEnabled())
+                .roles(dto.getRoles())
                 .build();
     }
 }

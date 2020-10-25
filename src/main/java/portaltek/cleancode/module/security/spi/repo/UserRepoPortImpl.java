@@ -23,4 +23,10 @@ class UserRepoPortImpl implements UserRepoPort {
                 .orElseThrow(NoRecordFoundException::new);
         return userConverter.toDomain(user);
     }
+
+    public UserDO create(UserDO u){
+        User user = userConverter.fromDomain(u);
+        userRepo.save(user);
+        return userConverter.toDomain(user);
+    }
 }

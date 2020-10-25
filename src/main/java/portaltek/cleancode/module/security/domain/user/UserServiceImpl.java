@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
+import portaltek.cleancode.module.security.spi.repo.UserConverter;
 import portaltek.cleancode.module.security.spi.repo.UserRepo;
 import portaltek.cleancode.module.security.spi.repo.Role;
 import portaltek.cleancode.module.security.spi.repo.User;
@@ -54,8 +55,16 @@ class UserServiceImpl implements UserService {
 		u.setEnabled(true);
 		Role role = roleService.read(2);
 		u.addRole(role);
-		return userRepo.save(u);
+		return temporalToRefactor(u);
+		//return userRepo.save(u);
 	}
+
+	private User temporalToRefactor(User u) {
+		var userDO = new UserConverter().toDomain(u);
+		port.create(userDO);
+		return new UserConverter().fromDomain(userDO);
+	}
+
 
 	@Override
 	public UserDO read(Long id) {
