@@ -31,23 +31,23 @@ public class CleanCodeApp implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
-        Role role_admin = new Role("ADMIN");
-        Role role_user = new Role("USER");
-        roleService.create(role_admin);
-        roleService.create(role_user);
+        Role roleAdmin = new Role("ADMIN");
+        Role roleUser = new Role("USER");
+//      RoleDO roleAdmin =  RoleDOBuilder.get("ADMIN");
+        roleService.create(roleAdmin);
+        roleService.create(roleUser);
 
 
         UserDO adminDO = UserDOBuilder.get("admin");
-        adminDO.roles().add(role_admin);
-        adminDO.roles().add(role_user);
+        adminDO.roles().add(roleAdmin);
+        adminDO.roles().add(roleUser);
         userService.create(adminDO);
 
         UserDO userDO = UserDOBuilder.get("user");
-        userDO.roles().add(role_user);
+        userDO.roles().add(roleUser);
         userService.create(userDO);
-
 
 
     }
