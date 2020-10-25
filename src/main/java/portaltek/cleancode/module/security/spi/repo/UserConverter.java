@@ -4,7 +4,7 @@ package portaltek.cleancode.module.security.spi.repo;
 import portaltek.cleancode.infra.util.Converter;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 
-public class UserConverter implements Converter<User, UserDO> {
+class UserConverter implements Converter<User, UserDO> {
 
     public UserConverter() {
     }
