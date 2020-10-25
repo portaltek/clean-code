@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
-import portaltek.cleancode.module.security.spi.repo.UserRepo;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;

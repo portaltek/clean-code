@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
 import portaltek.cleancode.module.security.domain.published.service.JwtService;
-import portaltek.cleancode.module.security.spi.repo.UserRepo;
 
 
 @Configuration

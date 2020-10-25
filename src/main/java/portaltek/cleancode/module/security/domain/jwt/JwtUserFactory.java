@@ -5,8 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 import portaltek.cleancode.module.security.spi.repo.Role;
-import portaltek.cleancode.module.security.spi.repo.User;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +14,6 @@ import java.util.stream.Collectors;
 final class JwtUserFactory {
 
     private JwtUserFactory() {
-    }
-
-    public static JwtUser create(User user) {
-        return new JwtUser(
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                mapToGrantedAuthorities(new ArrayList<Role>(user.getRoles())),
-                user.isEnabled()
-        );
     }
 
     public static JwtUser create(UserDO user) {
