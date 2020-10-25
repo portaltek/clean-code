@@ -2,11 +2,19 @@ package portaltek.cleancode.module.security.spi.repo;
 
 
 import portaltek.cleancode.infra.util.Converter;
+import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
+
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 class UserConverter implements Converter<User, UserDO> {
 
-    public UserConverter() {
+    private RoleConverter roleConverter;
+
+    public UserConverter(RoleConverter roleConverter) {
+        this.roleConverter = roleConverter;
     }
 
     @Override
@@ -29,4 +37,16 @@ class UserConverter implements Converter<User, UserDO> {
                 .roles(dto.getRoles())
                 .build();
     }
+
+    public Set<RoleDO> getRoles(User dto) {
+        return dto.getRoles().stream()
+                .map(roleConverter::toDomain)
+                .collect(toSet());
+    }
+
+//    public Set<Role> getRoles(UserDO domain) {
+//        return domain.roles().stream()
+//                .map(e -> roleConverter.fromDomain(e))
+//                .collect(toSet());
+//    }
 }

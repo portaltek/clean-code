@@ -12,5 +12,10 @@ class RoleRepoConfig {
         return new RoleRepoPortImpl(roleRepo);
     }
 
+    @Bean
+    public RoleConverter roleConverter() {
+        return new RoleConverter();
+    }
+
 
 }
