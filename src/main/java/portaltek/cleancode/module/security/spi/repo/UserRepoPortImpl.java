@@ -1,6 +1,3 @@
-/**
- *
- */
 package portaltek.cleancode.module.security.spi.repo;
 
 
@@ -9,9 +6,9 @@ import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRe
 
 class UserRepoPortImpl implements UserRepoPort {
 
-    private UserRepo userRepo;
-    private RoleRepo roleRepo;
-    private UserConverter userConverter;
+    final private UserRepo userRepo;
+    final private RoleRepo roleRepo;
+    final private UserConverter userConverter;
 
     public UserRepoPortImpl(UserRepo userRepo,
                             RoleRepo roleRepo,
@@ -21,8 +18,9 @@ class UserRepoPortImpl implements UserRepoPort {
         this.userConverter = userConverter;
     }
 
-    public UserDO findUserById(Long id){
-        User user = userRepo.findById(id).get();
+    public UserDO findUserById(Long id) {
+        User user = userRepo.findById(id)
+                .orElseThrow(NoRecordFoundException::new);
         return userConverter.toDomain(user);
     }
 }
