@@ -6,6 +6,7 @@ package portaltek.cleancode.module.security.domain.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
 import portaltek.cleancode.module.security.spi.repo.RoleRepo;
 import portaltek.cleancode.module.security.spi.repo.Role;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
@@ -15,11 +16,12 @@ import portaltek.cleancode.module.security.domain.published.service.RoleService;
 class RoleServiceImpl implements RoleService {
 
 	private RoleRepo roleRepo;
-	
+	private RoleRepoPort port;
+
 	@Autowired
-	public RoleServiceImpl(RoleRepo roleRepo) {
-		super();
+	public RoleServiceImpl(RoleRepo roleRepo, RoleRepoPort port) {
 		this.roleRepo = roleRepo;
+		this.port = port;
 	}
 
 	@Override
