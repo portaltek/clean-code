@@ -49,16 +49,6 @@ class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User create(User u) {
-		String hashedPass = passwordEncoder.encode(u.getPassword());
-		u.setPassword(hashedPass);
-		u.setEnabled(true);
-		Role role = roleService.read(2);
-		u.addRole(role);
-		return userRepo.save(u);
-	}
-
-	@Override
 	public UserDO create(UserDO u) {
 		String hashedPass = passwordEncoder.encode(u.password());
 		u.password(hashedPass);
@@ -67,13 +57,6 @@ class UserServiceImpl implements UserService {
 		u.roles().add(role);
 		return port.create(u);
 	}
-
-	private User temporalToRefactor(User u) {
-		var userDO = new UserConverter().toDomain(u);
-		port.create(userDO);
-		return new UserConverter().fromDomain(userDO);
-	}
-
 
 	@Override
 	public UserDO read(Long id) {

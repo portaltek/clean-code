@@ -45,13 +45,11 @@ public class CleanCodeApp implements CommandLineRunner {
         adminDO.roles().add(role_user);
         userService.create(adminDO);
 
+        UserDO userDO = UserDOBuilder.get("user");
+        adminDO.roles().add(role_user);
+        userService.create(userDO);
 
 
 
-        User u = new User("user", "user", true);
-        u.addRole(role_user);
-
-
-        userService.create(u);
     }
 }
