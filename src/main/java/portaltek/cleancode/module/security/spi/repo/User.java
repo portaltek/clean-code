@@ -3,13 +3,13 @@
  */
 package portaltek.cleancode.module.security.spi.repo;
 
-import portaltek.cleancode.module.security.spi.repo.Role;
+import lombok.Builder;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 
 @Entity
 @Table(name = "users")
@@ -27,18 +27,19 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
 
     public User(String username, String password, boolean enabled) {
-        super();
         this.username = username;
         this.password = password;
         this.enabled = enabled;
+        this.roles = new HashSet<>();
     }
 
     public User() {
         super();
+        this.roles = new HashSet<>();
     }
 
     public String getUsername() {

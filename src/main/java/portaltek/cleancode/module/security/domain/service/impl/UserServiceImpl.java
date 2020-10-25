@@ -7,6 +7,8 @@ package portaltek.cleancode.module.security.domain.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import portaltek.cleancode.module.security.domain.published.core.UserDO;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
 import portaltek.cleancode.module.security.spi.repo.UserRepo;
 import portaltek.cleancode.module.security.spi.repo.Role;
 import portaltek.cleancode.module.security.spi.repo.User;
@@ -23,15 +25,21 @@ class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 	private RoleService roleService;
 	private PasswordEncoder passwordEncoder;
-	
+	private UserRepoPort port;
+
 	@Autowired
 	public UserServiceImpl(UserRepo userRepo,
+												 RoleService roleService,
 												 PasswordEncoder passwordEncoder,
-												 RoleService roleService) {
+												 UserRepoPort port) {
 		this.userRepo = userRepo;
-		this.passwordEncoder = passwordEncoder;
 		this.roleService = roleService;
+		this.passwordEncoder = passwordEncoder;
+		this.port = port;
 	}
+
+
+
 
 	@Override
 	public User findUserByUsername(String username) {
@@ -50,8 +58,8 @@ class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User read(Long id) {
-		return userRepo.findById(id).get();
+	public UserDO read(Long id) {
+		return port.findUserById(id);
 	}
 
 	@Override

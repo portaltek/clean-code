@@ -14,7 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import portaltek.cleancode.module.security.api.web.ServerResponse;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.JwtService;
+import portaltek.cleancode.module.security.domain.published.service.JwtService;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.ok;

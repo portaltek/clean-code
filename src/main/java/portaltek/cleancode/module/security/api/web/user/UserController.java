@@ -1,44 +1,37 @@
 package portaltek.cleancode.module.security.api.web.user;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.JwtService;
-import portaltek.cleancode.module.security.spi.repo.User;
-import portaltek.cleancode.module.security.domain.published.service.UserService;
 
 import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 
 @RestController
-@RequestMapping("/api/auth/user/")
 class UserController {
-
 
     @Value("${jwt.header}")
     private String tokenHeader;
 
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private UserService userService;
+    private UserWebPort port;
 
-    @RequestMapping(value = "me", method = GET)
+    public UserController(UserWebPort port) {
+        this.port = port;
+    }
+
+    @GetMapping(value = "/api/auth/user/me")
     public ResponseEntity<String> getUserMe(
             @RequestHeader(value = "${jwt.header}") String token) {
 
-        Long userId = jwtService.getUserIdFromToken(token.substring(6));
-        User user = userService.read(userId);
-        var msg = "Hello, " + user.getUsername();
+        UserDto user = port.getUserFromToken(token);
+        var msg = "Hello, " + user.username();
         return ok(msg);
     }
 
-    @RequestMapping(value = "ping", method = GET)
+    @GetMapping(value = "/api/auth/user/ping")
     public ResponseEntity<String> ping() {
         return ok("Pong!");
     }
