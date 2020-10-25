@@ -6,6 +6,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import portaltek.cleancode.module.security.api.web.token.Api;
+import portaltek.cleancode.module.security.api.web.token.Header;
 
 @Lazy
 @TestConfiguration
@@ -24,6 +25,9 @@ public class CleanCodeAppITestConfig {
     public Api api(Rest rest){
         return new Api(rest, tokenEndpoint);
     }
-
+    @Bean
+    public Header header(Api api){
+        return new Header(api);
+    }
 }
 

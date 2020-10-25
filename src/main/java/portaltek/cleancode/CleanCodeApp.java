@@ -8,10 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 import portaltek.cleancode.module.security.domain.published.core.UserDOBuilder;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
-import portaltek.cleancode.module.security.spi.repo.Role;
-import portaltek.cleancode.module.security.spi.repo.User;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
 import portaltek.cleancode.module.security.domain.published.service.UserService;
+import portaltek.cleancode.module.security.spi.repo.Role;
 
 import javax.transaction.Transactional;
 
@@ -46,7 +45,7 @@ public class CleanCodeApp implements CommandLineRunner {
         userService.create(adminDO);
 
         UserDO userDO = UserDOBuilder.get("user");
-        adminDO.roles().add(role_user);
+        userDO.roles().add(role_user);
         userService.create(userDO);
 
 

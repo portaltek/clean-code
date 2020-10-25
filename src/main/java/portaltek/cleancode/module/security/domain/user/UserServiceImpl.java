@@ -51,10 +51,10 @@ class UserServiceImpl implements UserService {
 	@Override
 	public UserDO create(UserDO u) {
 		String hashedPass = passwordEncoder.encode(u.password());
-		u.password(hashedPass);
-		u.enabled(true);
 		Role role = roleService.read(2);
-		u.roles().add(role);
+		u.password(hashedPass)
+				.enabled(true)
+				.roles().add(role);
 		return port.create(u);
 	}
 
