@@ -2,12 +2,9 @@ package portaltek.cleancode.module.security.domain.jwt;
 
 
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 import portaltek.cleancode.module.security.api.web.token.JwtResponse;
 import portaltek.cleancode.module.security.domain.published.service.JwtService;
 
@@ -16,7 +13,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-@Component
 class JwtServiceImpl implements JwtService, Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
@@ -28,14 +24,17 @@ class JwtServiceImpl implements JwtService, Serializable {
     static final String CLAIM_KEY_ROLES = "roles";
     static final String BEARER = "Bearer ";
 
-    @Value("${jwt.secret}")
     private String secret;
-
-    @Value("${jwt.expiration}")
     private Long expiration;
-
-    @Autowired
     private UserDetailsService userDetailsService;
+
+    public JwtServiceImpl(String secret,
+                          Long expiration,
+                          UserDetailsService userDetailsService) {
+        this.secret = secret;
+        this.expiration = expiration;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     public String getIdFromToken(String token) {

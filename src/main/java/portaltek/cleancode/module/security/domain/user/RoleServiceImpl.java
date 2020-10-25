@@ -1,7 +1,7 @@
 /**
  * 
  */
-package portaltek.cleancode.module.security.domain.service.impl;
+package portaltek.cleancode.module.security.domain.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

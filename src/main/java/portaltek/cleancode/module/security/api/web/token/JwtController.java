@@ -22,24 +22,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 
 @RestController
-@RequestMapping("/api/open/token")
-class TokenController {
+class JwtController {
 
     private final Log log = LogFactory.getLog(this.getClass());
 
-    @Autowired
     private AuthenticationManager authManager;
-    @Autowired
     private JwtService jwtService;
 
-    public TokenController() {
-        log.info("init AuthController");
+    public JwtController(AuthenticationManager authManager,
+                         JwtService jwtService) {
+        this.authManager = authManager;
+        this.jwtService = jwtService;
     }
 
-
-
-
-    @RequestMapping(value = "${jwt.route.open.token.create}", method = {POST, OPTIONS})
+    @PostMapping(value = "/api/open/token/${jwt.route.open.token.create}")
     public ResponseEntity<?> createJwt(@RequestBody JwtRequest req)
             throws AuthenticationException {
 
@@ -61,8 +57,8 @@ class TokenController {
         return ok(response);
     }
 
-    @GetMapping(value = "ping")
-    public ResponseEntity<ServerResponse> greetingUser() throws Exception {
+    @GetMapping(value = "/api/open/token/ping")
+    public ResponseEntity<ServerResponse> ping() throws Exception {
         return ok(new ServerResponse("Pong!"));
     }
 }

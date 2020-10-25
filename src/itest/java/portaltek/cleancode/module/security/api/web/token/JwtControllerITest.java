@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CleanCodeApp.class, webEnvironment = RANDOM_PORT)
 @Import(CleanCodeAppITestConfig.class)
-class TokenControllerITest {
+class JwtControllerITest {
 
     final String EXPECTED_MSG = "{\"message\":\"Pong!\"}";
 
