@@ -9,13 +9,15 @@ class UserRepoPortImpl implements UserRepoPort {
     final private UserRepo userRepo;
     final private RoleRepo roleRepo;
     final private UserConverter userConverter;
+    final private RoleConverter roleConverter;
 
-    public UserRepoPortImpl(UserRepo userRepo,
-                            RoleRepo roleRepo,
-                            UserConverter userConverter) {
+    public UserRepoPortImpl(UserRepo userRepo, RoleRepo roleRepo,
+                            UserConverter userConverter,
+                            RoleConverter roleConverter) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.userConverter = userConverter;
+        this.roleConverter = roleConverter;
     }
 
     public UserDO findUserById(Long id) {

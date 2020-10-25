@@ -9,7 +9,8 @@ class UserRepoConfig {
 
     @Bean
     public UserRepoPort userRepoPort(UserRepo userRepo, RoleRepo roleRepo) {
-        return new UserRepoPortImpl(userRepo, roleRepo, new UserConverter());
+        return new UserRepoPortImpl(userRepo, roleRepo,
+                new UserConverter(), new RoleConverter());
     }
 
 

@@ -13,7 +13,7 @@ class RoleRepoPortImpl implements RoleRepoPort {
     }
 
     @Override
-    public Role create(Role role) {
+    public RoleDO create(RoleDO role) {
         return null;
     }
 
@@ -23,7 +23,7 @@ class RoleRepoPortImpl implements RoleRepoPort {
     }
 
     @Override
-    public Role update(Role role) {
+    public RoleDO update(RoleDO role) {
         return null;
     }
 
