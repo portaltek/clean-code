@@ -11,7 +11,7 @@ import portaltek.cleancode.module.security.spi.repo.UserRepo;
 
 
 @Configuration
-class JwtServiceConfiguration {
+class JwtServiceConfig {
 
     @Value("${jwt.secret}")
     private String secret;
