@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
 import portaltek.cleancode.module.security.domain.published.service.JwtService;
 import portaltek.cleancode.module.security.spi.repo.UserRepo;
 
@@ -26,8 +27,8 @@ class JwtServiceConfig {
 
     @Transactional
     @Bean
-    public JwtUserDetailsService jwtUserDetailsService(UserRepo userRepo) {
-        return new JwtUserDetailsService(userRepo);
+    public JwtUserDetailsService jwtUserDetailsService(UserRepoPort port) {
+        return new JwtUserDetailsService(port);
     }
 
 }
