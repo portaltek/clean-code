@@ -1,6 +1,3 @@
-/**
- * 
- */
 package portaltek.cleancode.module.security.domain.user;
 
 
@@ -9,12 +6,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
-import portaltek.cleancode.module.security.spi.repo.UserConverter;
-import portaltek.cleancode.module.security.spi.repo.UserRepo;
-import portaltek.cleancode.module.security.spi.repo.Role;
-import portaltek.cleancode.module.security.spi.repo.User;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
 import portaltek.cleancode.module.security.domain.published.service.UserService;
+import portaltek.cleancode.module.security.spi.repo.Role;
+import portaltek.cleancode.module.security.spi.repo.User;
 
 import javax.transaction.Transactional;
 
@@ -23,17 +18,15 @@ import javax.transaction.Transactional;
 @Transactional
 class UserServiceImpl implements UserService {
 	
-	private UserRepo userRepo;
 	private RoleService roleService;
 	private PasswordEncoder passwordEncoder;
 	private UserRepoPort port;
 
 	@Autowired
-	public UserServiceImpl(UserRepo userRepo,
-												 RoleService roleService,
+	public UserServiceImpl(RoleService roleService,
 												 PasswordEncoder passwordEncoder,
 												 UserRepoPort port) {
-		this.userRepo = userRepo;
+
 		this.roleService = roleService;
 		this.passwordEncoder = passwordEncoder;
 		this.port = port;
@@ -64,11 +57,13 @@ class UserServiceImpl implements UserService {
 
 	@Override
 	public User update(User u) {
-		return userRepo.save(u);
+		//return userRepo.save(u);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void delete(Long id) {
-		userRepo.deleteById(id);
+//		userRepo.deleteById(id);
+		throw new UnsupportedOperationException();
 	}
 }
