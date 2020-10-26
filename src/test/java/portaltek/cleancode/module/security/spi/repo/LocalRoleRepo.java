@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import portaltek.cleancode.infra.AbstractRepoInMemory;
+import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,14 +13,14 @@ import java.util.Optional;
 @SuppressWarnings({"NullableProblems", "unchecked","rawtypes"})
 class LocalRoleRepo implements RoleRepo {
 
-    AbstractRepoInMemory repo = new AbstractRepoInMemory<Role, Integer>() {
+    static AbstractRepoInMemory repo = new AbstractRepoInMemory<Role, Integer>() {
         protected Integer getId(Role entity) {
             return entity.getId();
         }
     };
 
 
-    public static RoleRepoPortImpl port(){
+    public static RoleRepoPort port(){
         var roleRepo = new LocalRoleRepo();
         var roleConverter = new RoleConverter();
         return new RoleRepoPortImpl(roleRepo, roleConverter);
