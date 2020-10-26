@@ -2,7 +2,6 @@ package portaltek.cleancode.module.security.api.web.user;
 
 
 import portaltek.cleancode.infra.util.Converter;
-import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 
 class UserDtoConverter implements Converter<UserDto, UserDO> {
