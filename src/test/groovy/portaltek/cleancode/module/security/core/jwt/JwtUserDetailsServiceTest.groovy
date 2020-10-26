@@ -1,7 +1,7 @@
-package portaltek.cleancode.module.security.domain.jwt
+package portaltek.cleancode.module.security.core.jwt
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import portaltek.cleancode.module.security.domain.published.core.UserDO
+import portaltek.cleancode.module.security.core.published.domain.UserDO
 import portaltek.cleancode.module.security.spi.repo.UserRepoPortImpl
 import spock.lang.Specification
 import spock.lang.Subject
@@ -9,9 +9,9 @@ import spock.lang.Subject
 class JwtUserDetailsServiceTest extends Specification {
 
     def port = Mock(UserRepoPortImpl)
-    def userDO = UserDO.get("Username");
+    def userDO = UserDO.get("Username")
     @Subject
-    def service = new JwtUserDetailsService(port);
+    def service = new JwtUserDetailsService(port)
 
 
     def "load existing user by username returns UserDetails"() {

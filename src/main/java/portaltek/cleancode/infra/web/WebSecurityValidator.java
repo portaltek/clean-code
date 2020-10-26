@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.module.security.domain.published.service.JwtService;
+import portaltek.cleancode.module.security.core.published.service.JwtService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

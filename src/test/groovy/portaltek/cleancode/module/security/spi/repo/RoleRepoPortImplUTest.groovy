@@ -1,6 +1,6 @@
 package portaltek.cleancode.module.security.spi.repo
 
-import portaltek.cleancode.module.security.domain.published.core.RoleDO
+import portaltek.cleancode.module.security.core.published.domain.RoleDO
 import spock.lang.Specification
 import spock.lang.Subject
 

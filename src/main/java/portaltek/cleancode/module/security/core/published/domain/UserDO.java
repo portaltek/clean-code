@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.published.core;
+package portaltek.cleancode.module.security.core.published.domain;
 
 
 import lombok.Builder;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import portaltek.cleancode.infra.web.Credentials;
 import portaltek.cleancode.infra.web.ServerResponse;
-import portaltek.cleancode.module.security.domain.published.service.JwtService;
+import portaltek.cleancode.module.security.core.published.service.JwtService;
 
 import static org.springframework.http.ResponseEntity.ok;
 

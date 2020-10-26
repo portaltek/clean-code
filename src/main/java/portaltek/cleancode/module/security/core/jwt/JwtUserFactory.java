@@ -1,10 +1,10 @@
-package portaltek.cleancode.module.security.domain.jwt;
+package portaltek.cleancode.module.security.core.jwt;
 
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import portaltek.cleancode.module.security.domain.published.core.RoleDO;
-import portaltek.cleancode.module.security.domain.published.core.UserDO;
+import portaltek.cleancode.module.security.core.published.domain.RoleDO;
+import portaltek.cleancode.module.security.core.published.domain.UserDO;
 
 
 import java.util.List;

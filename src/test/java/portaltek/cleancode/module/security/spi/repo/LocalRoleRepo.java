@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import portaltek.cleancode.infra.AbstractRepoInMemory;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
+import portaltek.cleancode.module.security.core.published.port.spi.repo.RoleRepoPort;
 
 import java.util.List;
 import java.util.Optional;

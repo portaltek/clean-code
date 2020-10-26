@@ -4,7 +4,6 @@ package portaltek.cleancode.module.article.api.web;
 import org.springframework.stereotype.Service;
 import portaltek.cleancode.module.article.core.ArticleDO;
 import portaltek.cleancode.infra.util.Converter;
-import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 
 
 @Service

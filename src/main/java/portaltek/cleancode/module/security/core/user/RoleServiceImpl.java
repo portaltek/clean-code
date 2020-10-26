@@ -1,11 +1,11 @@
-package portaltek.cleancode.module.security.domain.user;
+package portaltek.cleancode.module.security.core.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import portaltek.cleancode.module.security.domain.published.core.RoleDO;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.RoleRepoPort;
-import portaltek.cleancode.module.security.domain.published.service.RoleService;
+import portaltek.cleancode.module.security.core.published.domain.RoleDO;
+import portaltek.cleancode.module.security.core.published.port.spi.repo.RoleRepoPort;
+import portaltek.cleancode.module.security.core.published.service.RoleService;
 
 
 @Service

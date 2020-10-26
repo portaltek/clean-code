@@ -2,7 +2,6 @@ package portaltek.cleancode.module.article.spi.repo;
 
 import portaltek.cleancode.infra.util.Converter;
 import portaltek.cleancode.module.article.core.ArticleDO;
-import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 
 class ArticleRepoConverter implements Converter<Article, ArticleDO> {
 

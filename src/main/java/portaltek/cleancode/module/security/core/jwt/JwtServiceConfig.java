@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.jwt;
+package portaltek.cleancode.module.security.core.jwt;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
-import portaltek.cleancode.module.security.domain.published.service.JwtService;
+import portaltek.cleancode.module.security.core.published.port.spi.repo.UserRepoPort;
+import portaltek.cleancode.module.security.core.published.service.JwtService;
 
 
 @Configuration

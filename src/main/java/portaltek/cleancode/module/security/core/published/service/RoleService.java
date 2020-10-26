@@ -1,7 +1,7 @@
-package portaltek.cleancode.module.security.domain.published.service;
+package portaltek.cleancode.module.security.core.published.service;
 
 
-import portaltek.cleancode.module.security.domain.published.core.RoleDO;
+import portaltek.cleancode.module.security.core.published.domain.RoleDO;
 
 
 public interface RoleService {

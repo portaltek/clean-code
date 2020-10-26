@@ -1,9 +1,9 @@
 package portaltek.cleancode.module.security.api.web.user;
 
 
-import portaltek.cleancode.module.security.domain.published.core.UserDO;
-import portaltek.cleancode.module.security.domain.published.service.JwtService;
-import portaltek.cleancode.module.security.domain.published.service.UserService;
+import portaltek.cleancode.module.security.core.published.domain.UserDO;
+import portaltek.cleancode.module.security.core.published.service.JwtService;
+import portaltek.cleancode.module.security.core.published.service.UserService;
 
 class UserWebPort {
 

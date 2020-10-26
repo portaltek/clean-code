@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.jwt;
+package portaltek.cleancode.module.security.core.jwt;
 
 
 import io.jsonwebtoken.*;
@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import portaltek.cleancode.module.security.api.web.token.JwtResponse;
-import portaltek.cleancode.module.security.domain.published.service.JwtService;
+import portaltek.cleancode.module.security.core.published.service.JwtService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -77,7 +77,7 @@ class JwtServiceImpl implements JwtService, Serializable {
             roles = null;
         }
         return roles != null ? roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList()) : null;
     }
 

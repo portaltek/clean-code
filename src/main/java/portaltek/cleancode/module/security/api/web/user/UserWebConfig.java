@@ -3,8 +3,8 @@ package portaltek.cleancode.module.security.api.web.user;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import portaltek.cleancode.module.security.domain.published.service.JwtService;
-import portaltek.cleancode.module.security.domain.published.service.UserService;
+import portaltek.cleancode.module.security.core.published.service.JwtService;
+import portaltek.cleancode.module.security.core.published.service.UserService;
 
 
 @Configuration

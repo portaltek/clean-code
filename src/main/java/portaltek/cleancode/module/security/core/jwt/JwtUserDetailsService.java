@@ -1,10 +1,10 @@
-package portaltek.cleancode.module.security.domain.jwt;
+package portaltek.cleancode.module.security.core.jwt;
 
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
+import portaltek.cleancode.module.security.core.published.port.spi.repo.UserRepoPort;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -23,7 +23,11 @@ class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return ofNullable(port.findUserByUsername(username))
-                .map(e -> JwtUserFactory.create(e))
-                .orElseThrow(() -> new UsernameNotFoundException(format(NOT_FOUND, username)));
+                .map(JwtUserFactory::create)
+                .orElseThrow(() -> usernameNotFound(username));
+    }
+
+    public UsernameNotFoundException usernameNotFound(String username) {
+        return new UsernameNotFoundException(format(NOT_FOUND, username));
     }
 }

@@ -1,8 +1,8 @@
 package portaltek.cleancode.module.security.spi.repo;
 
 
-import portaltek.cleancode.module.security.domain.published.core.UserDO;
-import portaltek.cleancode.module.security.domain.published.port.spi.repo.UserRepoPort;
+import portaltek.cleancode.module.security.core.published.domain.UserDO;
+import portaltek.cleancode.module.security.core.published.port.spi.repo.UserRepoPort;
 
 class UserRepoPortImpl implements UserRepoPort {
 

@@ -1,4 +1,4 @@
-package portaltek.cleancode.module.security.domain.jwt;
+package portaltek.cleancode.module.security.core.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
