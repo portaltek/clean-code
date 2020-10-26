@@ -22,10 +22,6 @@ class RoleRepoPortImpl implements RoleRepoPort {
     public RoleDO create(RoleDO domain) {
         Role role = converter.fromDomain(domain);
         return converter.toDomain(domain, roleRepo.save(role));
-//        domain = converter.toDomain(roleRepo.save(role));
-//        return domain;
-
-//        return converter.toDomain(roleRepo.save(role));
     }
 
     @Override
