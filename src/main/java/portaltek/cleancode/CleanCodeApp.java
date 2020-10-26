@@ -6,9 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import portaltek.cleancode.module.security.domain.published.core.RoleDO;
-import portaltek.cleancode.module.security.domain.published.core.RoleDOBuilder;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
-import portaltek.cleancode.module.security.domain.published.core.UserDOBuilder;
 import portaltek.cleancode.module.security.domain.published.service.RoleService;
 import portaltek.cleancode.module.security.domain.published.service.UserService;
 
@@ -31,17 +29,17 @@ public class CleanCodeApp implements CommandLineRunner {
     public void run(String... args) {
 
 
-        RoleDO roleDOAdmin = RoleDOBuilder.get("ADMIN");
-        RoleDO roleDOUser = RoleDOBuilder.get("USER");
+        RoleDO roleDOAdmin = RoleDO.get("ADMIN");
+        RoleDO roleDOUser = RoleDO.get("USER");
         roleService.create(roleDOAdmin);
         roleService.create(roleDOUser);
 
-        UserDO adminDO = UserDOBuilder.get("admin");
+        UserDO adminDO = UserDO.get("admin");
         adminDO.roles().add(roleDOAdmin);
         adminDO.roles().add(roleDOUser);
         userService.create(adminDO);
 
-        UserDO userDO = UserDOBuilder.get("user");
+        UserDO userDO = UserDO.get("user");
         userDO.roles().add(roleDOUser);
         userService.create(userDO);
 

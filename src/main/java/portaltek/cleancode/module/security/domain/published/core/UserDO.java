@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -18,4 +19,17 @@ public class UserDO {
     private String password;
     private boolean enabled;
     private Set<RoleDO> roles;
+
+    public static UserDO get() {
+        return builder().build();
+    }
+
+    public static UserDO get(String username) {
+        return builder()
+                .username(username)
+                .password(username)
+                .roles(new HashSet<>())
+                .enabled(true)
+                .build();
+    }
 }
