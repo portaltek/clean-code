@@ -13,12 +13,13 @@ class RoleRepoPortImplUTest extends Specification {
 
     def "save user"() {
         given:
+        RoleDO role = RoleDO.get("ADMIN").id(1)
+        port.create(role)
         when:
-        RoleDO role = port.read(1)
+        RoleDO roleDO = port.read(1)
         then:
-        role != null
-        role.id == 1
-        role.name == "ADMIN"
-
+        roleDO != null
+        roleDO.id() == 1
+        roleDO.name() == "ADMIN"
     }
 }

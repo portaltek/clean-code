@@ -1,31 +1,42 @@
 package portaltek.cleancode.module.security.spi.repo;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import portaltek.cleancode.infra.AbstractRepoInMemory;
 
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("NullableProblems")
+@SuppressWarnings({"NullableProblems", "unchecked","rawtypes"})
 class LocalRoleRepo implements RoleRepo {
 
+    AbstractRepoInMemory repo = new AbstractRepoInMemory<Role, Integer>() {
+        protected Integer getId(Role entity) {
+            return entity.getId();
+        }
+    };
+
+
+    @Override
     public List<Role> findAll() {
-        throw new NoRecordFoundException();
+        return null;
     }
 
+    @Override
     public List<Role> findAll(Sort sort) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
+    @Override
     public Page<Role> findAll(Pageable pageable) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
+    @Override
     public List<Role> findAllById(Iterable<Integer> integers) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
     @Override
@@ -55,7 +66,7 @@ class LocalRoleRepo implements RoleRepo {
 
     @Override
     public <S extends Role> S save(S entity) {
-        return null;
+        return (S) repo.save(entity);
     }
 
     @Override
@@ -65,10 +76,7 @@ class LocalRoleRepo implements RoleRepo {
 
     @Override
     public Optional<Role> findById(Integer integer) {
-        Role role = new Role();
-        role.setId(1);
-        role.setRoleName("ADMIN");
-        return Optional.of(role);
+        return repo.findById(integer);
     }
 
     @Override
@@ -83,7 +91,7 @@ class LocalRoleRepo implements RoleRepo {
 
     @Override
     public <S extends Role> S saveAndFlush(S entity) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
     @Override
@@ -98,7 +106,7 @@ class LocalRoleRepo implements RoleRepo {
 
     @Override
     public Role getOne(Integer integer) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
     @Override
@@ -108,26 +116,26 @@ class LocalRoleRepo implements RoleRepo {
 
     @Override
     public <S extends Role> List<S> findAll(Example<S> example) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
     @Override
     public <S extends Role> List<S> findAll(Example<S> example, Sort sort) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
     @Override
     public <S extends Role> Page<S> findAll(Example<S> example, Pageable pageable) {
-        throw new NoRecordFoundException();
+        return null;
     }
 
     @Override
     public <S extends Role> long count(Example<S> example) {
-        throw new NoRecordFoundException();
+        return 0;
     }
 
     @Override
     public <S extends Role> boolean exists(Example<S> example) {
-        throw new NoRecordFoundException();
+        return false;
     }
 }

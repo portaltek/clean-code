@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
@@ -12,8 +13,10 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractRepoInMemory<T, ID> {
     private ConcurrentHashMap<ID, T> map = new ConcurrentHashMap<>();
 
-    public T findById(ID id) {
-        return map.get(id);
+    abstract protected ID getId(T entity);
+
+    public Optional<T> findById(ID id) {
+        return Optional.ofNullable(map.get(id));
     }
 
     public Page<T> findAll(Pageable pageable) {
@@ -26,5 +29,5 @@ public abstract class AbstractRepoInMemory<T, ID> {
         return entity;
     }
 
-    abstract protected ID getId(T entity);
+
 }
