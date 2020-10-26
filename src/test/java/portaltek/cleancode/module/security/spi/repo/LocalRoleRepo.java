@@ -19,6 +19,13 @@ class LocalRoleRepo implements RoleRepo {
     };
 
 
+    public static RoleRepoPortImpl port(){
+        var roleRepo = new LocalRoleRepo();
+        var roleConverter = new RoleConverter();
+        return new RoleRepoPortImpl(roleRepo, roleConverter);
+    }
+
+
     @Override
     public List<Role> findAll() {
         return null;

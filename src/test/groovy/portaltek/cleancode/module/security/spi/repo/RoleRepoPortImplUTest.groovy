@@ -6,17 +6,17 @@ import spock.lang.Subject
 
 class RoleRepoPortImplUTest extends Specification {
 
-    def roleRepo = new LocalRoleRepo()
-    def roleConverter = new RoleConverter()
     @Subject
-    def port = new RoleRepoPortImpl(roleRepo, roleConverter)
+    def port = LocalRoleRepo.port()
 
-    def "save user"() {
+    def "RoleRepoPortImplUTest save user"() {
         given:
         RoleDO role = RoleDO.get("ADMIN").id(1)
         port.create(role)
+
         when:
         RoleDO roleDO = port.read(1)
+
         then:
         roleDO != null
         roleDO.id() == 1
