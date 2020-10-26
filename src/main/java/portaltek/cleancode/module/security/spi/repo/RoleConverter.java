@@ -17,10 +17,7 @@ class RoleConverter implements Converter<Role, RoleDO> {
 
     @Override
     public RoleDO toDomain(Role dto) {
-        return RoleDO.builder()
-                .id(dto.getId())
-                .name(dto.getRoleName())
-                .build();
+        return toDomain(RoleDO.builder().build(), dto);
     }
 
 

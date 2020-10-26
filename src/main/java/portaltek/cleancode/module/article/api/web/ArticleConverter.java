@@ -4,6 +4,7 @@ package portaltek.cleancode.module.article.api.web;
 import org.springframework.stereotype.Service;
 import portaltek.cleancode.module.article.core.ArticleDO;
 import portaltek.cleancode.infra.util.Converter;
+import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 
 
 @Service
@@ -27,5 +28,10 @@ class ArticleConverter implements Converter<ArticleDto, ArticleDO> {
                 .body(dto.body())
                 .author(dto.author())
                 .build();
+    }
+
+    @Override
+    public ArticleDO toDomain(ArticleDO domain, ArticleDto articleDto) {
+        return null;
     }
 }

@@ -23,21 +23,23 @@ class UserConverter implements Converter<User, UserDO> {
                 domain.password(),
                 domain.enabled());
         user.setEnabled(domain.enabled());
-//        user.setRoles(domain.roles());
         user.setRoles(getRoles(domain));
         return user;
     }
 
     @Override
     public UserDO toDomain(User dto) {
-        return UserDO.builder()
+        return toDomain(UserDO.builder().build(), dto);
+    }
+
+    @Override
+    public UserDO toDomain(UserDO domain, User dto) {
+        return domain
                 .id(dto.getId())
                 .username(dto.getUsername())
                 .password(dto.getPassword())
                 .enabled(dto.isEnabled())
-                .roles(getRoles(dto))
-//                .roles(dto.getRoles())
-                .build();
+                .roles(getRoles(dto));
     }
 
     public Set<RoleDO> getRoles(User dto) {

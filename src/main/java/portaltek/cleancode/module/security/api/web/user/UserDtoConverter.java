@@ -2,6 +2,7 @@ package portaltek.cleancode.module.security.api.web.user;
 
 
 import portaltek.cleancode.infra.util.Converter;
+import portaltek.cleancode.module.security.domain.published.core.RoleDO;
 import portaltek.cleancode.module.security.domain.published.core.UserDO;
 
 class UserDtoConverter implements Converter<UserDto, UserDO> {
@@ -19,11 +20,17 @@ class UserDtoConverter implements Converter<UserDto, UserDO> {
     }
 
     @Override
-    public UserDO toDomain(UserDto userDTO) {
-        return UserDO.builder()
-                .id(userDTO.id())
-                .username(userDTO.username())
-                .enabled(userDTO.enabled())
-                .build();
+    public UserDO toDomain(UserDto dto) {
+        return toDomain(UserDO.builder().build(), dto);
     }
+
+    @Override
+    public UserDO toDomain(UserDO domain, UserDto dto) {
+        return domain
+                .id(dto.id())
+                .username(dto.username())
+                .enabled(dto.enabled());
+    }
+
+
 }
