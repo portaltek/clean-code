@@ -1,4 +1,4 @@
-package portaltek.cleancode.infra.util;
+package portaltek.cleancode.infra;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
