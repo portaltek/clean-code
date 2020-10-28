@@ -20,11 +20,6 @@ Commands to Initialize any project:
     mkdir MY_PROJECT | cd MY_PROJECT/
     gradle init 
     git init
-    mkdir src src/main src/main/java src/main/resources 
-    mkdir src/test src/test/java src/test/resources
-    mkdir app app/api app/api/rest 
-    mkdir app/core
-    mkdir app/spi app/spi/repo app/spi/mongo 
     idea .
 
 Optional     
@@ -122,14 +117,18 @@ Create project structure under MY_PROJECT folder:
   
     ######################################################################################################
     
-    mkdir src src/main src/main/java src/main/resources src/test src/test/java src/test/resources 
-    mkdir src/main/java/mycompany  src/main/java/mycompany/myproject
-    touch src/main/java/mycompany/myproject/MyProject.java
+    mkdir app app/api app/api/rest app/core app/spi app/spi/repo
+    mkdir src src/main src/main/java src/main/resources 
+    mkdir src/test src/test/java src/test/resources
+    
+    cd src/main/java/ 
+    mkdir mycompany  mycompany/myapp 
+    touch mycompany/myapp/MyApp.java
     
     ######################################################################################################
     # Paste the following code on the main class.
     
-    package mycompany.myproject;
+    package portaltek.myapp;
     
     import org.springframework.boot.SpringApplication;
     import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -138,18 +137,22 @@ Create project structure under MY_PROJECT folder:
     
     @SpringBootApplication
     @RestController
-    public class MyProject {
+    class MyApp {
     
         @GetMapping("/rest/open/hello")
         public String helloWorld(){
-            return "Hello World!!!";
+            return "Hello World!!!\n";
         }
     
         public static void main(String[] args) {
-            SpringApplication.run(MyProject.class, args);
+            SpringApplication.run(MyApp.class, args);
         }
     
     }
+
+Run the app and execute on terminal:
+
+     curl localhost:8080/rest/open/hello
 
 
 Add to .gitignore file:
