@@ -16,11 +16,61 @@ TODO List:
 
 Commands to Initialize any project:
 
+    
     mkdir MY_PROJECT | cd MY_PROJECT/
     gradle init 
     git init
-    stree .
+    mkdir src src/main src/main/java src/main/resources 
+    mkdir src/test src/test/java src/test/resources
+    mkdir app app/api app/api/rest 
+    mkdir app/core
+    mkdir app/spi app/spi/repo app/spi/mongo 
     idea .
+
+Optional     
+    
+    stree .
+    
+Update .gitignore with:
+    
+    
+    HELP.md
+    .gradle
+    build/
+    !gradle/wrapper/gradle-wrapper.jar
+    !**/src/main/**
+    !**/src/test/**
+    
+    ### STS ###
+    .apt_generated
+    .classpath
+    .factorypath
+    .project
+    .settings
+    .springBeans
+    .sts4-cache
+    
+    ### IntelliJ IDEA ###
+    .idea
+    *.iws
+    *.iml
+    *.ipr
+    out/
+    
+    ### NetBeans ###
+    /nbproject/private/
+    /nbbuild/
+    /dist/
+    /nbdist/
+    /.nb-gradle/
+    
+    ### VS Code ###
+    .vscode/
+    **.DS_Store
+    *.DS_Store
+    .DS_Store
+    .DS_Store?
+    
 
 Update file build.gradle by adding:
     
@@ -31,12 +81,14 @@ Update file build.gradle by adding:
         id 'idea'
     }
     
-    description = """myproject-project"""
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    description = rootProject.name
+    sourceCompatibility = 15
+    targetCompatibility = 15
     
     dependencies {
-        implementation          'org.springframework.boot:spring-boot-starter-web'
+        implementation(
+                'org.springframework.boot:spring-boot-starter-web'
+        )
     }
     
     repositories {
@@ -47,11 +99,11 @@ Update file build.gradle by adding:
     }
     
     bootJar {
-        archiveBaseName = 'myproject'
+        archiveBaseName = rootProject.name
         archiveVersion = '1.0.0'
-        archiveFileName = 'myproject.jar'
-        //archiveFileName = archiveBaseName + '-' + archiveVersion + '.jar'
+        archiveFileName = rootProject.name + '.jar'
     }
+
 
     
     # Click load gradle changes. 
