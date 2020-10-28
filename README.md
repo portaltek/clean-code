@@ -17,7 +17,7 @@ TODO List:
 Commands to Initialize any project:
 
     
-    mkdir MY_PROJECT | cd MY_PROJECT/
+    mkdir myapp | cd myapp/
     gradle init 
     git init
     idea .
@@ -105,7 +105,7 @@ Update file build.gradle by adding:
     
     
     
-Create project structure under MY_PROJECT folder:
+Create project structure under myapp folder:
 
     └── src
         └── main
