@@ -8,11 +8,13 @@ plugins {
     id "com.palantir.docker-run" version "0.22.1"
 }
 
-description = """clean-code project"""
 sourceCompatibility = 15
 targetCompatibility = 15
 version '1.0.0'
 
+ext {
+    springBootVersion = "2.3.4.RELEASE"
+}
 
 configurations {
     itestImplementation.extendsFrom testImplementation
@@ -27,10 +29,10 @@ sourceSets {
 
 dependencies {
     implementation(
-            'org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE',
-            'org.springframework.boot:spring-boot-starter-actuator:2.3.4.RELEASE',
-            'org.springframework.boot:spring-boot-starter-security:2.3.4.RELEASE',
-            'org.springframework.boot:spring-boot-starter-data-jpa:2.3.4.RELEASE',
+            "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-security:$springBootVersion",
+            "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion",
             'org.apache.commons:commons-collections4:4.4',
             'org.apache.commons:commons-lang3:3.9',
             'org.slf4j:slf4j-api:1.7.25',
@@ -48,7 +50,7 @@ dependencies {
     itestImplementation(
             'org.projectlombok:lombok:1.18.8',
             'org.junit.jupiter:junit-jupiter:5.6.2',
-            'org.springframework.boot:spring-boot-starter-test:2.3.4.RELEASE',
+            "org.springframework.boot:spring-boot-starter-test:$springBootVersion",
             'com.h2database:h2:1.4.200',
             'org.mockito:mockito-junit-jupiter:2.23.0',
             'org.codehaus.groovy:groovy:3.0.5',
@@ -69,10 +71,9 @@ test {
 }
 
 bootJar {
-    archiveBaseName = 'clean-code'
-    archiveVersion = '1.0.0'
-    archiveFileName = 'clean-code.jar'
-    //archiveFileName = archiveBaseName + '-' + archiveVersion + '.jar'
+    archiveBaseName.set(rootProject.name)
+    archiveVersion.set('1.0.0')
+    archiveFileName = rootProject.name + '.jar'
     mainClassName = 'portaltek.cleancode.CleanCodeApp'
 }
 
@@ -91,7 +92,7 @@ dockerRun {
 }
 
 task utest {
-    def tasks = [clean, assemble, test];
+    def tasks = [clean, assemble, test]
     for (int i = 0; i < tasks.size() - 1; i++) { tasks[i + 1].mustRunAfter(tasks[i]) }
     dependsOn(tasks)
 }

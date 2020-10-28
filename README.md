@@ -80,9 +80,14 @@ Update file build.gradle by adding:
     sourceCompatibility = 15
     targetCompatibility = 15
     
+    ext {
+        springBootVersion = "2.3.4.RELEASE"
+    }
+    
     dependencies {
         implementation(
-                'org.springframework.boot:spring-boot-starter-web'
+                "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
+                "org.springframework.boot:spring-boot-starter-test:$springBootVersion",
         )
     }
     
@@ -94,9 +99,9 @@ Update file build.gradle by adding:
     }
     
     bootJar {
-        archiveBaseName = rootProject.name
-        archiveVersion = '1.0.0'
-        archiveFileName = rootProject.name + '.jar'
+        archiveBaseName.set(rootProject.name)
+        archiveVersion.set('1.0.0')
+        archiveFileName = rootProject.name + "-" + archiveVersion.get() + ".jar"
     }
 
 
