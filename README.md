@@ -122,18 +122,23 @@ Create project structure under myapp folder:
   
     ######################################################################################################
     
-    mkdir app app/api app/api/rest app/core app/spi app/spi/repo
-    mkdir src src/main src/main/java src/main/resources 
-    mkdir src/test src/test/java src/test/resources
+    mkdir app app/api app/api/rest app/core app/spi app/spi/repo app/util
     
-    cd src/main/java/ 
-    mkdir mycompany  mycompany/myapp 
-    touch mycompany/myapp/MyApp.java
+    
+    export folders="src src/main src/main/java src/main/resources src/test src/test/java src/test/resources"
+    mkdir modules $folders; 
+    mkdir src/main/java/myapp; touch src/main/java/myapp/MyApp.java
+    mkdir modules/util; cd modules/util; touch build.gradle; mkdir $folders; cd ../.. 
+    mkdir modules/core; cd modules/core; touch build.gradle; mkdir $folders; cd ../.. 
+    mkdir modules/api modules/api/rest; cd modules/api/rest; touch build.gradle; mkdir $folders; cd ../../.. 
+    mkdir modules/spi modules/spi/repo; cd modules/spi/repo; touch build.gradle; mkdir $folders; cd ../../.. 
+    
+
     
     ######################################################################################################
     # Paste the following code on the main class.
     
-    package portaltek.myapp;
+    package myapp;
     
     import org.springframework.boot.SpringApplication;
     import org.springframework.boot.autoconfigure.SpringBootApplication;
