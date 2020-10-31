@@ -138,24 +138,31 @@ Create project structure under myapp folder:
     ######################################################################################################
     # Paste the following code on the main class.
     
-    package myapp;
+    package mycompany.myapp;
     
-    import org.springframework.boot.SpringApplication;
+    import mycompany.myapp.api.rest.RestApiHelloWorld;
+    import mycompany.myapp.util.Sleep;
+    import mycompany.myapp.util.UtilHelloWorld;
     import org.springframework.boot.autoconfigure.SpringBootApplication;
     import org.springframework.web.bind.annotation.GetMapping;
     import org.springframework.web.bind.annotation.RestController;
+    
+    import static org.springframework.boot.SpringApplication.run;
     
     @SpringBootApplication
     @RestController
     class MyApp {
     
         @GetMapping("/rest/open/hello")
-        public String helloWorld(){
-            return "Hello World!!!\n";
+        public String helloWorld() {
+            var utilHelloWorld = new UtilHelloWorld();
+            var restApiHelloWorld = new RestApiHelloWorld();
+            Sleep.sleep(1000);
+            return utilHelloWorld.hello() + restApiHelloWorld.hello();
         }
     
         public static void main(String[] args) {
-            SpringApplication.run(MyApp.class, args);
+            run(MyApp.class, args);
         }
     
     }
@@ -163,6 +170,7 @@ Create project structure under myapp folder:
 Run the app and execute on terminal:
 
      curl localhost:8080/rest/open/hello
+     curl localhost:8080/rest/open/controller
 
 
 Add to .gitignore file:
