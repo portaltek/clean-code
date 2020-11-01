@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import portaltek.cleancode.infra.web.Credentials;
 import portaltek.cleancode.infra.web.ServerResponse;
-import portaltek.cleancode.module.security.core.published.service.JwtService;
+import portaltek.cleancode.module.security.core.published.service.JwtGenerator;
+
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -24,12 +25,12 @@ class JwtController {
     private final Log log = LogFactory.getLog(this.getClass());
 
     private AuthenticationManager authManager;
-    private JwtService jwtService;
+    private JwtGenerator jwtGenerator;
 
     public JwtController(AuthenticationManager authManager,
-                         JwtService jwtService) {
+                         JwtGenerator jwtGenerator) {
         this.authManager = authManager;
-        this.jwtService = jwtService;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @PostMapping(value = "/api/open/token/${jwt.route.open.token.create}")
@@ -46,7 +47,7 @@ class JwtController {
             return ServerResponse.of(e);
         }
 
-        var response = jwtService.generateToken(req.getUsername());
+        var response = jwtGenerator.create(req.getUsername());
         return ok(response);
     }
 

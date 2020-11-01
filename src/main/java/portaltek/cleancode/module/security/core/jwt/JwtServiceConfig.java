@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 import portaltek.cleancode.module.security.core.published.port.spi.repo.UserRepoPort;
+import portaltek.cleancode.module.security.core.published.service.JwtGenerator;
 import portaltek.cleancode.module.security.core.published.service.JwtService;
 
 
@@ -14,10 +15,10 @@ import portaltek.cleancode.module.security.core.published.service.JwtService;
 class JwtServiceConfig {
 
     @Value("${jwt.secret}")
-    private String secret;
+    String secret;
 
     @Value("${jwt.expiration}")
-    private Long expiration;
+    Long expiration;
 
     @Bean
     public JwtService jwtService(UserDetailsService userDetailsService) {
@@ -25,7 +26,7 @@ class JwtServiceConfig {
     }
 
     @Bean
-    public JwtGenerator jwtGeneratorImpl(UserDetailsService userDetailsService) {
+    public JwtGenerator jwtGenerator(UserDetailsService userDetailsService) {
         return new JwtGeneratorImpl(secret, expiration, userDetailsService);
     }
 

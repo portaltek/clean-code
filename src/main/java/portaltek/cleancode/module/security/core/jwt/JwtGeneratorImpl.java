@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import portaltek.cleancode.module.security.api.web.token.JwtResponse;
+import portaltek.cleancode.module.security.core.published.service.JwtGenerator;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ class JwtGeneratorImpl implements JwtGenerator {
     private String secret;
     private Long expiration;
     private UserDetailsService userDetailsService;
+    private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
     public JwtGeneratorImpl(String secret,
                             Long expiration,
@@ -43,18 +45,14 @@ class JwtGeneratorImpl implements JwtGenerator {
 
     @Override
     public JwtResponse refresh(String username) {
-
-        String newToken;
-        String newRefreshToken;
         try {
             final Map<String, Object> claims = createClaims(username);
-            newToken = createToken(claims);
-            newRefreshToken = createRefreshToken(claims);
+            String newToken = createToken(claims);
+            String newRefreshToken = createRefreshToken(claims);
+            return new JwtResponse(newToken, newRefreshToken);
         } catch (Exception e) {
-            newToken = null;
-            newRefreshToken = null;
+            return new JwtResponse(null, null);
         }
-        return new JwtResponse(newToken, newRefreshToken);
     }
 
     private Map<String, Object> createClaims(String username) {
@@ -74,7 +72,7 @@ class JwtGeneratorImpl implements JwtGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate("token"))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(signatureAlgorithm, secret)
                 .compact();
     }
 
@@ -82,7 +80,7 @@ class JwtGeneratorImpl implements JwtGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate("refresh"))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(signatureAlgorithm, secret)
                 .compact();
     }
 
