@@ -32,7 +32,7 @@ public class JwtUtil implements Serializable {
 
         return Jwts.parser()
                 .setSigningKey(secret)
-                .parseClaimsJws(token)
+                .parseClaimsJws(removePrefix(token))
                 .getBody();
 
     }
