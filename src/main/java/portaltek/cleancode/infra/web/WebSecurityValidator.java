@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+import portaltek.cleancode.module.security.core.jwt.JwtUtil;
 import portaltek.cleancode.module.security.core.published.service.JwtService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ class WebSecurityValidator {
     private final Log logger = LogFactory.getLog(this.getClass());
 
     @Autowired
-    private JwtService jwtService;
+    private JwtUtil jwtUtil;
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -33,10 +34,12 @@ class WebSecurityValidator {
 
     public void validate(HttpServletRequest request) {
 
+        if (getContext().getAuthentication() != null){
+            return;
+        }
         ofNullable(request.getHeader(tokenHeader))
-                .filter(jwtService::hasToken)
-                .filter(e -> getContext().getAuthentication() == null)
-                .map(e -> e.substring(7))
+                .filter(jwtUtil::hasToken)
+                .map(jwtUtil::removePrefix)
                 .ifPresent(e -> validateToken(request, e));
 
     }
@@ -44,11 +47,11 @@ class WebSecurityValidator {
 
     public void validateToken(HttpServletRequest request, String token) {
 
-        var username = jwtService.getUsernameFromToken(token);
-        var authorities = jwtService.getRolesFromToken(token);
+        var username = jwtUtil.getUsernameFromToken(token);
+        var authorities = jwtUtil.getRolesFromToken(token);
         logger.info("checking authentication for user " + username);
 
-        if (jwtService.validateToken(token)) {
+        if (jwtUtil.isValid(token)) {
             setSecurityCtx(request, username, authorities);
         }
 

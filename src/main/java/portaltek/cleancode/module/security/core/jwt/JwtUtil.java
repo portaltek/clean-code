@@ -124,4 +124,8 @@ public class JwtUtil implements Serializable {
         return header != null && header.startsWith(BEARER);
     }
 
+    public String removePrefix(String header) {
+        return header.replace(BEARER, "");
+    }
+
 }
