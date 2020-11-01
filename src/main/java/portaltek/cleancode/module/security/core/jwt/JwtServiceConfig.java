@@ -24,6 +24,11 @@ class JwtServiceConfig {
         return new JwtServiceImpl(secret, expiration, userDetailsService);
     }
 
+    @Bean
+    public JwtGenerator jwtGeneratorImpl(UserDetailsService userDetailsService) {
+        return new JwtGeneratorImpl(secret, expiration, userDetailsService);
+    }
+
     @Transactional
     @Bean
     public JwtUserDetailsService jwtUserDetailsService(UserRepoPort port) {
